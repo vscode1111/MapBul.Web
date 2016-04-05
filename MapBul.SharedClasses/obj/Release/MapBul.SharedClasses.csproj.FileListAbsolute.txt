@@ -1,0 +1,9 @@
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\bin\Release\MapBul.SharedClasses.dll
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\bin\Release\MapBul.SharedClasses.pdb
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\bin\Release\MapBul.DBContext.dll
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\bin\Release\EntityFramework.dll
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\bin\Release\MapBul.DBContext.pdb
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\bin\Release\EntityFramework.xml
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\obj\Release\MapBul.SharedClasses.csprojResolveAssemblyReference.cache
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\obj\Release\MapBul.SharedClasses.dll
+C:\AKryuchkov\MBWeb\MapBul.SharedClasses\obj\Release\MapBul.SharedClasses.pdb

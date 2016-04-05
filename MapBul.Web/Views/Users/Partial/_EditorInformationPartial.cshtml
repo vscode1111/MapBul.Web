@@ -1,0 +1,75 @@
+﻿@using MapBul.DBContext
+@using MapBul.SharedClasses.Constants
+@model MapBul.Web.Models.NewEditorModel
+
+<div class="panel">
+    <div class="panel-heading">
+
+    </div>
+    <div class="panel-body">
+        @using (Ajax.BeginForm("EditEditor", "Users", new AjaxOptions {HttpMethod = "POST", OnSuccess = "EditEditorSuccess", OnFailure = "ViewNotification('Не удалось сохранить изменения','error')", AllowCache = false}))
+        {
+            @Html.HiddenFor(m => m.Id)
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Фамилия" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Имя" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.MiddleName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Отчество" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.DropDownListFor(m => m.Sex, UserParameters.Sex.Select(s => new SelectListItem { Text = s, Value = s }), new Dictionary<string, object> { { "class", "form-control" }, { "required", "Пол" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Телефон" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Адрес" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBox("BirthDate", Model.BirthDate.ToString("dd.MM.yyyy"), new Dictionary<string, object> { { "class", "form-control datepicker" }, { "placeholder", "Дата рождения" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Email, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Email" }, { "required", "" } })
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group">
+                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>) ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите страны"}, {"multiple", ""}})
+                    </div>
+                    <div class="form-group">
+                        @Html.ListBox("PermittedRegions", new MultiSelectList((List<region>) ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите регионы"}, {"multiple", ""}})
+                    </div>
+                    <div class="form-group">
+                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Заблокирован</label>
+                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Сохранить"/>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.datepicker').datepicker({ language: "ru" });
+
+        $('.chosenselect').chosen();
+
+        var a = $('.checkbox');
+        a.each(function () {
+            Switchery(this, { color: '#1AB394' });
+        });
+    });
+</script>

@@ -1,0 +1,29 @@
+﻿@using System.Web.Optimization
+
+<div class="row" id="CitiesContainer">
+    @Html.Action("_CitiesPartial", "Dictionaries")
+</div>
+<div class="row" id="CategoriesContainer">
+    @Html.Action("_CategoriesPartial", "Dictionaries")
+</div>
+
+
+
+@section Styles{
+    @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
+    @Styles.Render("~/plugins/dataPickerStyles")
+    @Styles.Render("~/Content/plugins/chosen/chosenStyles")
+    @Styles.Render("~/plugins/switcheryStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/dataPicker")
+    @Scripts.Render("~/plugins/chosen")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/nestable")
+    @Scripts.Render("~/CustomScripts/Cities")
+    @Scripts.Render("~/CustomScripts/Categories")
+
+
+}

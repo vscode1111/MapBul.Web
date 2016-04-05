@@ -1,0 +1,81 @@
+﻿@using System.Web.Optimization
+@using MapBul.Web.Helpers
+@using MapBul.Web.Auth
+@{
+    //IAuthProvider auth = DependencyResolver.Current.GetService<IAuthProvider>();
+    //ViewBag.userType = auth.UserType;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Map Bul</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <!-- Add local styles, mostly for plugins css file -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+    <!-- Add jQuery Style direct - used for jQGrid plugin -->
+    <link href="@Url.Content("~/Scripts/plugins/jquery-ui/jquery-ui.css")" rel="stylesheet" type="text/css" />
+
+    <!-- Primary Inspinia style -->
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/font-awesome/css")
+    @Styles.Render("~/plugins/toastrStyles")
+
+
+</head>
+<body>
+
+    <!-- Skin configuration box -->
+    <!-- Wrapper-->
+    <!-- PageClass give you ability to specify custom style for specific view based on action -->
+<div id="wrapper" class="@Html.PageClass()">
+
+
+    <!-- Navigation -->
+    @Html.Partial("_Navigation")
+
+    <!-- Page wraper -->
+    <div id="page-wrapper" class="gray-bg @ViewBag.SpecialClass">
+
+        @Html.Partial("_TopBar")
+        <!-- Main view -->
+        @RenderBody()
+
+    </div>
+    <!-- End page wrapper-->
+
+</div>
+    <div class="modal" id="Modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalContent">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End wrapper-->
+    <!-- Section for main scripts render -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/plugins/slimScroll")
+    @Scripts.Render("~/bundles/inspinia")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/CustomScripts/Shared")
+
+
+
+    <!-- Skin config script - only for demo purpose-->
+    @Scripts.Render("~/bundles/skinConfig")
+
+    <!-- Handler for local scripts -->
+    @RenderSection("scripts", required: false)
+</body>
+</html>

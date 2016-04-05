@@ -1,0 +1,22 @@
+﻿@using System.Web.Optimization
+
+
+<div class="row" id="MarkersContainer">
+    @Html.Action("_MarkersTablePartial")
+</div>
+
+@section Styles{
+    @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
+    @Styles.Render("~/plugins/dataPickerStyles")
+    @Styles.Render("~/Content/plugins/chosen/chosenStyles")
+    @Styles.Render("~/plugins/switcheryStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/dataPicker")
+    @Scripts.Render("~/plugins/chosen")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/nestable")
+    @Scripts.Render("~/CustomScripts/Markers")
+}

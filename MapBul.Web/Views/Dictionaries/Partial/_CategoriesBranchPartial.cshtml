@@ -1,0 +1,14 @@
+﻿@model IEnumerable<MapBul.DBContext.category>
+
+    @foreach (var category in Model)
+    {
+        <li class="dd-item" data-id="@category.Id">
+            <div class="dd-handle"><img style="width: 30px;" src="@category.Icon" /> @category.Name</div>
+            @if (category.category1 != null&&category.category1.Count!=0)
+            {
+                <ol class="dd-list">
+                    @Html.Partial("Partial/_CategoriesBranchPartial", category.category1)
+                </ol>
+            }
+        </li>
+    }

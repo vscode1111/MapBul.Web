@@ -1,0 +1,71 @@
+﻿@model MapBul.Web.Models.EditorsListModel
+
+<div class="ibox">
+    <div class="ibox-title">
+        <h3>Редакторы</h3>
+    </div>
+    <div class="ibox-content">
+        <div class="panel-body">
+            <input type="button" class="btn btn-primary" data-actionurl="@Url.Action("_NewEditorPartial","Users")" value="Новый редактор" id="NewEditorButton"/>
+        </div>
+        <div class="table-responsive" id="EditorsTable">
+            <table class="table table-striped table-bordered table-hover dataTable">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Дата регистрации</th>
+                    <th>Email</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Фамилия</th>
+                    <th>Дата рождения</th>
+                    <th>Пол</th>
+                    <th>Телефон</th>
+                    <th>Адрес</th>
+                    <th>Статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var editor in Model.Editors)
+                {
+                    <tr class="EditorDescriptionRow" data-id="@editor.Id" style="cursor: pointer; background-color: rgba(@(editor.user.Deleted ? "255,0,0,0.1" : "0,255,0,0.1"))">
+                        <td>
+                            @editor.Id
+                        </td>
+                        <td>
+                            @editor.user.RegistrationDate
+                        </td>
+                        <td>
+                            @editor.user.Email
+                        </td>
+                        <td>
+                            @editor.FirstName
+                        </td>
+                        <td>
+                            @editor.LastName
+                        </td>
+                        <td>
+                            @editor.MiddleName
+                        </td>
+                        <td>
+                            @editor.BirthDate.ToString("dd.MM.yyyy")
+                        </td>
+                        <td>
+                            @editor.Sex
+                        </td>
+                        <td>
+                            @editor.Phone
+                        </td>
+                        <td>
+                            @editor.Address
+                        </td>
+                        <td>
+                            @(editor.user.Deleted ? "Заблокирован" : "Активен")
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
