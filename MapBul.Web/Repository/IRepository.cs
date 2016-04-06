@@ -31,5 +31,10 @@ namespace MapBul.Web.Repository
         void EditCategory(category model);
         void AddNewAdmin(NewAdminModel model);
         List<marker> GetMarkers();
+        List<discount> GetDiscounts();
+        List<status> GetStatuses();
+        List<weekday> GetWeekDays();
+        void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid);
+        void ChangeMarkerStatus(int markerId, int statusId);
     }
 }

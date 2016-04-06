@@ -50,7 +50,11 @@
                                 @marker.Site
                             </td>
                             <td>
-                                @marker.status.Description
+
+                                @{
+                                    var tmp = marker;
+                                }
+                                @Html.DropDownList("MarkerSatusSelect", ((List<status>)ViewBag.Statuses).Select(s => new SelectListItem { Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId }), new Dictionary<string, object> { { "class", "MarkerSatusSelect form-control chosenselect" }, { "data-markerid", marker.Id } })
                             </td>
                         </tr>
                     }

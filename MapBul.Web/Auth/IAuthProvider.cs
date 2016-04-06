@@ -7,5 +7,6 @@
         void RefreshPrincipal();
         bool IsAuthenticated { get; }
         string UserType { get; }
+        string UserGuid { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MapBul.DBContext;
+﻿using System.Collections.Generic;
+using MapBul.DBContext;
 
 namespace MapBul.Web.Models
 {
@@ -15,6 +16,20 @@ namespace MapBul.Web.Models
                 if (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType.Name == "String")
                 {
                     propertyInfo.SetValue(this, propertyInfo.GetValue(marker));
+                }
+            }
+        }
+
+        public List<int> SubCategories { get; set; }
+        public List<string> Phones { get; set; }
+
+        public void CopyTo(marker marker)
+        {
+            foreach (var propertyInfo in marker.GetType().GetProperties())
+            {
+                if (!propertyInfo.Name.Contains("Id") && (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType.Name == "String"))
+                {
+                    propertyInfo.SetValue(marker, propertyInfo.GetValue(this));
                 }
             }
         }

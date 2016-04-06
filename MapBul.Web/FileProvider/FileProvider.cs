@@ -11,7 +11,6 @@ namespace MapBul.Web.FileProvider
     {
         public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon)
         {
-
             string virtualPath = "CategoryIcons/" + Guid.NewGuid() + categoryIcon.FileName.Substring(categoryIcon.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot=HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
@@ -34,6 +33,20 @@ namespace MapBul.Web.FileProvider
             }
             else 
                 throw new MyException(Errors.UnknownError);
+        }
+
+        public static string SaveMarkerPhoto(HttpPostedFileBase markerPhoto)
+        {
+            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + markerPhoto.FileName.Substring(markerPhoto.FileName.IndexOf(".", StringComparison.Ordinal));
+            var siteRoot = HostingEnvironment.MapPath("~/");
+            if (siteRoot != null)
+            {
+                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                markerPhoto.SaveAs(savePath);
+            }
+            else
+                throw new MyException(Errors.UnknownError);
+            return virtualPath;
         }
     }
 }

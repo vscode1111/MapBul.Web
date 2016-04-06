@@ -320,6 +320,87 @@ namespace MapBul.Web.Repository
             return _db.marker.OrderByDescending(m=>m.AddedDate).ToList();
         }
 
+        public List<discount> GetDiscounts()
+        {
+            return _db.discount.ToList();
+        }
+
+        public List<status> GetStatuses()
+        {
+            return _db.status.ToList();
+        }
+
+        public List<weekday> GetWeekDays()
+        {
+            return _db.weekday.ToList();
+        }
+
+        public void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid)
+        {
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                user adder = GetUserByGuid(userGuid);
+                marker newMarker = new marker();
+                model.CopyTo(newMarker);
+                newMarker.BaseCategoryId = model.BaseCategoryId;
+                newMarker.CityId = model.CityId;
+                newMarker.DiscountId = model.DiscountId;
+                newMarker.StatusId = model.StatusId;
+                newMarker.UserId = adder.Id;
+                if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
+                    newMarker.CheckDate = DateTime.Now;
+                _db.marker.Add(newMarker);
+                _db.SaveChanges();
+
+                var subCategories = model.SubCategories!=null?
+                    model.SubCategories.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id}).ToList():new List<subcategory>();
+
+                var phones = model.Phones.Select(p => new phone {Number = p, MarkerId = newMarker.Id, Primary = false}).ToList();
+                phones.First().Primary = true;
+
+                var workTimes =
+                    openTimes.Join(closeTimes.Select(ct => new {ct.WeekDayId, CloseTime = ct.Time}),
+                        ot => ot.WeekDayId,ct=>ct.WeekDayId,(ot,ct)=>new {ot.WeekDayId,OpenTime=ot.Time,ct.CloseTime}).Where(t=>t.CloseTime!=null&&t.OpenTime!=null).ToList();  //собираем из двух частей полное время работы
+
+                _db.subcategory.AddRange(subCategories);
+                _db.phone.AddRange(phones);
+                _db.worktime.AddRange(workTimes.Select(t=>new worktime{CloseTime = t.CloseTime.Value, OpenTime = t.OpenTime.Value, MarkerId = newMarker.Id, WeekDayId = t.WeekDayId}));
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
+        public void ChangeMarkerStatus(int markerId, int statusId)
+        {
+            var marker = _db.marker.First(m => m.Id == markerId);
+
+            if (statusId == GetStatusByTag(MarkerStatuses.Published).Id)
+                marker.PublishedDate = DateTime.Now;
+            else if (statusId == GetStatusByTag(MarkerStatuses.Checking).Id)
+            {
+                marker.CheckDate = DateTime.Now;
+                marker.PublishedDate = null;
+            }
+            else
+            {
+                marker.CheckDate = null;
+                marker.PublishedDate = null;
+            }
+            marker.StatusId = statusId;
+            _db.SaveChanges();
+        }
+
+        public status GetStatusByTag(string tag)
+        {
+            return _db.status.First(s => s.Tag == tag);
+        }
+
         public region GetRegion(int regionId)
         {
             return _db.region.First(r => r.Id == regionId);

@@ -1,7 +1,9 @@
 ﻿namespace MapBul.SharedClasses.Constants
 {
-    public class MarkerStatuses
+    public static class MarkerStatuses
     {
-         
+        public static string Created = "created";
+        public static string Published = "published";
+        public static string Checking = "checking";
     }
 }

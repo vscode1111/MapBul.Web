@@ -55,7 +55,8 @@ function SendNewCategoryForm() {
         contentType: false,
         processData: false,
         type: "POST",
-        success: AddNewCategorySuccess
+        success: AddNewCategorySuccess,
+        error:ViewNotification("Ошибка","error")
     });
     return false;
 }

@@ -70,5 +70,16 @@ namespace MapBul.Web.Auth
                 return user.usertype.Tag;
             }
         }
+
+        public string UserGuid
+        {
+            get
+            {
+                if(!IsAuthenticated)
+                    throw new MyException(Errors.UserNotAuthorized);
+                return HttpContext.Current.User.Identity.Name;
+
+            }
+        }
     }
 }
