@@ -36,5 +36,8 @@ namespace MapBul.Web.Repository
         List<weekday> GetWeekDays();
         void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid);
         void ChangeMarkerStatus(int markerId, int statusId);
+        marker GetMarker(int markerId);
+        void EditMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid);
+        List<article> GetArticles();
     }
 }

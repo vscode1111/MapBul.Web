@@ -92,7 +92,7 @@ function SendNewStructure(string) {
         url: url,
         type: "POST",
         data: { structure: string },
-        success: function (data) {
+        success: function () {
             ViewNotification("Изменения сохранены", 'success');
         },
         error: function () {

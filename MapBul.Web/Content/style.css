@@ -8094,3 +8094,7 @@ body.md-skin {
 .clockpicker-popover {
     z-index: 2060;
 }
+
+.EditMarkerLink {
+    cursor: pointer;
+}

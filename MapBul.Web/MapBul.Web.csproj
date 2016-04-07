@@ -309,6 +309,8 @@
     <Content Include="fonts\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="HtmlPage1.html" />
+    <Content Include="Images\mapmarker.png" />
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\app\inspinia.min.js" />
     <Content Include="Scripts\app\skin.config.min.js" />
@@ -780,6 +782,9 @@
     <Content Include="Views\Dictionaries\Partial\_EditCategoryPartial.cshtml" />
     <Content Include="Views\Markers\Partial\_MarkersTablePartial.cshtml" />
     <Content Include="Views\Markers\Partial\_NewMarkerModalPartial.cshtml" />
+    <Content Include="Views\Markers\Partial\_EditMarkerModalPartial.cshtml" />
+    <Content Include="Views\Articles\Index.cshtml" />
+    <Content Include="Views\Articles\Partial\_ArticlesTablePartial.cshtml" />
     <None Include="Views\Users\Index.cshtml" />
     <None Include="Views\Markers\Index.cshtml" />
     <None Include="Views\Users\Partial\_AdminsTablePartial.cshtml" />
@@ -794,7 +799,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Articles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

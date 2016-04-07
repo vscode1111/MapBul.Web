@@ -1,15 +1,17 @@
-﻿@using System.Web.Mvc.Html
+﻿@using System.Globalization
 @using MapBul.DBContext
 @model MapBul.Web.Models.NewMarkerModel
 
 <div class="ibox">
     <div class="ibox-title">
-        <h3>Новый маркер</h3>
+        <h3>Редактировать маркер</h3>
     </div>
     <div class="ibox-content">
-        <form action="#" method="POST" id="NewMarkerForm">
+        <form action="#" method="POST" id="EditMarkerForm">
             <div class="row">
                 <div class="col-md-6">
+                    @Html.HiddenFor(m=>m.Id)
+                    @Html.HiddenFor(m => m.Photo)
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", "Название"}, {"class", "form-control"}, {"required", ""}})
                     </div>
@@ -29,7 +31,7 @@
                         @Html.TextBoxFor(m => m.EntryTicket, new Dictionary<string, object> {{"placeholder", "Входной билет"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Phones, new Dictionary<string, object> { { "placeholder", "Телефон" }, { "class", "form-control" }, { "required", "" }, {"data-mask","(999)999-99-99"} })
+                        @Html.TextBox("Phones",Model.Phones.FirstOrDefault(), new Dictionary<string, object> {{"placeholder", "Телефон"}, {"class", "form-control"}, {"required", ""}, {"data-mask", "(999)999-99-99"}})
                     </div>
                     <div class="form-group">
                         <label class="control-label">Базовая категория</label>
@@ -37,28 +39,28 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Тэги</label>
-                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}, {"required", ""}})
+                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.SubCategories.Contains(c.Id), Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}, {"required", ""}})
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        @Html.DropDownList("CityId", ((List<city>)ViewBag.Cities).Select(c => new SelectListItem { Text = c.Name + ", " + c.region.Name + ", " + c.region.country.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "id", "NewMarkerCitySelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
+                        @Html.DropDownList("CityId", ((List<city>) ViewBag.Cities).Select(c => new SelectListItem {Text = c.Name + ", " + c.region.Name + ", " + c.region.country.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"id", "EditMarkerCitySelect"}, {"class", "form-control chosenselect"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Street, new Dictionary<string, object> {{"id", "NewMarkerStreetInput"}, {"placeholder", "Улица"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.Street, new Dictionary<string, object> {{"id", "EditMarkerStreetInput"}, {"placeholder", "Улица"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.House, new Dictionary<string, object> {{"id", "NewMarkerHouseInput"}, {"placeholder", "Дом"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.House, new Dictionary<string, object> {{"id", "EditMarkerHouseInput"}, {"placeholder", "Дом"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Buliding, new Dictionary<string, object> {{"id", "NewMarkerBuildingInput"}, {"placeholder", "Строение"}, {"class", "form-control"}})
+                        @Html.TextBoxFor(m => m.Buliding, new Dictionary<string, object> {{"id", "EditMarkerBuildingInput"}, {"placeholder", "Строение"}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Floor, new Dictionary<string, object> {{"placeholder", "Этаж"}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
                         <label class="control-label">Скидка</label>
-                        @Html.DropDownListFor(m => m.DiscountId, ((List<discount>)ViewBag.Discounts).Select(c => new SelectListItem { Text = c.Value.ToString() + "%", Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
+                        @Html.DropDownListFor(m => m.DiscountId, ((List<discount>) ViewBag.Discounts).Select(c => new SelectListItem {Text = c.Value.ToString() + "%", Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"required", ""}})
                     </div>
                     <div class="form-group">
                         <label class="control-label">Статус</label>
@@ -66,7 +68,13 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Фотография</label>
-                        <input type="file" id="NewMarkerPhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
+                        <div class="col-sm-10">
+                            <img src="@Model.Photo"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Новая фотография</label>
+                        <input type="file" id="EditMarkerPhotoInput" class="form-control fileinput" accept="image/jpeg, image/png"/>
                     </div>
                 </div>
             </div>
@@ -91,24 +99,26 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr >
+                            <tr>
                                 <td>Открытие</td>
                                 @foreach (var weekDay in ((List<weekday>) ViewBag.WeekDays))
                                 {
+                                    var tmpWorkTime = Model.WorkTimes.FirstOrDefault(wt => wt.WeekDayId == weekDay.Id);
                                     <td>
                                         <div class="input-group clockpicker" data-autoclose="true">
-                                            <input data-WeekDayId="@weekDay.Id" class="OpenTime form-control" type="text">
+                                            <input data-weekdayid="@weekDay.Id" class="OpenTime form-control" type="text" value="@(tmpWorkTime != null ? tmpWorkTime.OpenTime.ToString(@"hh\:mm") : "")"/>
                                         </div>
                                     </td>
                                 }
                             </tr>
-                            <tr >
+                            <tr>
                                 <td>Закрытие</td>
-                                @foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                @foreach (var weekDay in ((List<weekday>) ViewBag.WeekDays))
                                 {
+                                    var tmpWorkTime = Model.WorkTimes.FirstOrDefault(wt => wt.WeekDayId == weekDay.Id);
                                     <td>
                                         <div class="input-group clockpicker" data-autoclose="true">
-                                            <input data-WeekDayId="@weekDay.Id" class="CloseTime form-control" type="text">
+                                            <input data-weekdayid="@weekDay.Id" class="CloseTime form-control" type="text" value="@(tmpWorkTime != null ? tmpWorkTime.CloseTime.ToString(@"hh\:mm") : "")"/>
                                         </div>
                                     </td>
                                 }
@@ -119,17 +129,20 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="button" id="NewMarkerFormSubmit" value="Сохранить" class="btn btn-primary"/>
+                <input type="button" id="EditMarkerFormSubmit" value="Сохранить" class="btn btn-primary"/>
             </div>
         </form>
     </div>
 </div>
 
+@{
+    var numberProvider = new NumberFormatInfo {NumberDecimalSeparator = "."};
+}
 
 <script type="text/javascript">
     var marker;
     var map;
-    var markerLat = undefined;
-    var markerLng = undefined;
-    OnNewMarkerDocumentReady();
+    var markerLat=@Model.Lat.ToString("###.######", numberProvider);
+    var markerLng=@Model.Lng.ToString("###.######", numberProvider);
+    OnEditMarkerDocumentReady();
 </script>

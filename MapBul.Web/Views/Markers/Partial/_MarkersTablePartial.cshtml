@@ -27,30 +27,29 @@
                     <tbody>
                     @foreach (var marker in Model)
                     {
-                        <tr>
-                            <td>
+                        <tr data-markerid="@marker.Id">
+                            <td class="EditMarkerLink">
                                 @marker.Id
                             </td>
-                            <td>
+                            <td class="EditMarkerLink">
                                 @marker.Name
                             </td>
-                            <td>
+                            <td class="EditMarkerLink">
                                 @marker.Introduction
                             </td>
-                            <td>
+                            <td class="EditMarkerLink">
                                 @marker.city.Name, @marker.city.region.Name, @marker.city.region.country.Name
                             </td>
-                            <td>
+                            <td class="EditMarkerLink">
                                 @marker.Street, д. @marker.House, стр. @marker.Buliding, эт. @marker.Floor
                             </td>
-                            <td>
+                            <td class="EditMarkerLink">
                                 @marker.category.Name
                             </td>
-                            <td>
+                            <td class="EditMarkerLink">
                                 @marker.Site
                             </td>
                             <td>
-
                                 @{
                                     var tmp = marker;
                                 }

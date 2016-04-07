@@ -54,11 +54,47 @@ namespace MapBul.Web.Controllers
         }
 
         [HttpPost]
+        public bool EditMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
+            HttpPostedFileBase markerPhoto)
+        {
+            var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
+            var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
+
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            var userGuid = auth.UserGuid;
+            if (markerPhoto != null)
+            {
+                FileProvider.FileProvider.DeleteFile(model.Photo);
+                string filePath = FileProvider.FileProvider.SaveMarkerPhoto(markerPhoto);
+                model.Photo = filePath;
+            }
+            repo.EditMarker(model, openTimes, closeTimes, userGuid);
+
+            return true;
+        }
+
+        [HttpPost]
         public bool ChangeMarkerStatus(int markerId, int statusId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.ChangeMarkerStatus(markerId,statusId);
             return true;
+        }
+
+        [HttpPost]
+        public ActionResult _EditMarkerModalPartial(int markerId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            marker marker=repo.GetMarker(markerId);
+            NewMarkerModel model=new NewMarkerModel(marker);
+            ViewBag.Cities = repo.GetCities();
+            ViewBag.Categories = repo.GetCategories();
+            ViewBag.Discounts = repo.GetDiscounts();
+            ViewBag.Statuses = repo.GetStatuses();
+            ViewBag.WeekDays = repo.GetWeekDays();
+            return PartialView("Partial/_EditMarkerModalPartial", model);
+
         }
 
     }

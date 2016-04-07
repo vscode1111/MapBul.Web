@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="admin.cs" />
     <Compile Include="article.cs" />
+    <Compile Include="articlesubcategory.cs" />
     <Compile Include="category.cs" />
     <Compile Include="city.cs" />
     <Compile Include="city_permission.cs" />

@@ -12,6 +12,8 @@ namespace MapBul.DBContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public category()
         {
+            article = new HashSet<article>();
+            articlesubcategory = new HashSet<articlesubcategory>();
             category1 = new HashSet<category>();
             marker = new HashSet<marker>();
             subcategory = new HashSet<subcategory>();
@@ -30,6 +32,12 @@ namespace MapBul.DBContext
         [Required]
         [StringLength(200)]
         public string Icon { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<article> article { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<articlesubcategory> articlesubcategory { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<category> category1 { get; set; }

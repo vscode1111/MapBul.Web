@@ -9,6 +9,12 @@ namespace MapBul.DBContext
     [Table("mapbul.article")]
     public partial class article
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public article()
+        {
+            articlesubcategory = new HashSet<articlesubcategory>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -44,11 +50,18 @@ namespace MapBul.DBContext
 
         public int StatusId { get; set; }
 
+        public int BaseCategoryId { get; set; }
+
         public virtual user user { get; set; }
+
+        public virtual category category { get; set; }
 
         public virtual user user1 { get; set; }
 
         public virtual marker marker { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<articlesubcategory> articlesubcategory { get; set; }
 
         public virtual status status { get; set; }
     }

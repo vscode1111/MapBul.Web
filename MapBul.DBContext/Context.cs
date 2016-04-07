@@ -14,6 +14,7 @@ namespace MapBul.DBContext
 
         public virtual DbSet<admin> admin { get; set; }
         public virtual DbSet<article> article { get; set; }
+        public virtual DbSet<articlesubcategory> articlesubcategory { get; set; }
         public virtual DbSet<category> category { get; set; }
         public virtual DbSet<city> city { get; set; }
         public virtual DbSet<city_permission> city_permission { get; set; }
@@ -63,6 +64,11 @@ namespace MapBul.DBContext
             modelBuilder.Entity<category>()
                 .Property(e => e.Icon)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<category>()
+                .HasMany(e => e.article)
+                .WithRequired(e => e.category)
+                .HasForeignKey(e => e.BaseCategoryId);
 
             modelBuilder.Entity<category>()
                 .HasMany(e => e.category1)
