@@ -8,5 +8,6 @@
         bool IsAuthenticated { get; }
         string UserType { get; }
         string UserGuid { get; }
+        int UserId { get; }
     }
 }

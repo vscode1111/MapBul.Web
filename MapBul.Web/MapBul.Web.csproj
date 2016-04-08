@@ -175,6 +175,7 @@
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Helpers\MyCssRewriteUrlTransform.cs" />
     <Compile Include="Helpers\ViewExtensions.cs" />
+    <Compile Include="Models\ArticlesModels.cs" />
     <Compile Include="Models\DictionariesModels.cs" />
     <Compile Include="Models\LoginModels.cs" />
     <Compile Include="Models\MarkersModels.cs" />
@@ -319,6 +320,7 @@
     <None Include="Properties\PublishProfiles\MapBul.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\CustomScripts\Admins.js" />
+    <Content Include="Scripts\CustomScripts\Articles.js" />
     <Content Include="Scripts\CustomScripts\Categories.js" />
     <Content Include="Scripts\CustomScripts\Cities.js" />
     <Content Include="Scripts\CustomScripts\Dictionaries.js" />
@@ -785,6 +787,8 @@
     <Content Include="Views\Markers\Partial\_EditMarkerModalPartial.cshtml" />
     <Content Include="Views\Articles\Index.cshtml" />
     <Content Include="Views\Articles\Partial\_ArticlesTablePartial.cshtml" />
+    <Content Include="Views\Articles\Partial\_NewArticleModalPartial.cshtml" />
+    <Content Include="Views\Articles\Partial\_EditArticleModalPartial.cshtml" />
     <None Include="Views\Users\Index.cshtml" />
     <None Include="Views\Markers\Index.cshtml" />
     <None Include="Views\Users\Partial\_AdminsTablePartial.cshtml" />

@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Hosting;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
+using MapBul.Web.Models;
 
 namespace MapBul.Web.FileProvider
 {
@@ -43,6 +44,20 @@ namespace MapBul.Web.FileProvider
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
                 markerPhoto.SaveAs(savePath);
+            }
+            else
+                throw new MyException(Errors.UnknownError);
+            return virtualPath;
+        }
+
+        public static string SaveArticlePhoto(HttpPostedFileBase articlePhoto)
+        {
+            string virtualPath = "ArticlePhotos/" + Guid.NewGuid() + articlePhoto.FileName.Substring(articlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
+            var siteRoot = HostingEnvironment.MapPath("~/");
+            if (siteRoot != null)
+            {
+                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                articlePhoto.SaveAs(savePath);
             }
             else
                 throw new MyException(Errors.UnknownError);

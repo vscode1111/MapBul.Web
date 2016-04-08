@@ -8,6 +8,9 @@ namespace MapBul.Web
 
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/CustomScripts/Articles").Include(
+                      "~/Scripts/CustomScripts/Articles.js", new MyCssRewriteUrlTransform()));
+
             bundles.Add(new ScriptBundle("~/CustomScripts/Markers").Include(
                       "~/Scripts/CustomScripts/Markers.js", new MyCssRewriteUrlTransform()));
 

@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Тэги</label>
-                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.SubCategories.Contains(c.Id), Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}, {"required", ""}})
+                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.SubCategories.Contains(c.Id), Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}})
                     </div>
                 </div>
                 <div class="col-md-6">

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using MapBul.Web.Auth;
 
 namespace MapBul.Web.Helpers
 {
@@ -27,5 +29,11 @@ namespace MapBul.Web.Helpers
             return currentAction;
         }
 
-	}
+        public static bool IsUserInRoles(this HtmlHelper html, params string[] roles)
+        {
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            return roles.Contains(auth.UserType);
+        }
+
+    }
 }

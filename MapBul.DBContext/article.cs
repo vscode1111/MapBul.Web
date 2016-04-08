@@ -64,5 +64,6 @@ namespace MapBul.DBContext
         public virtual ICollection<articlesubcategory> articlesubcategory { get; set; }
 
         public virtual status status { get; set; }
+
     }
 }

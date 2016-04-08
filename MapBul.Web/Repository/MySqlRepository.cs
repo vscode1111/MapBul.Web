@@ -158,7 +158,7 @@ namespace MapBul.Web.Repository
                     Guid = Guid.NewGuid().ToString(),
                     Password = TransformationProvider.Md5(model.Password),
                     Email = model.Email,
-                    UserTypeId = GetUserTypeByTag(UserTypes.Editor),
+                    UserTypeId = GetUserTypeByTag(UserTypes.Journalist),
                     Deleted = model.Deleted
                 };
                 _db.user.Add(newUser);
@@ -330,6 +330,15 @@ namespace MapBul.Web.Repository
             return _db.status.ToList();
         }
 
+        public List<status> GetStatuses(string userGuid)
+        {
+            var user = GetUserByGuid(userGuid);
+            var statuses=_db.status.ToList();
+            if (user.usertype.Tag != UserTypes.Admin && user.usertype.Tag != UserTypes.Editor)
+                statuses.Remove(statuses.First(s => s.Tag == MarkerStatuses.Published));
+            return statuses;
+        }
+
         public List<weekday> GetWeekDays()
         {
             return _db.weekday.ToList();
@@ -416,14 +425,13 @@ namespace MapBul.Web.Repository
             var trans = _db.Database.BeginTransaction();
             try
             {
-                user adder = GetUserByGuid(userGuid);
+                GetUserByGuid(userGuid);
                 marker newMarker = _db.marker.First(m => m.Id == model.Id);
                 model.CopyTo(newMarker);
                 newMarker.BaseCategoryId = model.BaseCategoryId;
                 newMarker.CityId = model.CityId;
                 newMarker.DiscountId = model.DiscountId;
                 newMarker.StatusId = model.StatusId;
-                newMarker.UserId = adder.Id;
                 if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
                     newMarker.PublishedDate = DateTime.Now;
                 else if (model.StatusId == GetStatusByTag(MarkerStatuses.Checking).Id)
@@ -470,6 +478,152 @@ namespace MapBul.Web.Repository
         public List<article> GetArticles()
         {
             return _db.article.ToList();
+        }
+
+        public void AddNewArticle(NewArticleModel model, string userGuid)
+        {
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                user adder = GetUserByGuid(userGuid);
+                var article = new article();
+                model.CopyTo(article);
+                article.BaseCategoryId = model.BaseCategoryId;
+                article.AuthorId = adder.Id;
+                article.MarkerId = model.MarkerId;
+                if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
+                {
+                    article.EditorId = adder.Id;
+                    article.PublishedDate = DateTime.Now;
+                }
+                article.StatusId = model.StatusId;
+                _db.article.Add(article);
+                _db.SaveChanges();
+
+                if(model.SubCategories!=null)
+                {
+                    _db.articlesubcategory.AddRange(
+                    model.SubCategories.Select(sc => new articlesubcategory {ArticleId = article.Id, CategoryId = sc}));
+                }
+
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+
+        }
+
+        public void ChangeArticleStatus(int articleId, int statusId, string userGuid)
+        {
+            var article = _db.article.First(m => m.Id == articleId);
+
+            if (statusId == GetStatusByTag(MarkerStatuses.Published).Id)
+            {
+                article.PublishedDate = DateTime.Now;
+                article.EditorId = GetUserByGuid(userGuid).Id;
+            }
+            else 
+            {
+                article.PublishedDate = null;
+                article.EditorId = null;
+            }
+            article.StatusId = statusId;
+            _db.SaveChanges();
+        }
+
+        public article GetArticle(int articleId)
+        {
+            return _db.article.First(a => a.Id == articleId);
+        }
+
+        public void EditArticle(NewArticleModel model, string userGuid)
+        {
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                user adder = GetUserByGuid(userGuid);
+                article article = _db.article.First(m => m.Id == model.Id);
+                model.CopyTo(article);
+                article.BaseCategoryId = model.BaseCategoryId;
+                article.MarkerId = model.MarkerId;
+
+                if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
+                {
+                    article.EditorId = adder.Id;
+                    article.PublishedDate = DateTime.Now;
+                }
+                else
+                {
+                    article.EditorId = null;
+                    article.PublishedDate = null;
+                }
+                article.StatusId = model.StatusId;
+
+                _db.articlesubcategory.RemoveRange(_db.articlesubcategory.Where(s => s.ArticleId == article.Id));
+                if (model.SubCategories != null)
+                {
+                    _db.articlesubcategory.AddRange(
+                    model.SubCategories.Select(sc => new articlesubcategory { ArticleId = article.Id, CategoryId = sc }));
+                }
+                
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
+        public List<marker> GetMarkers(string userGuid)
+        {
+            var user = GetUserByGuid(userGuid);
+            switch (user.usertype.Tag)
+            {
+                case UserTypes.Admin:
+                    return _db.marker.ToList();
+                case UserTypes.Journalist:
+                    return user.marker.ToList();
+                case UserTypes.Editor:
+                    var journalists = user.editor.First().journalist;
+                    var result = new List<marker>();
+                    result.AddRange(user.marker);
+                    foreach (var journalist in journalists)
+                    {
+                        result.AddRange(journalist.user.marker);
+                    }
+                    return result;
+                default:
+                    return null;
+            }
+        }
+
+        public List<article> GetArticles(string userGuid)
+        {
+            var user = GetUserByGuid(userGuid);
+            switch (user.usertype.Tag)
+            {
+                case UserTypes.Admin:
+                    return _db.article.ToList();
+                case UserTypes.Journalist:
+                    return user.article.ToList();
+                case UserTypes.Editor:
+                    var journalists = user.editor.First().journalist;
+                    var result = new List<article>();
+                    result.AddRange(user.article);
+                    foreach (var journalist in journalists)
+                    {
+                        result.AddRange(journalist.user.article);
+                    }
+                    return result;
+                default:
+                    return null;
+            }
         }
 
         public status GetStatusByTag(string tag)

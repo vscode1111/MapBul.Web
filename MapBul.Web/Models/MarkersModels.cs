@@ -4,6 +4,13 @@ using MapBul.DBContext;
 
 namespace MapBul.Web.Models
 {
+
+    public class MarkersListModel
+    {
+        public List<marker> MyMarkers { get; set; }
+        public List<marker> OtherMarkers { get; set; }
+    }
+
     public class NewMarkerModel : marker
     {
         public NewMarkerModel()

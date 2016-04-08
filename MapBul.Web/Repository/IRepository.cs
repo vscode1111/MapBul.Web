@@ -33,11 +33,19 @@ namespace MapBul.Web.Repository
         List<marker> GetMarkers();
         List<discount> GetDiscounts();
         List<status> GetStatuses();
+        List<status> GetStatuses(string userGuid);
         List<weekday> GetWeekDays();
         void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid);
         void ChangeMarkerStatus(int markerId, int statusId);
         marker GetMarker(int markerId);
         void EditMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid);
         List<article> GetArticles();
+        void AddNewArticle(NewArticleModel model,string userGuid);
+        void ChangeArticleStatus(int articleId, int statusId, string userGuid);
+        article GetArticle(int articleId);
+        void EditArticle(NewArticleModel model, string userGuid);
+        List<marker> GetMarkers(string userGuid);
+        List<article> GetArticles(string userGuid);
+
     }
 }

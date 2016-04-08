@@ -1,0 +1,63 @@
+﻿@using MapBul.DBContext
+@model MapBul.Web.Models.NewArticleModel
+
+<div class="ibox">
+    <div class="ibox-title">
+        <h3>Новая статья</h3>
+    </div>
+    <div class="ibox-content">
+        <form action="#" method="POST" id="NewArticleForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Title, new Dictionary<string, object> { { "placeholder", "Название" }, { "class", "form-control" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Description, new Dictionary<string, object> { { "placeholder", "Описание" }, { "class", "form-control" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextAreaFor(m => m.Text, new Dictionary<string, object> { { "placeholder", "Текст" }, { "class", "form-control" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.EventDate, new Dictionary<string, object> { { "placeholder", "Дата события" }, { "class", "form-control datepicker" } })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Фотография заголовка</label>
+                        <input type="file" id="NewArticlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Фотография статьи</label>
+                        <input type="file" id="NewArticleTitlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Базовая категория</label>
+                        @Html.DropDownListFor(m => m.BaseCategoryId, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Тэги</label>
+                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "multiple", "" }, { "data-placeholder", "Выберите тэги" } })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Привязка к маркеру</label>
+                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>)ViewBag.Markers).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Text = "Нет", Selected = true, Value = null } }), new Dictionary<string, object> { { "id", "NewArticleMarkerSelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Статус</label>
+                        @Html.DropDownListFor(m => m.StatusId, ((List<status>)ViewBag.Statuses).Select(c => new SelectListItem { Text = c.Description, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-right">
+                <input type="button" id="NewArticleFormSubmit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        OnNewArticleDocumentReady();
+    });
+</script>

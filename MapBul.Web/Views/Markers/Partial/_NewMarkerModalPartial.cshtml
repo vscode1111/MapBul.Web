@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Тэги</label>
-                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}, {"required", ""}})
+                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}})
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -119,7 +119,7 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="button" id="NewMarkerFormSubmit" value="Сохранить" class="btn btn-primary"/>
+                <input type="button" id="NewArticleFormSubmit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>

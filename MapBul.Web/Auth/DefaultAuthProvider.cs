@@ -81,5 +81,15 @@ namespace MapBul.Web.Auth
 
             }
         }
+
+        public int UserId
+        {
+            get
+            {
+                IRepository db = DependencyResolver.Current.GetService<IRepository>();
+                user user = db.GetUserByGuid(HttpContext.Current.User.Identity.Name);
+                return user.Id;
+            }
+        }
     }
 }

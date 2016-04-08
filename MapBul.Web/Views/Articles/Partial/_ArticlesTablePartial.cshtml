@@ -1,5 +1,5 @@
 ﻿@using MapBul.DBContext
-@model List<MapBul.DBContext.article>
+@model List<article>
 
 <div class="col-xs-12">
     <div class="ibox">
@@ -16,44 +16,43 @@
                         <tr>
                             <th>№</th>
                             <th>Название</th>
-                            <th>Введение</th>
-                            <th>Город</th>
-                            <th>Адрес</th>
+                            <th>Описание</th>
                             <th>Категория</th>
-                            <th>Сайт</th>
+                            <th>Текст</th>
                             <th>Статус</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var article in Model)
                         {
-                            <tr data-markerid="@article.Id">
-                                <td class="EditMarkerLink">
+                            <tr data-articleid="@article.Id">
+                                <td class="EditArticleLink">
                                     @article.Id
                                 </td>
-                                <td class="EditMarkerLink">
+                                <td class="EditArticleLink">
                                     @article.Title
                                 </td>
-                                <td class="EditMarkerLink">
+                                <td class="EditArticleLink">
                                     @article.Description
                                 </td>
-                                
-                                <td class="EditMarkerLink">
+
+                                <td class="EditArticleLink">
                                     @article.category.Name
                                 </td>
-                                <td class="EditMarkerLink">
+                                <td class="EditArticleLink">
                                     @article.Text
                                 </td>
                                 <td>
                                     @{
                             var tmp = article;
                                     }
-                                    @Html.DropDownList("MarkerSatusSelect", ((List<status>)ViewBag.Statuses).Select(s => new SelectListItem { Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId }), new Dictionary<string, object> { { "class", "MarkerSatusSelect form-control chosenselect" }, { "data-markerid", article.Id } })
+                                    @Html.DropDownList("ArticleSatusSelect", ((List<status>)ViewBag.Statuses).Select(s => new SelectListItem { Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId }), new Dictionary<string, object> { { "class", "ArticleSatusSelect form-control chosenselect" }, { "data-articleid", article.Id } })
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 ﻿@using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
+@using Ninject.Infrastructure.Language
 @model MapBul.Web.Models.NewJournalistModel
 
 <div class="panel">
@@ -48,7 +49,7 @@
                         @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.DropDownList("EditorId", ((List<editor>)ViewBag.Editors).Select(e => new SelectListItem { Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString(), Selected = Model.EditorId == e.Id }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите редактора" } })
+                        @Html.DropDownListFor(m=>m.EditorId, ((List<editor>)ViewBag.Editors).Select(e => new SelectListItem { Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString(), Selected = Model.EditorId == e.Id }).Union(new List<SelectListItem>{new SelectListItem{Selected = Model.EditorId==null, Value = "null", Text = "Нет"}}), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите редактора" } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Заблокирован</label>

@@ -227,24 +227,26 @@ function OnMarkersDocumentReady() {
     $("#NewMarkerButton").click(OnNewMarkerClick);
     $(".EditMarkerLink").each(function(index, item) {
         $(item).click(OnEditMarkerClick);
-    }); 
-    $('#MarkersTable').dataTable({
-        "pageLength": 30,
-        "autoWidth": true,
-        "language": {
-            "lengthMenu": "Показать _MENU_",
-            "zeroRecords": "Ничего не найдено",
-            "info": "Страница _PAGE_ из _PAGES_",
-            "infoEmpty": "Нет записей",
-            "infoFiltered": "(Найдено из _MAX_ строк)",
-            "search": "Поиск",
-            "paginate": {
-                "first": "Первая",
-                "last": "Последняя",
-                "next": "Следующая",
-                "previous": "Предыдущая"
+    });
+    $('.dataTable').each(function(index, item) {
+        $(item).dataTable({
+            "pageLength": 30,
+            "autoWidth": true,
+            "language": {
+                "lengthMenu": "Показать _MENU_",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Страница _PAGE_ из _PAGES_",
+                "infoEmpty": "Нет записей",
+                "infoFiltered": "(Найдено из _MAX_ строк)",
+                "search": "Поиск",
+                "paginate": {
+                    "first": "Первая",
+                    "last": "Последняя",
+                    "next": "Следующая",
+                    "previous": "Предыдущая"
+                }
             }
-        }
+        });
     });
 
     $(".MarkerSatusSelect").each(function(index,value) {
