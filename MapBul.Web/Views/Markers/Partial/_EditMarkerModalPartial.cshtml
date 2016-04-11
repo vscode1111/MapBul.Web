@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using MapBul.DBContext
+@using MapBul.Web.Helpers
 @model MapBul.Web.Models.NewMarkerModel
 
 <div class="ibox">
@@ -69,7 +70,7 @@
                     <div class="form-group">
                         <label class="control-label">Фотография</label>
                         <div class="col-sm-10">
-                            <img src="@Model.Photo"/>
+                            <img class="col-xs-7" src="@Html.MapImage(Model.Photo)" />
                         </div>
                     </div>
                     <div class="form-group">

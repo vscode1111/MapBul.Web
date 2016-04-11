@@ -1,12 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using MapBul.DBContext;
+using MapBul.Web.Auth;
+using MapBul.Web.Repository;
 
 namespace MapBul.Web.Models
 {
 
     public class MarkersListModel
     {
+        public MarkersListModel(string guid)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            var user = repo.GetUserByGuid(guid);
+            var avaliableMarkers = repo.GetMarkers(guid);
+            MyMarkers = avaliableMarkers.Where(m => m.UserId == user.Id).ToList();
+            OtherMarkers = avaliableMarkers.Where(m => m.UserId != user.Id).ToList();
+        }
         public List<marker> MyMarkers { get; set; }
         public List<marker> OtherMarkers { get; set; }
     }

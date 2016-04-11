@@ -12,6 +12,7 @@ namespace MapBul.DBContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public editor()
         {
+            guide = new HashSet<guide>();
             journalist = new HashSet<journalist>();
         }
 
@@ -34,7 +35,7 @@ namespace MapBul.DBContext
         [Column(TypeName = "char")]
         [Required]
         [StringLength(1)]
-        public string Sex { get; set; }
+        public string Gender { get; set; }
 
         [Required]
         [StringLength(45)]
@@ -47,6 +48,9 @@ namespace MapBul.DBContext
         public string Address { get; set; }
 
         public virtual user user { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<guide> guide { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<journalist> journalist { get; set; }

@@ -626,6 +626,95 @@ namespace MapBul.Web.Repository
             }
         }
 
+        public List<guide> GetGuides()
+        {
+            return _db.guide.ToList();
+        }
+
+        public List<tenant> GetTenants()
+        {
+            return _db.tenant.ToList();
+        }
+
+        public tenant GetTenant(int tenantId)
+        {
+            return _db.tenant.First(t => t.Id == tenantId);
+        }
+
+        public guide GetGuide(int guideId)
+        {
+            return _db.guide.First(g => g.Id == guideId);
+        }
+
+        public void SaveGuideChanges(NewGuideModel model)
+        {
+            guide guide = _db.guide.FirstOrDefault(e => e.Id == model.Id);
+            if (guide == null)
+                throw new MyException(Errors.UserNotFound);
+
+            model.CopyTo(ref guide);
+            //editor.user.Password = TransformationProvider.Md5(model.Password);
+            guide.user.Email = TransformationProvider.TransformEmail(model.Email);
+            guide.user.Deleted = model.Deleted;
+
+            //сохранение новых прав
+            _db.country_permission.RemoveRange(guide.user.country_permission);
+            _db.city_permission.RemoveRange(guide.user.city_permission);
+            _db.region_permission.RemoveRange(guide.user.region_permission);
+
+            _db.country_permission.AddRange(
+                model.PermittedCountries.Select(c => new country_permission { CountryId = c, UserId = guide.UserId }));
+            _db.city_permission.AddRange(
+                model.PermittedCities.Select(c => new city_permission { CityId = c, UserId = guide.UserId }));
+            _db.region_permission.AddRange(
+                model.PermittedRegions.Select(c => new region_permission { RegionId = c, UserId = guide.UserId }));
+
+
+            _db.SaveChanges();
+        }
+
+        public void SaveTenantChanges(NewTenantModel model)
+        {
+            tenant tenant = _db.tenant.FirstOrDefault(e => e.Id == model.Id);
+            if (tenant == null)
+                throw new MyException(Errors.UserNotFound);
+
+            model.CopyTo(ref tenant);
+            //editor.user.Password = TransformationProvider.Md5(model.Password);
+            tenant.user.Email = TransformationProvider.TransformEmail(model.Email);
+            tenant.user.Deleted = model.Deleted;
+
+            _db.SaveChanges();
+        }
+
+        public List<journalist> GetJournalists(string userGuid)
+        {
+            var user = GetUserByGuid(userGuid);
+            switch (user.usertype.Tag)
+            {
+                case UserTypes.Admin:
+                    return _db.journalist.ToList();
+                case UserTypes.Editor:
+                    return user.editor.First().journalist.ToList();
+                default:
+                    return null;
+            }
+        }
+
+        public List<guide> GetGuides(string userGuid)
+        {
+            var user = GetUserByGuid(userGuid);
+            switch (user.usertype.Tag)
+            {
+                case UserTypes.Admin:
+                    return _db.guide.ToList();
+                case UserTypes.Editor:
+                    return user.editor.First().guide.ToList();
+                default:
+                    return null;
+            }
+        }
+
         public status GetStatusByTag(string tag)
         {
             return _db.status.First(s => s.Tag == tag);

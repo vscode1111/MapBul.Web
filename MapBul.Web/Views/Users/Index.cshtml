@@ -1,20 +1,43 @@
 ﻿@using System.Web.Optimization
+@using MapBul.SharedClasses.Constants
+@using MapBul.Web.Helpers
 
-<div class="row">
-    <div class="col-lg-12" id="AdminsTableContainer">
-        @Html.Action("_AdminsTablePartial", "Users")
+@if (Html.IsUserInRoles(UserTypes.Admin))
+{
+    <div class="row">
+        <div class="col-lg-12" id="AdminsTableContainer">
+            @Html.Action("_AdminsTablePartial", "Users")
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-12" id="EditorsTableContainer">
-        @Html.Action("_EditorsTablePartial", "Users")
+    <div class="row">
+        <div class="col-lg-12" id="EditorsTableContainer">
+            @Html.Action("_EditorsTablePartial", "Users")
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-12" id="JournalistsTableContainer">
-        @Html.Action("_JournalistsTablePartial", "Users")
+}
+
+@if (Html.IsUserInRoles(UserTypes.Admin,UserTypes.Editor))
+{
+    <div class="row">
+        <div class="col-lg-12" id="JournalistsTableContainer">
+            @Html.Action("_JournalistsTablePartial", "Users")
+        </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-lg-12" id="GuidesTableContainer">
+            @Html.Action("_GuidesTablePartial", "Users")
+        </div>
+    </div>
+}
+
+@if (Html.IsUserInRoles(UserTypes.Admin))
+{
+    <div class="row">
+        <div class="col-lg-12" id="TenantsTableContainer">
+            @Html.Action("_TenantsTablePartial", "Users")
+        </div>
+    </div>
+}
 
 @section Styles{
     @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
@@ -29,6 +52,8 @@
     @Scripts.Render("~/CustomScripts/Editors")
     @Scripts.Render("~/CustomScripts/Journalists")
     @Scripts.Render("~/CustomScripts/Admins")
+    @Scripts.Render("~/CustomScripts/Tenants")
+    @Scripts.Render("~/CustomScripts/Guides")
     @Scripts.Render("~/plugins/dataPicker")
     @Scripts.Render("~/plugins/chosen")
     @Scripts.Render("~/plugins/switchery")

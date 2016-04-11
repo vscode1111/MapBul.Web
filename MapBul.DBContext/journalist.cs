@@ -30,7 +30,7 @@ namespace MapBul.DBContext
         [Column(TypeName = "char")]
         [Required]
         [StringLength(1)]
-        public string Sex { get; set; }
+        public string Gender { get; set; }
 
         [Required]
         [StringLength(45)]

@@ -69,6 +69,7 @@
     <Compile Include="country_permission.cs" />
     <Compile Include="discount.cs" />
     <Compile Include="editor.cs" />
+    <Compile Include="guide.cs" />
     <Compile Include="journalist.cs" />
     <Compile Include="marker.cs" />
     <Compile Include="phone.cs" />

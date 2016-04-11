@@ -1,4 +1,5 @@
 ﻿@using MapBul.DBContext
+@using MapBul.Web.Helpers
 @model MapBul.Web.Models.NewArticleModel
 
 <div class="ibox">
@@ -30,7 +31,7 @@
                                 <label class="control-label">Фотография заголовка</label>
                                 @if (Model.TitlePhoto != null)
                                 {
-                                    <img src="@Model.TitlePhoto"/>
+                                    <img class="col-xs-7" src="@Html.MapImage(Model.TitlePhoto)" />
                                 }
                                 else
                                 {
@@ -43,7 +44,7 @@
                                 <label class="control-label">Фотография статьи</label>
                                 @if (Model.Photo != null)
                                 {
-                                    <img src="@Model.Photo"/>
+                                    <img class="col-xs-7" src="@Html.MapImage(Model.Photo)"/>
                                 }
                                 else
                                 {
@@ -54,11 +55,11 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Новая фотография заголовка</label>
-                        <input type="file" id="EditArticlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png"/>
+                        <input type="file" id="EditArticleTitlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Новая фотография статьи</label>
-                        <input type="file" id="EditArticleTitlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png"/>
+                        <input type="file" id="EditArticlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -72,7 +73,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Привязка к маркеру</label>
-                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>) ViewBag.Markers).Select(c => new SelectListItem {Selected = Model.MarkerId == c.Id, Text = c.Name, Value = c.Id.ToString()}).Union(new List<SelectListItem> {new SelectListItem {Selected = Model.MarkerId == null, Text = "Нет", Value = null}}), new Dictionary<string, object> {{"id", "EditArticleMarkerSelect"}, {"class", "form-control chosenselect"}, {"required", ""}})
+                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>)ViewBag.Markers).Select(c => new SelectListItem { Selected = Model.MarkerId == c.Id, Text = c.Name + ", " + c.city.Name + ", " + c.city.region.Name + ", " + c.city.region.country.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Selected = Model.MarkerId == null, Text = "Нет", Value = null } }), new Dictionary<string, object> { { "id", "EditArticleMarkerSelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Статус</label>

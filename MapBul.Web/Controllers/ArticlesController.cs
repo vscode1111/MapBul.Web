@@ -20,7 +20,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
-            List<article> model = repo.GetArticles(auth.UserGuid);
+            var model = new ArticlesListModel(userGuid);
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             return PartialView("Partial/_ArticlesTablePartial",model);
         }
@@ -42,7 +42,7 @@ namespace MapBul.Web.Controllers
             if (articlePhoto != null)
                 model.Photo = FileProvider.FileProvider.SaveArticlePhoto(articlePhoto);
             if(articleTitlePhoto!=null)
-                model.TitlePhoto = FileProvider.FileProvider.SaveArticlePhoto(articleTitlePhoto);
+                model.TitlePhoto = FileProvider.FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
 
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
@@ -73,7 +73,7 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditArticleModalPartial",model);
         }
 
-        public bool EditArticle(NewArticleModel model, HttpPostedFileBase articlePhoto, HttpPostedFileBase articleTitlePhoto)
+        public bool EditArticle(NewArticleModel model,  HttpPostedFileBase articleTitlePhoto, HttpPostedFileBase articlePhoto)
         {
             
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -86,8 +86,8 @@ namespace MapBul.Web.Controllers
             }
             if (articleTitlePhoto != null)
             {
-                FileProvider.FileProvider.DeleteFile(model.Photo);
-                model.TitlePhoto = FileProvider.FileProvider.SaveArticlePhoto(articleTitlePhoto);
+                FileProvider.FileProvider.DeleteFile(model.TitlePhoto);
+                model.TitlePhoto = FileProvider.FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
             }
             repo.EditArticle(model, userGuid);
 

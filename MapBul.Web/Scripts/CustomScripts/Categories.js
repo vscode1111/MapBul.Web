@@ -22,6 +22,9 @@ function SendEditCategoryForm() {
         success: function() {
             AddNewCategorySuccess();
             $("#Modal").modal("hide");
+        },
+        error:function() {
+            ViewNotification("Ошибка","error");
         }
     });
     return false;

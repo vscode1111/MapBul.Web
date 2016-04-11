@@ -18,6 +18,7 @@ namespace MapBul.DBContext
             city_permission = new HashSet<city_permission>();
             country_permission = new HashSet<country_permission>();
             editor = new HashSet<editor>();
+            guide = new HashSet<guide>();
             journalist = new HashSet<journalist>();
             marker = new HashSet<marker>();
             region_permission = new HashSet<region_permission>();
@@ -62,6 +63,9 @@ namespace MapBul.DBContext
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<editor> editor { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<guide> guide { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<journalist> journalist { get; set; }

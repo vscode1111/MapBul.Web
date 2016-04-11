@@ -1,8 +1,7 @@
 ﻿@using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
 @using MapBul.Web.Helpers
-@using Ninject.Infrastructure.Language
-@model MapBul.Web.Models.NewJournalistModel
+@model MapBul.Web.Models.NewGuideModel
 
 @{
     bool isAdmin = Html.IsUserInRoles(UserTypes.Admin);
@@ -10,18 +9,19 @@
     var isDisabled = isAdmin ? "notdisabled" : "disabled";
 }
 
+
 <div class="panel">
     <div class="panel-heading">
 
     </div>
     <div class="panel-body">
-        @using (Ajax.BeginForm("EditJournalist", "Users", new AjaxOptions { HttpMethod = "POST", OnSuccess = "EditJournalistSuccess", OnFailure = "ViewNotification('Не удалось сохранить изменения','error')", AllowCache = false }))
+        @using (Ajax.BeginForm("EditGuide", "Users", new AjaxOptions { HttpMethod = "POST", OnSuccess = "EditGuideSuccess", OnFailure = "ViewNotification('Не удалось сохранить изменения','error')", AllowCache = false }))
         {
             @Html.HiddenFor(m => m.Id)
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Фамилия" }, { "required", "" }, { isReadonly,""} })
+                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Фамилия" }, { "required", "" }, { isReadonly, "" } })
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Имя" }, { "required", "" }, { isReadonly, "" } })
@@ -67,14 +67,12 @@
             <div class="form-group">
                 @if (isAdmin)
                 {
-                    <input type="submit" class="btn btn-primary" value="Сохранить"/>
+                    <input type="submit" class="btn btn-primary" value="Сохранить" />
                 }
                 else
                 {
                     <input type="submit" class="btn btn-primary" disabled="disabled" value="Сохранить" />
                 }
-                
-                
             </div>
         }
     </div>
@@ -93,4 +91,3 @@
         });
     });
 </script>
-

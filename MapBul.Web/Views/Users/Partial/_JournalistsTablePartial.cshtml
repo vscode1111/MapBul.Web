@@ -1,4 +1,8 @@
-﻿@model MapBul.Web.Models.JournalistsListModel
+﻿@using MapBul.SharedClasses.Constants
+@using MapBul.Web.Helpers
+@model MapBul.Web.Models.JournalistsListModel
+
+
 
 <div class="ibox">
     <div class="ibox-title">
@@ -6,7 +10,10 @@
     </div>
     <div class="ibox-content">
         <div class="panel-body">
-            <input type="button" class="btn btn-primary" data-actionurl="@Url.Action("_NewJournalistPartial", "Users")" value="Новый журналист" id="NewJornalistButton"/>
+            @if (Html.IsUserInRoles(UserTypes.Admin))
+            {
+                <input type="button" class="btn btn-primary" data-actionurl="@Url.Action("_NewJournalistPartial", "Users")" value="Новый журналист" id="NewJornalistButton"/>
+            }
         </div>
         <div class="table-responsive" id="JournalistsTable">
             <table class="table table-striped table-bordered table-hover dataTable">
@@ -52,7 +59,7 @@
                             @journalist.BirthDate.ToString("dd.MM.yyyy")
                         </td>
                         <td>
-                            @journalist.Sex
+                            @journalist.Gender
                         </td>
                         <td>
                             @journalist.Phone

@@ -11,7 +11,6 @@ namespace MapBul.DBContext
             : base("name=Context")
         {
         }
-
         public virtual DbSet<admin> admin { get; set; }
         public virtual DbSet<article> article { get; set; }
         public virtual DbSet<articlesubcategory> articlesubcategory { get; set; }
@@ -22,6 +21,7 @@ namespace MapBul.DBContext
         public virtual DbSet<country_permission> country_permission { get; set; }
         public virtual DbSet<discount> discount { get; set; }
         public virtual DbSet<editor> editor { get; set; }
+        public virtual DbSet<guide> guide { get; set; }
         public virtual DbSet<journalist> journalist { get; set; }
         public virtual DbSet<marker> marker { get; set; }
         public virtual DbSet<phone> phone { get; set; }
@@ -102,7 +102,7 @@ namespace MapBul.DBContext
                 .IsUnicode(false);
 
             modelBuilder.Entity<editor>()
-                .Property(e => e.Sex)
+                .Property(e => e.Gender)
                 .IsUnicode(false);
 
             modelBuilder.Entity<editor>()
@@ -110,6 +110,35 @@ namespace MapBul.DBContext
                 .IsUnicode(false);
 
             modelBuilder.Entity<editor>()
+                .Property(e => e.Address)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<editor>()
+                .HasMany(e => e.guide)
+                .WithOptional(e => e.editor)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<guide>()
+                .Property(e => e.FirstName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<guide>()
+                .Property(e => e.MiddleName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<guide>()
+                .Property(e => e.LastName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<guide>()
+                .Property(e => e.Gender)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<guide>()
+                .Property(e => e.Phone)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<guide>()
                 .Property(e => e.Address)
                 .IsUnicode(false);
 
@@ -126,7 +155,7 @@ namespace MapBul.DBContext
                 .IsUnicode(false);
 
             modelBuilder.Entity<journalist>()
-                .Property(e => e.Sex)
+                .Property(e => e.Gender)
                 .IsUnicode(false);
 
             modelBuilder.Entity<journalist>()
@@ -215,7 +244,7 @@ namespace MapBul.DBContext
                 .IsUnicode(false);
 
             modelBuilder.Entity<tenant>()
-                .Property(e => e.Sex)
+                .Property(e => e.Gender)
                 .IsUnicode(false);
 
             modelBuilder.Entity<tenant>()

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
@@ -9,7 +10,7 @@ namespace MapBul.Web.Controllers
 {
     public class UsersController : Controller
     {
-        [MyAuth(Roles = UserTypes.Admin)]
+        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
         public ActionResult Index()
         {
             return View();
@@ -31,10 +32,12 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditorsTablePartial", model);
         }
 
-        [MyAuth(Roles = UserTypes.Admin)]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _JournalistsTablePartial()
         {
-            JournalistsListModel model = new JournalistsListModel();
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            var userGuid = auth.UserGuid;
+            JournalistsListModel model = new JournalistsListModel(userGuid);
             return PartialView("Partial/_JournalistsTablePartial", model);
         }
 
@@ -77,7 +80,7 @@ namespace MapBul.Web.Controllers
         }
 
         [HttpPost]
-        [MyAuth(Roles = UserTypes.Admin)]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _JournalistInformationPartial(int journalistId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -233,5 +236,79 @@ namespace MapBul.Web.Controllers
 
 #endregion
 
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public ActionResult _GuidesTablePartial()
+        {
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            var userGuid = auth.UserGuid;
+            GuidesListModel model = new GuidesListModel(userGuid);
+            return PartialView("Partial/_GuidesTablePartial",model);
+        }
+
+
+        public ActionResult _TenantsTablePartial()
+        {
+            TenantsListModel model=new TenantsListModel();
+            return PartialView("Partial/_TenantsTablePartial",model);
+        }
+
+        public ActionResult _TenantInformationPartial(int tenantId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            NewTenantModel model = new NewTenantModel(repo.GetTenant(tenantId));
+            return PartialView("Partial/_TenantInformationPartial",model);
+        }
+
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public ActionResult _GuideInformationPartial(int guideId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            NewGuideModel model=new NewGuideModel(repo.GetGuide(guideId));
+            return PartialView("Partial/_GuideInformationPartial",model);
+        }
+
+        public ActionResult EditGuide(NewGuideModel model)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            try
+            {
+                repo.SaveGuideChanges(model);
+            }
+            catch (MyException e)
+            {
+                return new JsonResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                    Data = new { success = false, errorReason = e.Error.Message }
+                };
+            }
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                Data = new { success = true }
+            };
+        }
+
+        public ActionResult EditTenant(NewTenantModel model)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            try
+            {
+                repo.SaveTenantChanges(model);
+            }
+            catch (MyException e)
+            {
+                return new JsonResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                    Data = new { success = false, errorReason = e.Error.Message }
+                };
+            }
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                Data = new { success = true }
+            };
+        }
     }
 }

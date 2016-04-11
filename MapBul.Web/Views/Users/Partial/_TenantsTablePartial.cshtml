@@ -1,0 +1,69 @@
+﻿@model MapBul.Web.Models.TenantsListModel
+
+<div class="ibox">
+    <div class="ibox-title">
+        <h3>Жители</h3>
+    </div>
+    <div class="ibox-content">
+        <div class="table-responsive" id="TenantsTable">
+            <table class="table table-striped table-bordered table-hover dataTable">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Дата регистрации</th>
+                        <th>Email</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
+                        <th>Фамилия</th>
+                        <th>Дата рождения</th>
+                        <th>Пол</th>
+                        <th>Телефон</th>
+                        <th>Адрес</th>
+                        <th>Редактор</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tenant in Model.Tenants)
+                    {
+                        <tr class="TenantDescriptionRow" data-id="@tenant.Id" style="cursor: pointer; background-color: rgba(@(tenant.user.Deleted ? "255,0,0,0.1" : "0,255,0,0.1"))">
+                            <td>
+                                @tenant.Id
+                            </td>
+                            <td>
+                                @tenant.user.RegistrationDate
+                            </td>
+                            <td>
+                                @tenant.user.Email
+                            </td>
+                            <td>
+                                @tenant.FirstName
+                            </td>
+                            <td>
+                                @tenant.LastName
+                            </td>
+                            <td>
+                                @tenant.MiddleName
+                            </td>
+                            <td>
+                                @(tenant.BirthDate!=null?tenant.BirthDate.Value.ToString("dd.MM.yyyy"):"")
+                            </td>
+                            <td>
+                                @tenant.Gender
+                            </td>
+                            <td>
+                                @tenant.Phone
+                            </td>
+                            <td>
+                                @tenant.Address
+                            </td>
+                            <td>
+                                @(tenant.user.Deleted ? "Заблокирован" : "Активен")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

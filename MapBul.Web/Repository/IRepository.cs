@@ -46,6 +46,13 @@ namespace MapBul.Web.Repository
         void EditArticle(NewArticleModel model, string userGuid);
         List<marker> GetMarkers(string userGuid);
         List<article> GetArticles(string userGuid);
-
+        List<guide> GetGuides();
+        List<tenant> GetTenants();
+        tenant GetTenant(int tenantId);
+        guide GetGuide(int guideId);
+        void SaveGuideChanges(NewGuideModel model);
+        void SaveTenantChanges(NewTenantModel model);
+        List<journalist> GetJournalists(string userGuid);
+        List<guide> GetGuides(string userGuid);
     }
 }

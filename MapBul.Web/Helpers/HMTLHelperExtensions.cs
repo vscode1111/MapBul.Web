@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using MapBul.Web.Auth;
 
@@ -33,6 +35,11 @@ namespace MapBul.Web.Helpers
         {
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             return roles.Contains(auth.UserType);
+        }
+
+        public static string MapImage(this HtmlHelper html, string path)
+        {
+            return "/" + path;
         }
 
     }

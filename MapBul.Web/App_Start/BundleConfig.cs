@@ -8,6 +8,9 @@ namespace MapBul.Web
 
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/CustomScripts/Index").Include(
+                      "~/Scripts/CustomScripts/Index.js", new MyCssRewriteUrlTransform()));
+
             bundles.Add(new ScriptBundle("~/CustomScripts/Articles").Include(
                       "~/Scripts/CustomScripts/Articles.js", new MyCssRewriteUrlTransform()));
 
@@ -30,6 +33,10 @@ namespace MapBul.Web
                       "~/Scripts/CustomScripts/Admins.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Journalists").Include(
                       "~/Scripts/CustomScripts/Journalists.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/Tenants").Include(
+                      "~/Scripts/CustomScripts/Tenants.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/Guides").Include(
+                      "~/Scripts/CustomScripts/Guides.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Users").Include(
                       "~/Scripts/CustomScripts/Users.js", new MyCssRewriteUrlTransform()));
 

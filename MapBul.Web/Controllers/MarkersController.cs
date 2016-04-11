@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
@@ -23,13 +22,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
-            var userId = auth.UserId;
-            var avaliableMarkers = repo.GetMarkers(userGuid);
-            var model = new MarkersListModel
-            {
-                MyMarkers = avaliableMarkers.Where(m => m.UserId == userId).ToList(),
-                OtherMarkers = avaliableMarkers.Where(m => m.UserId != userId).ToList()
-            };
+            var model = new MarkersListModel(userGuid);
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             return PartialView("Partial/_MarkersTablePartial",model);
         }

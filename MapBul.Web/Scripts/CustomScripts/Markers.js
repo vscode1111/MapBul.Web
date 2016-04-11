@@ -182,6 +182,27 @@ function MapInit() {
 
 }
 
+function OnMarkerPositionChanged() {
+    var url = "";
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+            markerId: markerId,
+            statusId: statusId
+        },
+        success: function () {
+            ViewNotification("Статус изменен", "success");
+        },
+        error: function () {
+            ViewNotification('Ошибка', 'error');
+        }
+    });
+
+}
+
+
+
 function OnEditMarkerAddressChanged() {
     var address = $("#EditMarkerHouseInput").val() + ", " + $("#EditMarkerStreetInput").val() + ", " + $("#EditMarkerCitySelect option:selected").text();
     var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;

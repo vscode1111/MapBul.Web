@@ -177,6 +177,7 @@
     <Compile Include="Helpers\ViewExtensions.cs" />
     <Compile Include="Models\ArticlesModels.cs" />
     <Compile Include="Models\DictionariesModels.cs" />
+    <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\LoginModels.cs" />
     <Compile Include="Models\MarkersModels.cs" />
     <Compile Include="Models\UsersModels.cs" />
@@ -325,9 +326,12 @@
     <Content Include="Scripts\CustomScripts\Cities.js" />
     <Content Include="Scripts\CustomScripts\Dictionaries.js" />
     <Content Include="Scripts\CustomScripts\Editors.js" />
+    <Content Include="Scripts\CustomScripts\Guides.js" />
+    <Content Include="Scripts\CustomScripts\Index.js" />
     <Content Include="Scripts\CustomScripts\Journalists.js" />
     <Content Include="Scripts\CustomScripts\Markers.js" />
     <Content Include="Scripts\CustomScripts\Shared.js" />
+    <Content Include="Scripts\CustomScripts\Tenants.js" />
     <Content Include="Scripts\CustomScripts\Users.js" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
@@ -800,6 +804,10 @@
     <Content Include="Views\Users\Partial\_NewJournalistPartial.cshtml" />
     <Content Include="Views\Users\Partial\_JournalistInformationPartial.cshtml" />
     <Content Include="Views\Users\Partial\_NewAdminModalPartial.cshtml" />
+    <Content Include="Views\Users\Partial\_GuidesTablePartial.cshtml" />
+    <Content Include="Views\Users\Partial\_TenantsTablePartial.cshtml" />
+    <Content Include="Views\Users\Partial\_TenantInformationPartial.cshtml" />
+    <Content Include="Views\Users\Partial\_GuideInformationPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

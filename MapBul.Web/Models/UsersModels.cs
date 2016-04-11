@@ -5,6 +5,16 @@ using MapBul.Web.Repository;
 
 namespace MapBul.Web.Models
 {
+    public class TenantsListModel
+    {
+        public List<tenant> Tenants { get; set; }
+
+        public TenantsListModel()
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            Tenants = repo.GetTenants();
+        }
+    }
     public class JournalistsListModel
     {
         public JournalistsListModel()
@@ -12,8 +22,29 @@ namespace MapBul.Web.Models
             IRepository repo = DependencyResolver.Current.GetService<IRepository>();
             Journalists = repo.GetJournalists();
         }
+        public JournalistsListModel(string userGuid)
+        {
+            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            Journalists = repo.GetJournalists(userGuid);
+        }
         public List<journalist> Journalists { get; set; }
+    }
 
+    public class GuidesListModel
+    {
+        public GuidesListModel()
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            Guides = repo.GetGuides();
+        }
+
+        public GuidesListModel(string userGuid)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            Guides = repo.GetGuides(userGuid);
+        }
+
+        public List<guide> Guides { get; set; } 
     }
 
     public class EditorsListModel
@@ -180,6 +211,94 @@ namespace MapBul.Web.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public bool Deleted { get; set; }
+    }
+
+
+
+
+    public class NewGuideModel : guide
+    {
+        public NewGuideModel()
+        {
+            PermittedCountries = new List<int>();
+            PermittedCities = new List<int>();
+            PermittedRegions = new List<int>();
+        }
+        public NewGuideModel(guide guide)
+        {
+            foreach (var propertyInfo in guide.GetType().GetProperties())
+            {
+                if (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType.Name == "String")
+                {
+                    propertyInfo.SetValue(this, propertyInfo.GetValue(guide));
+                }
+            }
+            Email = guide.user.Email;
+            Password = guide.user.Password;
+            Deleted = guide.user.Deleted;
+            PermittedCountries = new List<int>();
+            PermittedCities = new List<int>();
+            PermittedRegions = new List<int>();
+            foreach (var countryPermission in guide.user.country_permission)
+            {
+                PermittedCountries.Add(countryPermission.country.Id);
+            }
+            foreach (var regionPermission in guide.user.region_permission)
+            {
+                PermittedRegions.Add(regionPermission.region.Id);
+            }
+            foreach (var cityPermission in guide.user.city_permission)
+            {
+                PermittedCities.Add(cityPermission.city.Id);
+            }
+        }
+        public void CopyTo(ref guide guide)
+        {
+            foreach (var propertyInfo in guide.GetType().GetProperties())
+            {
+                if (!propertyInfo.Name.Contains("Id") && (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType.Name == "String"))
+                {
+                    propertyInfo.SetValue(guide, propertyInfo.GetValue(this));
+                }
+            }
+        }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public bool Deleted { get; set; }
+        public List<int> PermittedCountries { get; set; }
+        public List<int> PermittedRegions { get; set; }
+        public List<int> PermittedCities { get; set; }
+    }
+
+    public class NewTenantModel : tenant
+    {
+        public NewTenantModel(tenant tenant)
+        {
+            foreach (var propertyInfo in tenant.GetType().GetProperties())
+            {
+                if (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType.Name == "String")
+                {
+                    propertyInfo.SetValue(this, propertyInfo.GetValue(tenant));
+                }
+            }
+            Email = tenant.user.Email;
+            Password = tenant.user.Password;
+            Deleted = tenant.user.Deleted;
+        }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public bool Deleted { get; set; }
+
+        public void CopyTo(ref tenant tenant)
+        {
+            foreach (var propertyInfo in tenant.GetType().GetProperties())
+            {
+                if (!propertyInfo.Name.Contains("Id") && (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType.Name == "String"))
+                {
+                    propertyInfo.SetValue(tenant, propertyInfo.GetValue(this));
+                }
+            }
+        }
     }
 
 }
