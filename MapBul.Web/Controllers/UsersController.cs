@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
@@ -10,6 +9,7 @@ namespace MapBul.Web.Controllers
 {
     public class UsersController : Controller
     {
+        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
         public ActionResult Index()
         {
@@ -17,7 +17,8 @@ namespace MapBul.Web.Controllers
         }
 
 #region partials
-        
+
+        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _AdminsTablePartial()
         {
@@ -25,6 +26,7 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_AdminsTablePartial", model);
         }
 
+        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _EditorsTablePartial()
         {
@@ -32,6 +34,7 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditorsTablePartial", model);
         }
 
+        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _JournalistsTablePartial()
         {
@@ -100,6 +103,42 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewAdminModalPartial", model);
         }
 
+        [HttpGet]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public ActionResult _GuidesTablePartial()
+        {
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            var userGuid = auth.UserGuid;
+            GuidesListModel model = new GuidesListModel(userGuid);
+            return PartialView("Partial/_GuidesTablePartial", model);
+        }
+
+        [HttpGet]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult _TenantsTablePartial()
+        {
+            TenantsListModel model = new TenantsListModel();
+            return PartialView("Partial/_TenantsTablePartial", model);
+        }
+
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult _TenantInformationPartial(int tenantId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            NewTenantModel model = new NewTenantModel(repo.GetTenant(tenantId));
+            return PartialView("Partial/_TenantInformationPartial", model);
+        }
+
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public ActionResult _GuideInformationPartial(int guideId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            NewGuideModel model = new NewGuideModel(repo.GetGuide(guideId));
+            return PartialView("Partial/_GuideInformationPartial", model);
+        }
+
 #endregion
 
 #region actions
@@ -136,9 +175,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
-                //model.Password = TransformationProvider.GeneratePassword();
                 repo.SaveEditorChanges(model);
-                //MailProvider.SendMailWithCredintails(model.Password,model.FirstName,model.MiddleName,model.Email);
             }
             catch (MyException e)
             {
@@ -234,39 +271,8 @@ namespace MapBul.Web.Controllers
             };
         }
 
-#endregion
-
-        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
-        public ActionResult _GuidesTablePartial()
-        {
-            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
-            var userGuid = auth.UserGuid;
-            GuidesListModel model = new GuidesListModel(userGuid);
-            return PartialView("Partial/_GuidesTablePartial",model);
-        }
-
-
-        public ActionResult _TenantsTablePartial()
-        {
-            TenantsListModel model=new TenantsListModel();
-            return PartialView("Partial/_TenantsTablePartial",model);
-        }
-
-        public ActionResult _TenantInformationPartial(int tenantId)
-        {
-            var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewTenantModel model = new NewTenantModel(repo.GetTenant(tenantId));
-            return PartialView("Partial/_TenantInformationPartial",model);
-        }
-
-        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
-        public ActionResult _GuideInformationPartial(int guideId)
-        {
-            var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewGuideModel model=new NewGuideModel(repo.GetGuide(guideId));
-            return PartialView("Partial/_GuideInformationPartial",model);
-        }
-
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult EditGuide(NewGuideModel model)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -289,6 +295,8 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult EditTenant(NewTenantModel model)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -310,5 +318,9 @@ namespace MapBul.Web.Controllers
                 Data = new { success = true }
             };
         }
+
+#endregion
+
+        
     }
 }

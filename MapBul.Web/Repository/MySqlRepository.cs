@@ -519,12 +519,16 @@ namespace MapBul.Web.Repository
 
         public void ChangeArticleStatus(int articleId, int statusId, string userGuid)
         {
+            var user = GetUserByGuid(userGuid);
+            var status = GetStatusByTag(MarkerStatuses.Published);
+            if(status.Tag==MarkerStatuses.Published&&(user.usertype.Tag!=UserTypes.Editor&&user.usertype.Tag!=UserTypes.Admin))
+                throw new MyException(Errors.NotPermitted);
             var article = _db.article.First(m => m.Id == articleId);
 
-            if (statusId == GetStatusByTag(MarkerStatuses.Published).Id)
+            if (statusId == status.Id)
             {
                 article.PublishedDate = DateTime.Now;
-                article.EditorId = GetUserByGuid(userGuid).Id;
+                article.EditorId = user.Id;
             }
             else 
             {

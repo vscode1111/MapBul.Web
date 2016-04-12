@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
+using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
 using MapBul.Web.Models;
 using MapBul.Web.Repository;
@@ -10,11 +11,15 @@ namespace MapBul.Web.Controllers
 {
     public class ArticlesController : Controller
     {
+        [HttpGet]
+        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor+", "+UserTypes.Journalist)]
         public ActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public ActionResult _ArticlesTablePartial()
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -25,6 +30,8 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_ArticlesTablePartial",model);
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public ActionResult _NewArticleModalPartial()
         {
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
@@ -37,6 +44,8 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewArticleModalPartial",model);
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public bool AddNewArticle(NewArticleModel model, HttpPostedFileBase articlePhoto, HttpPostedFileBase articleTitlePhoto)
         {
             if (articlePhoto != null)
@@ -51,6 +60,8 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public bool ChangeArticleStatus(int articleId, int statusId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -60,6 +71,8 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public ActionResult _EditArticleModalPartial(int articleId)
         {
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
@@ -73,6 +86,8 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditArticleModalPartial",model);
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public bool EditArticle(NewArticleModel model,  HttpPostedFileBase articleTitlePhoto, HttpPostedFileBase articlePhoto)
         {
             

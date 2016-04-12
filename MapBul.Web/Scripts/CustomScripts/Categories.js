@@ -2,6 +2,9 @@
     $('#nestable').nestable({}).on('change', OnCategoriesStructureChanged);
     $("#NewCategoryFormSubmit").click(SendNewCategoryForm);
     $("#EditCategoryButton").click(OnEditCategoryClick);
+    jQuery.extend(jQuery.validator.messages, {
+        required: "Заполните поле"
+    });
 }
 
 function OnEditCategoryDocumentReady() {
@@ -48,6 +51,10 @@ function OnEditCategoryClick() {
 }
 
 function SendNewCategoryForm() {
+    if (!($("#NewCategoryForm").valid())) {
+        ViewNotification("Заполните обязательные поля!", "error");
+        return 0;
+    }
     var form = document.getElementById("NewCategoryForm");
     var formData = new FormData(form);
     var file = document.getElementById("NewCategoryIconInput").files[0];
@@ -59,7 +66,9 @@ function SendNewCategoryForm() {
         processData: false,
         type: "POST",
         success: AddNewCategorySuccess,
-        error:ViewNotification("Ошибка","error")
+        error: function() {
+            ViewNotification("Ошибка", "error");
+        }
     });
     return false;
 }

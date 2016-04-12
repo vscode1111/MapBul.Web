@@ -5,7 +5,7 @@
         <h3>Новая категория</h3>
     </div>
     <div class="ibox-content">
-        <form action="/" method="POST" id="NewCategoryForm" enctype="multipart/form-data">
+        <form action="" method="POST" id="NewCategoryForm" enctype="multipart/form-data">
             <div class="form-group">
                 <label class="control-label">Имя категории</label>
                 @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", "Название"}, {"required", ""}, {"class", "form-control"}})
@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Иконка категории</label>
-                <input id="NewCategoryIconInput" name="categoryIcon" type="file" accept="image/jpeg, image/png" class="fileinput"/>
+                <input id="NewCategoryIconInput" required="" name="categoryIcon" type="file" accept="image/jpeg, image/png" class="fileinput"/>
             </div>
             <div class="form-group">
                 <input id="NewCategoryFormSubmit" type="button" class="btn btn-primary" value="Сохранить"/>

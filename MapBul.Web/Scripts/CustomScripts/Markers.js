@@ -1,9 +1,10 @@
 ﻿function OnNewMarkerDocumentReady() {
-    $("#NewMarkerStreetInput").focusout(OnAddressChanged);
-    $("#NewMarkerHouseInput").focusout(OnAddressChanged);
-    $("#NewMarkerBuildingInput").focusout(OnAddressChanged);
+    $("#NewMarkerStreetInput").focusout(OnNewMarkerAddressChanged);
+    $("#NewMarkerHouseInput").focusout(OnNewMarkerAddressChanged);
+    $("#NewMarkerBuildingInput").focusout(OnNewMarkerAddressChanged);
     $("#NewMarkerFormSubmit").click(OnNewMarkerFormSubmit);
     $('.chosenselect').chosen();
+    $("#NewMarkerCitySelect").chosen().change(OnNewMarkerAddressChanged);
     $('.clockpicker').clockpicker();
     MapInit();
 
@@ -17,8 +18,10 @@ function OnEditMarkerDocumentReady() {
     $("#EditMarkerStreetInput").focusout(OnEditMarkerAddressChanged);
     $("#EditMarkerHouseInput").focusout(OnEditMarkerAddressChanged);
     $("#EditMarkerBuildingInput").focusout(OnEditMarkerAddressChanged);
-    $("#EditMarkerFormSubmit").click(OnEditMarkerFormSubmit);
+    $("#EditMarkerFormSubmit").click(OnEditMarkerFormSubmit); 
     $('.chosenselect').chosen();
+    $("#EditMarkerCitySelect").chosen().change(OnEditMarkerAddressChanged);
+
     $('.clockpicker').clockpicker();
     MapInit();
 
@@ -170,6 +173,8 @@ function MapInit() {
         center: myLatlng
     }
     window.map = new google.maps.Map(document.getElementById("GMap"), mapOptions);
+    window.geocoder = new google.maps.Geocoder;
+
 
     var image = 'Images/mapmarker.png';
     window.marker = new google.maps.Marker({
@@ -179,26 +184,40 @@ function MapInit() {
         title: "",
         icon: image
     });
+    marker.addListener('dragend', OnMarkerPositionChanged);
 
 }
 
 function OnMarkerPositionChanged() {
-    var url = "";
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: {
-            markerId: markerId,
-            statusId: statusId
-        },
-        success: function () {
-            ViewNotification("Статус изменен", "success");
-        },
-        error: function () {
-            ViewNotification('Ошибка', 'error');
+    var latLng = { lat: window.marker.position.lat(), lng: window.marker.position.lng() };
+
+    window.geocoder.geocode({ 'location': latLng }, function (results, status) {
+        if (status === window.google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+                $("input[name='House']").val("");
+                $("input[name='Buliding']").val("");
+                $(results[0].address_components).each(function(index, item) {
+                    if (item.types.indexOf("street_number") >= 0) {
+                        var house;
+                        var building = "";
+
+                        if (item.short_name.indexOf('с') >= 0) {
+                            house = item.short_name.substring(0, item.short_name.indexOf('с'));
+                            building = item.short_name.substr(item.short_name.indexOf('с') + 1);
+                        } else {
+                            house = item.short_name;
+                        }
+                        $("input[name='House']").val(house);
+                        $("input[name='Buliding']").val(building);
+                    }
+                    if (item.types.indexOf("route") >= 0) {
+                        var street = item.short_name;
+                        $("input[name='Street']").val(street);
+                    }
+                });
+            }
         }
     });
-
 }
 
 
@@ -216,6 +235,7 @@ function OnEditMarkerAddressChanged() {
             var latLng = new google.maps.LatLng(location.lat, location.lng);
             window.marker.setPosition(latLng);
             window.map.setCenter(latLng);
+            window.map.setZoom(11);
         },
         error: function () {
             ViewNotification('Ошибка', 'error');
@@ -223,7 +243,7 @@ function OnEditMarkerAddressChanged() {
     });
 }
 
-function OnAddressChanged() {
+function OnNewMarkerAddressChanged() {
     var address = $("#NewMarkerHouseInput").val() + ", "+$("#NewMarkerStreetInput").val()+ ", " + $("#NewMarkerCitySelect option:selected").text();
     var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;
         $.ajax({

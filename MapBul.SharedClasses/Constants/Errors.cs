@@ -29,5 +29,7 @@
         public static Error UserBlocked=new Error(5, "Пользователь заблокирован");
 
         public static Error UserNotAuthorized =new Error(6,"Пользователь не авторизован");
+
+        public static Error NotPermitted = new Error(7, "Недостаточно прав");
     }
 }
