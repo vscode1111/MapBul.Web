@@ -18,7 +18,6 @@ namespace MapBul.Web.Controllers
             return View();
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public ActionResult _ArticlesTablePartial()
         {

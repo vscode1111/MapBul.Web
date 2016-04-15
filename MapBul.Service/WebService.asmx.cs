@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.Services;
 using MapBul.DBContext;
@@ -23,7 +24,7 @@ namespace MapBul.Service
 
         private string MapUrl(string filePath)
         {
-            return "/"+filePath;
+            return "http://"+HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"]+"/" + filePath;
         }
 
         private object GetUserDescriptor(user user)
@@ -87,6 +88,7 @@ namespace MapBul.Service
             }
         }
 
+
         [WebMethod]
         public string GetMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng)
         {
@@ -106,11 +108,18 @@ namespace MapBul.Service
                             marker.Name,
                             marker.Lat,
                             marker.Lng,
-                            marker.category.Icon,
-                            marker.Photo,
+                            Icon=MapUrl(marker.category.Icon),
+                            Photo=MapUrl(marker.Photo),
                             marker.phone.First(p => p.Primary).Number,
                             marker.Site,
-                            marker.Introduction
+                            marker.Introduction,
+                            WorkTime=marker.worktime.Select(wt=>new
+                            {
+                                wt.OpenTime,
+                                wt.CloseTime,
+                                wt.weekday.Id
+                            }).ToList(),
+                            CategoriesBranch=GetCategoriesBranch(marker.category)
                         }, markers.IndexOf(marker));
                 }
 
@@ -141,6 +150,37 @@ namespace MapBul.Service
                 Subcategories = marker.subcategory.Select(s=>s.category.Name).ToList()
             }, 0);
             return JsonConvert.SerializeObject(result);
+        }
+
+        [WebMethod]
+        public string GetRootCategories()
+        {
+            MySqlRepository repo=new MySqlRepository();
+            List<category> rootCategories = repo.GetRootCategories();
+            int index = 0;
+            var result=new JsonResult(new List<Dictionary<string, object>>());
+            foreach (var rootCategory in rootCategories)
+            {
+                rootCategory.Icon = MapUrl(rootCategory.Icon);
+                List<category> childCategories = repo.GetChildCategories(rootCategory.Id);
+                result.AddObjectToResult(rootCategory,index);
+                result.AddObjectToResult(new {Color="ab3412"},index);
+                result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { Color = "cd8f85", c.Id, c.ParentId, c.AddedDate, Icon = MapUrl(c.Icon), c.Name }).ToList() }, index);
+                index++;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        private List<int> GetCategoriesBranch(category category)
+        {
+            var result=new List<int>();
+            var currentCategory = category;
+            while (currentCategory != null)
+            {
+                result.Add(currentCategory.Id);
+                currentCategory = currentCategory.category2;
+            }
+            return result;
         }
     }
 }

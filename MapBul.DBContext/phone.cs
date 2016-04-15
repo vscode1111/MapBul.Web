@@ -12,7 +12,7 @@ namespace MapBul.DBContext
         public int Id { get; set; }
 
         [Required]
-        [StringLength(10)]
+        [StringLength(20)]
         public string Number { get; set; }
 
         public int MarkerId { get; set; }

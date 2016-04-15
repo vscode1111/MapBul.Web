@@ -18,7 +18,6 @@ namespace MapBul.Web.Controllers
 
 #region partials
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _AdminsTablePartial()
         {
@@ -26,7 +25,6 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_AdminsTablePartial", model);
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _EditorsTablePartial()
         {
@@ -34,7 +32,6 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditorsTablePartial", model);
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _JournalistsTablePartial()
         {
@@ -103,7 +100,6 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewAdminModalPartial", model);
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _GuidesTablePartial()
         {
@@ -113,7 +109,6 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_GuidesTablePartial", model);
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _TenantsTablePartial()
         {

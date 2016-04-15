@@ -23,7 +23,6 @@ namespace MapBul.Web.Controllers
 
 #region partials
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _MarkersTablePartial()
         {

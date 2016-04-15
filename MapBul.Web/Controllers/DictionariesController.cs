@@ -30,7 +30,6 @@ namespace MapBul.Web.Controllers
 
 #region partials
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _CitiesPartial()
         {
@@ -48,7 +47,6 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditCategoryModalPartial", model);
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _CategoriesPartial()
         {
@@ -56,7 +54,6 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_CategoriesPartial", model);
         }
 
-        [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewCategoryPartial()
         {

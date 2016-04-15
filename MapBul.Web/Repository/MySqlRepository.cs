@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
@@ -520,7 +521,7 @@ namespace MapBul.Web.Repository
         public void ChangeArticleStatus(int articleId, int statusId, string userGuid)
         {
             var user = GetUserByGuid(userGuid);
-            var status = GetStatusByTag(MarkerStatuses.Published);
+            var status = GetStatuses().First(s => s.Id == statusId);
             if(status.Tag==MarkerStatuses.Published&&(user.usertype.Tag!=UserTypes.Editor&&user.usertype.Tag!=UserTypes.Admin))
                 throw new MyException(Errors.NotPermitted);
             var article = _db.article.First(m => m.Id == articleId);

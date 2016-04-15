@@ -31,6 +31,6 @@ C:\AKryuchkov\MBWeb\MapBul.DBContext\bin\Debug\MySql.Data.dll
 C:\AKryuchkov\MBWeb\MapBul.DBContext\bin\Debug\MySql.Data.Entity.EF6.dll
 C:\AKryuchkov\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.xml
 C:\AKryuchkov\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.SqlServer.xml
-C:\AKryuchkov\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.csprojResolveAssemblyReference.cache
 C:\AKryuchkov\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.dll
 C:\AKryuchkov\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.pdb
+C:\AKryuchkov\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.csprojResolveAssemblyReference.cache
