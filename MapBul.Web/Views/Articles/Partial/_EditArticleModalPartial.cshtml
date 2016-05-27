@@ -73,7 +73,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Привязка к маркеру</label>
-                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>)ViewBag.Markers).Select(c => new SelectListItem { Selected = Model.MarkerId == c.Id, Text = c.Name + ", " + c.city.Name + ", " + c.city.region.Name + ", " + c.city.region.country.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Selected = Model.MarkerId == null, Text = "Нет", Value = null } }), new Dictionary<string, object> { { "id", "EditArticleMarkerSelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
+                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>)ViewBag.Markers).Select(c => new SelectListItem { Selected = Model.MarkerId == c.Id, Text = c.Name + ", " + c.city.Name + ", " + c.city.country.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Selected = Model.MarkerId == null, Text = "Нет", Value = null } }), new Dictionary<string, object> { { "id", "EditArticleMarkerSelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Статус</label>

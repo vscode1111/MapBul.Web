@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Linq;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
@@ -84,8 +83,8 @@ namespace MapBul.Web.Repository
                     model.PermittedCountries.Select(c => new country_permission {CountryId = c, UserId = newUser.Id}));
                 _db.city_permission.AddRange(
                     model.PermittedCities.Select(c => new city_permission {CityId = c, UserId = newUser.Id}));
-                _db.region_permission.AddRange(
-                    model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = newUser.Id}));
+               /* _db.region_permission.AddRange(
+                    model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = newUser.Id}));*/
 
                 _db.SaveChanges();
                 trans.Commit();
@@ -118,14 +117,14 @@ namespace MapBul.Web.Repository
             //сохранение новых прав
             _db.country_permission.RemoveRange(editor.user.country_permission);
             _db.city_permission.RemoveRange(editor.user.city_permission);
-            _db.region_permission.RemoveRange(editor.user.region_permission);
+//            _db.region_permission.RemoveRange(editor.user.region_permission);
 
             _db.country_permission.AddRange(
                 model.PermittedCountries.Select(c => new country_permission {CountryId = c, UserId = editor.UserId}));
             _db.city_permission.AddRange(
                 model.PermittedCities.Select(c => new city_permission {CityId = c, UserId = editor.UserId}));
-            _db.region_permission.AddRange(
-                model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = editor.UserId}));
+//            _db.region_permission.AddRange(
+//                model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = editor.UserId}));
 
 
             _db.SaveChanges();
@@ -136,10 +135,10 @@ namespace MapBul.Web.Repository
             return _db.country.ToList();
         }
 
-        public List<region> GetRegions()
+        /*public List<region> GetRegions()
         {
             return _db.region.ToList();
-        }
+        }*/
 
         public List<city> GetCities()
         {
@@ -172,8 +171,8 @@ namespace MapBul.Web.Repository
                     model.PermittedCountries.Select(c => new country_permission {CountryId = c, UserId = newUser.Id}));
                 _db.city_permission.AddRange(
                     model.PermittedCities.Select(c => new city_permission {CityId = c, UserId = newUser.Id}));
-                _db.region_permission.AddRange(
-                    model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = newUser.Id}));
+//                _db.region_permission.AddRange(
+//                    model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = newUser.Id}));
 
                 _db.SaveChanges();
                 trans.Commit();
@@ -204,40 +203,66 @@ namespace MapBul.Web.Repository
             //сохранение новых прав
             _db.country_permission.RemoveRange(journalist.user.country_permission);
             _db.city_permission.RemoveRange(journalist.user.city_permission);
-            _db.region_permission.RemoveRange(journalist.user.region_permission);
+            //_db.region_permission.RemoveRange(journalist.user.region_permission);
 
             _db.country_permission.AddRange(
                 model.PermittedCountries.Select(c => new country_permission { CountryId = c, UserId = journalist.UserId }));
             _db.city_permission.AddRange(
                 model.PermittedCities.Select(c => new city_permission { CityId = c, UserId = journalist.UserId }));
-            _db.region_permission.AddRange(
-                model.PermittedRegions.Select(c => new region_permission { RegionId = c, UserId = journalist.UserId }));
+//            _db.region_permission.AddRange(
+//                model.PermittedRegions.Select(c => new region_permission { RegionId = c, UserId = journalist.UserId }));
 
 
             _db.SaveChanges();
         }
 
-        public void AddCountry(string name)
+        public void AddCountry(string name, string placeId, string code)
         {
-            _db.country.Add(new country {Name = name});
+            if(_db.country.Any(c=>c.PlaceId==placeId))
+                return;
+            _db.country.Add(new country {Name = name, PlaceId = placeId, Code = code});
             _db.SaveChanges();
         }
 
-        public void AddRegion(string name, int countryId)
+        /*public void AddRegion(string name, int countryId, string placeId)
         {
-            _db.region.Add(new region {Name = name, CountryId = countryId});
+            if (_db.region.Any(c => c.PlaceId == placeId))
+                return;
+            _db.region.Add(new region {Name = name, CountryId = countryId,PlaceId = placeId});
             _db.SaveChanges();
-        }
+        }*/
 
-        public void AddCity(string name, int regionId)
+        /*public void AddCity(string name, int regionId,string placeId, float lat, float lng)
         {
+            if (_db.city.Any(c => c.PlaceId == placeId))
+                return;
             region region = GetRegion(regionId);
             var coordinates =
                 ExternalRequest.ExternalRequestProvider.GetCoordinates(region.country.Name + ", " + region.Name + ", " +
-                                                                       name);
-            _db.city.Add(new city {Name = name, RegionId = regionId, Lat = coordinates.Lat, Lng = coordinates.Lng});
+                                                               name);
+            _db.city.Add(new city { Name = name, RegionId = regionId, Lat = coordinates.Lat, Lng = coordinates.Lng, PlaceId = placeId });
+            //_db.city.Add(new city {Name = name, RegionId = regionId, Lat = lat, Lng = lng, PlaceId = placeId});
+            _db.SaveChanges();
+        }*/
+
+        public void AddCity(string name, int countryId, string placeId, float lat, float lng)
+        {
+            if (_db.city.Any(c => c.PlaceId == placeId))
+                return;
+            country country = GetCountry(countryId);
+            /*var coordinates =
+                ExternalRequest.ExternalRequestProvider.GetCoordinates(country.Name + ", " +
+                                                               name);
+            _db.city.Add(new city { Name = name, CountryId = countryId, Lat = coordinates.Lat, Lng = coordinates.Lng, PlaceId = placeId });*/
+            _db.city.Add(new city { Name = name, CountryId = country.Id, Lat = lat, Lng = lng, PlaceId = placeId });
             _db.SaveChanges();
         }
+
+        private country GetCountry(int countryId)
+        {
+            return _db.country.First(c => c.Id == countryId);
+        }
+
 
         public List<category> GetCategories()
         {
@@ -665,14 +690,14 @@ namespace MapBul.Web.Repository
             //сохранение новых прав
             _db.country_permission.RemoveRange(guide.user.country_permission);
             _db.city_permission.RemoveRange(guide.user.city_permission);
-            _db.region_permission.RemoveRange(guide.user.region_permission);
+            //_db.region_permission.RemoveRange(guide.user.region_permission);
 
             _db.country_permission.AddRange(
                 model.PermittedCountries.Select(c => new country_permission { CountryId = c, UserId = guide.UserId }));
             _db.city_permission.AddRange(
                 model.PermittedCities.Select(c => new city_permission { CityId = c, UserId = guide.UserId }));
-            _db.region_permission.AddRange(
-                model.PermittedRegions.Select(c => new region_permission { RegionId = c, UserId = guide.UserId }));
+           // _db.region_permission.AddRange(
+           //     model.PermittedRegions.Select(c => new region_permission { RegionId = c, UserId = guide.UserId }));
 
 
             _db.SaveChanges();
@@ -725,9 +750,9 @@ namespace MapBul.Web.Repository
             return _db.status.First(s => s.Tag == tag);
         }
 
-        public region GetRegion(int regionId)
+        /*public region GetRegion(int regionId)
         {
             return _db.region.First(r => r.Id == regionId);
-        }
+        }*/
     }
 }

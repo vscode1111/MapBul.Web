@@ -74,15 +74,17 @@ namespace MapBul.Web.Controllers
 
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto)
+        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo)
         {
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
-            string filePath = markerPhoto == null ? null : FileProvider.FileProvider.SaveMarkerPhoto(markerPhoto);
-            model.Photo = filePath;
+            string photoPath = markerPhoto == null ? null : FileProvider.FileProvider.SaveMarkerPhoto(markerPhoto);
+            string logoPath = markerPhoto == null ? null : FileProvider.FileProvider.SaveMarkerLogo(markerLogo);
+            model.Photo = photoPath;
+            model.Logo = logoPath;
             repo.AddMarker(model, openTimes, closeTimes, userGuid);
 
             return true;
@@ -91,7 +93,7 @@ namespace MapBul.Web.Controllers
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public bool EditMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
-            HttpPostedFileBase markerPhoto)
+            HttpPostedFileBase markerPhoto,  HttpPostedFileBase markerLogo)
         {
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
@@ -104,6 +106,12 @@ namespace MapBul.Web.Controllers
                 FileProvider.FileProvider.DeleteFile(model.Photo);
                 string filePath = FileProvider.FileProvider.SaveMarkerPhoto(markerPhoto);
                 model.Photo = filePath;
+            }
+            if (markerLogo != null)
+            {
+                FileProvider.FileProvider.DeleteFile(model.Logo);
+                string filePath = FileProvider.FileProvider.SaveMarkerLogo(markerLogo);
+                model.Logo = filePath;
             }
             repo.EditMarker(model, openTimes, closeTimes, userGuid);
 

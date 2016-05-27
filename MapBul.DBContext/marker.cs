@@ -80,6 +80,9 @@ namespace MapBul.DBContext
 
         public int StatusId { get; set; }
 
+        [StringLength(200)]
+        public string Logo { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<article> article { get; set; }
 

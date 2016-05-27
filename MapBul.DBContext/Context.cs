@@ -81,14 +81,6 @@ namespace MapBul.DBContext
                 .WithRequired(e => e.category)
                 .HasForeignKey(e => e.BaseCategoryId);
 
-            modelBuilder.Entity<city>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<country>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
             modelBuilder.Entity<editor>()
                 .Property(e => e.FirstName)
                 .IsUnicode(false);
@@ -219,10 +211,6 @@ namespace MapBul.DBContext
                 .Property(e => e.Number)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<region>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
             modelBuilder.Entity<status>()
                 .Property(e => e.Tag)
                 .IsUnicode(false);
@@ -292,6 +280,34 @@ namespace MapBul.DBContext
 
             modelBuilder.Entity<weekday>()
                 .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<city>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<country>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<region>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<city>()
+                .Property(e => e.PlaceId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<country>()
+                .Property(e => e.PlaceId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<region>()
+                .Property(e => e.PlaceId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<country>()
+                .Property(e => e.Code)
                 .IsUnicode(false);
         }
     }

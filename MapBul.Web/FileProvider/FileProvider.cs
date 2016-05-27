@@ -107,5 +107,25 @@ namespace MapBul.Web.FileProvider
                 throw new MyException(Errors.UnknownError);
             return virtualPath;
         }
+
+        public static string SaveMarkerLogo(HttpPostedFileBase markerLogo)
+        {
+            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
+            var siteRoot = HostingEnvironment.MapPath("~/");
+            if (siteRoot != null)
+            {
+                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                markerLogo.SaveAs(savePath);
+                Image resizedImage;
+                using (var image = Image.FromFile(savePath))
+                {
+                    resizedImage = CompressImage(image, 300, 300);
+                }
+                resizedImage.Save(savePath);
+            }
+            else
+                throw new MyException(Errors.UnknownError);
+            return virtualPath;
+        }
     }
 }

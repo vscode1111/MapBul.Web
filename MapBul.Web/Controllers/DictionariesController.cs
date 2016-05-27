@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -67,28 +68,32 @@ namespace MapBul.Web.Controllers
 #region actions
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddCountry(string name)
+        public bool AddCountry(string name, string placeId, string code)
         {
             IRepository repo = DependencyResolver.Current.GetService<IRepository>();
-            repo.AddCountry(name);
+            repo.AddCountry(name, placeId, code);
             return true;
         }
+/*
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public bool AddRegion(string name, int countryId, string placeId)
+        {
+            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.AddRegion(name, countryId,placeId);
+            return true;
+        }*/
 
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddRegion(string name, int countryId)
+        public bool AddCity(string name, int countryId, string placeId, string lat, string lng)
         {
+            var latConverted = Convert.ToSingle(lat,
+                new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," });
+            var lngConverted = Convert.ToSingle(lng,
+                new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," });
             IRepository repo = DependencyResolver.Current.GetService<IRepository>();
-            repo.AddRegion(name, countryId);
-            return true;
-        }
-
-        [HttpPost]
-        [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddCity(string name, int regionId)
-        {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
-            repo.AddCity(name, regionId);
+            repo.AddCity(name, countryId, placeId, latConverted, lngConverted);
             return true;
         }
 

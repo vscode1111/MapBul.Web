@@ -4,8 +4,10 @@
     $("#NewMarkerBuildingInput").focusout(OnNewMarkerAddressChanged);
     $("#NewMarkerFormSubmit").click(OnNewMarkerFormSubmit);
     $('.chosenselect').chosen();
-    $("#NewMarkerCitySelect").chosen().change(OnNewMarkerAddressChanged);
+    $("#MarkerCitySelect").chosen().change(OnNewMarkerAddressChanged);
     $('.clockpicker').clockpicker();
+    $("#MarkerLatInput").focusout(OnMarkerCoordinateChanged);
+    $("#MarkerLngInput").focusout(OnMarkerCoordinateChanged);
     MapInit();
 
     jQuery.extend(jQuery.validator.messages, {
@@ -21,14 +23,32 @@ function OnEditMarkerDocumentReady() {
     $("#EditMarkerFormSubmit").click(OnEditMarkerFormSubmit); 
     $('.chosenselect').chosen();
     $("#EditMarkerCitySelect").chosen().change(OnEditMarkerAddressChanged);
-
     $('.clockpicker').clockpicker();
+    $("#MarkerLatInput").focusout(OnMarkerCoordinateChanged);
+    $("#MarkerLngInput").focusout(OnMarkerCoordinateChanged);
     MapInit();
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Заполните поле"
     });
 }
+
+
+function OnMarkerCoordinateChanged() {
+    var lat = $("#MarkerLatInput").val();
+    var lng = $("#MarkerLngInput").val();
+    if (lat.length === 0) {
+        lat = window.marker.position.lat();
+    }
+    if (lng.length === 0) {
+        lng = window.marker.position.lng();
+    }
+    var latlng = new window.google.maps.LatLng(lat, lng);
+    marker.setPosition(latlng);
+    window.map.setCenter(latlng);
+    OnMarkerPositionChanged();
+}
+
 
 function OnEditMarkerFormSubmit() {
     var form = document.getElementById("EditMarkerForm");
@@ -39,8 +59,10 @@ function OnEditMarkerFormSubmit() {
     }
 
     var formData = new FormData(form);
-    var file = document.getElementById("EditMarkerPhotoInput").files[0];
-    formData.append("markerPhoto", file);
+    var photo = document.getElementById("EditMarkerPhotoInput").files[0];
+    formData.append("markerPhoto", photo);
+    var logo = document.getElementById("EditMarkerLogoInput").files[0];
+    formData.append("markerLogo", logo);
 
     var openTimesElements = $(".OpenTime");
     var openTimes = [];
@@ -102,8 +124,10 @@ function OnNewMarkerFormSubmit() {
     }
 
     var formData = new FormData(form);
-    var file = document.getElementById("NewMarkerPhotoInput").files[0];
-    formData.append("markerPhoto", file);
+    var photo = document.getElementById("NewMarkerPhotoInput").files[0];
+    formData.append("markerPhoto", photo);
+    var logo = document.getElementById("NewMarkerLogoInput").files[0];
+    formData.append("markerLogo", logo);
 
     var openTimesElements = $(".OpenTime");
     var openTimes = [];
@@ -185,15 +209,67 @@ function MapInit() {
         icon: image
     });
     marker.addListener('dragend', OnMarkerPositionChanged);
+    map.addListener('click',OnMapClick);
 
 }
+
+function OnMapClick(e) {
+    var latLng = e.latLng;
+    marker.setPosition(latLng);
+    OnMarkerPositionChanged();
+}
+
+
+function ChangeCitySelect(result) {
+    $("#MarkerCitySelect option").each(function (index2, option) {
+        $("#MarkerCitySelect").val("");
+    });
+    var found = false;
+    var fullAddress = "";
+    var localities = 0;
+    $(result.address_components.reverse()).each(function (index1, component) {
+        if (component.types.indexOf("postal_code") !== -1) {
+            return;
+        }
+        fullAddress += component.long_name;
+        if (component.types.indexOf("locality") !== -1) {
+            localities++;
+            window.geocoder.geocode({ 'address': fullAddress }, function (results, status) {
+                if (status === "OK") {
+                    $("#MarkerCitySelect option").each(function(index2, option) {
+                        if ($(option).attr("data-city-placeid") === results[0].place_id) {
+                            $("#MarkerCitySelect").val($(option).attr("value")).trigger("chosen:updated");
+                            found = true;
+                        }
+                        if ((index2 === ($("#MarkerCitySelect option").length - 1)) && !found) {
+                            ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
+                            $("#MarkerCitySelect").val("").trigger("chosen:updated");
+                        }
+                    });
+                }
+            });
+        }
+        fullAddress += ", ";
+        if ((index1 === ($(result.address_components).length - 1)) && localities === 0) {
+            ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
+            $("#MarkerCitySelect").val("").trigger("chosen:updated");
+        }
+    });
+}
+
 
 function OnMarkerPositionChanged() {
     var latLng = { lat: window.marker.position.lat(), lng: window.marker.position.lng() };
 
+    $("#MarkerLatInput").val(window.marker.position.lat());
+    $("#MarkerLngInput").val(window.marker.position.lng());
+
     window.geocoder.geocode({ 'location': latLng }, function (results, status) {
         if (status === window.google.maps.GeocoderStatus.OK) {
             if (results[0]) {
+
+                ChangeCitySelect(results[0]);
+
                 $("input[name='House']").val("");
                 $("input[name='Buliding']").val("");
                 $(results[0].address_components).each(function(index, item) {
@@ -222,45 +298,37 @@ function OnMarkerPositionChanged() {
 
 
 
-function OnEditMarkerAddressChanged() {
+function OnEditMarkerAddressChanged() {    
     var address = $("#EditMarkerHouseInput").val() + ", " + $("#EditMarkerStreetInput").val() + ", " + $("#EditMarkerCitySelect option:selected").text();
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;
-    $.ajax({
-        url: url,
-        type: "POST",
-        success: function (data) {
-            if (data.status !== "OK")
-                return;
-            var location = data.results[0].geometry.location;
-            var latLng = new google.maps.LatLng(location.lat, location.lng);
-            window.marker.setPosition(latLng);
-            window.map.setCenter(latLng);
-            window.map.setZoom(11);
-        },
-        error: function () {
-            ViewNotification('Ошибка', 'error');
-        }
+
+    window.geocoder.geocode({ 'address': address }, function(results, status) {
+        if (status !== "OK")
+            return;
+        var location = results[0].geometry.location;
+        var latLng = new google.maps.LatLng(location.lat(), location.lng());
+        window.marker.setPosition(latLng);
+        window.map.setCenter(latLng);
+        window.map.setZoom(11);
+        $("#MarkerLatInput").val(location.lat());
+        $("#MarkerLngInput").val(location.lng());
     });
+
 }
 
 function OnNewMarkerAddressChanged() {
-    var address = $("#NewMarkerHouseInput").val() + ", "+$("#NewMarkerStreetInput").val()+ ", " + $("#NewMarkerCitySelect option:selected").text();
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;
-        $.ajax({
-            url: url,
-            type: "POST",
-            success: function (data) {
-                if (data.status !== "OK")
-                    return;
-                var location = data.results[0].geometry.location;
-                var latLng = new google.maps.LatLng(location.lat, location.lng);
-                window.marker.setPosition(latLng);
-                window.map.setCenter(latLng);
-            },
-            error: function () {
-                ViewNotification('Ошибка', 'error');
-            }
-        });
+    var address = $("#NewMarkerHouseInput").val() + ", "+$("#NewMarkerStreetInput").val()+ ", " + $("#MarkerCitySelect option:selected").text();
+    window.geocoder.geocode({ 'address': address }, function(results, status) {
+        if (status !== "OK") {
+            ViewNotification("Проверьте корректность адреса", "error");
+            return;
+
+        }
+        var location = results[0].geometry.location;
+        var latLng = new google.maps.LatLng(location.lat(), location.lng());
+        window.marker.setPosition(latLng);
+        window.map.setCenter(latLng);
+    });
+
 }
 
 function OnMarkersDocumentReady() {

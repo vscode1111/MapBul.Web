@@ -11,7 +11,7 @@ namespace MapBul.Web.Models
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             Countries = repo.GetCountries();
-            Regions = repo.GetRegions();
+//            Regions = repo.GetRegions();
             Cities = repo.GetCities();
         }
         public List<country> Countries { get; set; }

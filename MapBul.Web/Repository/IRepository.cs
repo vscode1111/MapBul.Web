@@ -16,14 +16,13 @@ namespace MapBul.Web.Repository
         editor GetEditor(int editorId);
         void SaveEditorChanges(NewEditorModel model);
         List<country> GetCountries();
-        List<region> GetRegions();
+        /*List<region> GetRegions();*/
         List<city> GetCities();
         void AddNewJournalist(NewJournalistModel model);
         journalist GetJournalist(int journalistId);
         void SaveJournalistChanges(NewJournalistModel model);
-        void AddCountry(string name);
-        void AddRegion(string name, int countryId);
-        void AddCity(string name, int regionId);
+        void AddCountry(string name, string placeId, string code);
+       /* void AddRegion(string name, int countryId, string placeId);*/
         List<category> GetCategories();
         void SaveCategoriesStructure(List<NestableElement> structure);
         void AddNewCategory(category model);
@@ -54,5 +53,6 @@ namespace MapBul.Web.Repository
         void SaveTenantChanges(NewTenantModel model);
         List<journalist> GetJournalists(string userGuid);
         List<guide> GetGuides(string userGuid);
+        void AddCity(string name, int countryId, string placeId, float latConverted, float lngConverted);
     }
 }

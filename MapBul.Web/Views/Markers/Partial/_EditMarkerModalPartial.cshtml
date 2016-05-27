@@ -8,19 +8,22 @@
         <h3>Редактировать маркер</h3>
     </div>
     <div class="ibox-content">
+        <h5>Обязательные поля помечены *</h5>
         <form action="#" method="POST" id="EditMarkerForm">
             <div class="row">
                 <div class="col-md-6">
-                    @Html.HiddenFor(m=>m.Id)
+                    @Html.HiddenFor(m => m.Id)
                     @Html.HiddenFor(m => m.Photo)
+                    @Html.HiddenFor(m => m.Logo)
+
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", "Название"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", "Название*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Introduction, new Dictionary<string, object> {{"placeholder", "Вступление"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.Introduction, new Dictionary<string, object> {{"placeholder", "Вступление*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextAreaFor(m => m.Description, new Dictionary<string, object> {{"placeholder", "Описание"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextAreaFor(m => m.Description, new Dictionary<string, object> {{"placeholder", "Описание*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Site, new Dictionary<string, object> {{"placeholder", "Сайт"}, {"class", "form-control"}})
@@ -29,10 +32,10 @@
                         @Html.TextBoxFor(m => m.Email, new Dictionary<string, object> {{"placeholder", "Email"}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.EntryTicket, new Dictionary<string, object> {{"placeholder", "Входной билет"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.EntryTicket, new Dictionary<string, object> {{"placeholder", "Входной билет*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBox("Phones",Model.Phones.FirstOrDefault(), new Dictionary<string, object> {{"placeholder", "Телефон"}, {"class", "form-control"}, {"required", ""}, {"data-mask", "(999)999-99-99"}})
+                        @Html.TextBox("Phones", Model.Phones.FirstOrDefault(), new Dictionary<string, object> {{"placeholder", "Телефон*"}, {"class", "form-control"}, {"required", ""}, {"data-mask", "(999)999-99-99"}})
                     </div>
                     <div class="form-group">
                         <label class="control-label">Базовая категория</label>
@@ -42,22 +45,47 @@
                         <label class="control-label">Тэги</label>
                         @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.SubCategories.Contains(c.Id), Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}})
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Новая фотография <br /> (Фотография, отображаемая в описании метки)</label>
+                        <input type="file" id="EditMarkerPhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Новый логотип <br /> (Изображение во всплывающем окне, оптимальный размер 300х300)</label>
+                        <input type="file" id="EditMarkerLogoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        @Html.DropDownList("CityId", ((List<city>) ViewBag.Cities).Select(c => new SelectListItem {Text = c.Name + ", " + c.region.Name + ", " + c.region.country.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"id", "EditMarkerCitySelect"}, {"class", "form-control chosenselect"}, {"required", ""}})
+                        <label class="control-label">Выберите город из списка</label>
+                        <select name="CityId" id="MarkerCitySelect" class="form-control chosenselect" required="">
+                            @foreach (var city in (List<city>) ViewBag.Cities)
+                            {
+                                <option @(city.Id==Model.CityId?"selected":"") value="@city.Id" data-city-placeid="@city.PlaceId">@city.Name, @city.country.Name</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Street, new Dictionary<string, object> {{"id", "EditMarkerStreetInput"}, {"placeholder", "Улица"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.Street, new Dictionary<string, object> {{"id", "EditMarkerStreetInput"}, {"placeholder", "Улица*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.House, new Dictionary<string, object> {{"id", "EditMarkerHouseInput"}, {"placeholder", "Дом"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.House, new Dictionary<string, object> {{"id", "EditMarkerHouseInput"}, {"placeholder", "Дом*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Buliding, new Dictionary<string, object> {{"id", "EditMarkerBuildingInput"}, {"placeholder", "Строение"}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Floor, new Dictionary<string, object> {{"placeholder", "Этаж"}, {"class", "form-control"}})
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Или введите координаты</label>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input class="form-control" type="number" id="MarkerLatInput" placeholder="Широта" value=@Model.Lat.ToString(new NumberFormatInfo{NumberDecimalSeparator = ".", NumberGroupSeparator = ","}) />
+                            </div>
+                            <div class="col-xs-6">
+                                <input class="form-control" type="number" id="MarkerLngInput" placeholder="Долгота" value=@Model.Lng.ToString(new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," }) />
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Скидка</label>
@@ -68,14 +96,21 @@
                         @Html.DropDownListFor(m => m.StatusId, ((List<status>) ViewBag.Statuses).Select(c => new SelectListItem {Text = c.Description, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Фотография</label>
-                        <div class="col-sm-10">
-                            <img class="col-xs-7" src="@Html.MapImage(Model.Photo)" />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Фотография</label>
+                                <div class="col-sm-12">
+                                    <img class="col-sm-12" src="@Html.MapImage(Model.Photo)" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label">Логотип</label>
+                                <div class="col-sm-12">
+                                    <img class="col-sm-12" src="@Html.MapImage(Model.Logo)" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Новая фотография</label>
-                        <input type="file" id="EditMarkerPhotoInput" class="form-control fileinput" accept="image/jpeg, image/png"/>
+                        
                     </div>
                 </div>
             </div>

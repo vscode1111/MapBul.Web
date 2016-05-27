@@ -15,7 +15,7 @@
                 @Html.DropDownListFor(m => m.ParentId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Value = c.Id.ToString(), Text = c.Name}).Concat(new List<SelectListItem> {new SelectListItem {Text = "Нет", Value = "null"}}), new Dictionary<string, object> {{"data-placeholder", "Выберите категорию"}, {"class", "form-control chosenselect"}})
             </div>
             <div class="form-group">
-                <label class="control-label">Иконка категории</label>
+                <label class="control-label">Иконка категории <br/> (Оптимальный размер иконки 120х120, иконки других размеров масштабируются до указанного)</label>
                 <input id="NewCategoryIconInput" required="" name="categoryIcon" type="file" accept="image/jpeg, image/png" class="fileinput"/>
             </div>
             <div class="form-group">

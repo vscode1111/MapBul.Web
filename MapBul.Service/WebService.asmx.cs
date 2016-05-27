@@ -109,7 +109,7 @@ namespace MapBul.Service
                             marker.Lat,
                             marker.Lng,
                             Icon=MapUrl(marker.category.Icon),
-                            Photo=MapUrl(marker.Photo),
+                            Logo=MapUrl(marker.Logo),
                             marker.phone.First(p => p.Primary).Number,
                             marker.Site,
                             marker.Introduction,
@@ -142,12 +142,13 @@ namespace MapBul.Service
             marker marker = repo.GetMarker(markerId);
             JsonResult result=new JsonResult(new List<Dictionary<string, object>>());
 
+            marker.Photo = MapUrl(marker.Photo);
             result.AddObjectToResult(marker,0);
             result.AddObjectToResult(new
             {
                 Phones = marker.phone.Select(p=>new {p.Primary,p.Number}).ToList(),
                 Discount = marker.discount.Value,
-                Subcategories = marker.subcategory.Select(s=>s.category.Name).ToList()
+                Subcategories = marker.subcategory.Select(s=>s.category.Id).ToList()
             }, 0);
             return JsonConvert.SerializeObject(result);
         }
@@ -167,6 +168,104 @@ namespace MapBul.Service
                 result.AddObjectToResult(new {Color="ab3412"},index);
                 result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { Color = "cd8f85", c.Id, c.ParentId, c.AddedDate, Icon = MapUrl(c.Icon), c.Name }).ToList() }, index);
                 index++;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        [WebMethod]
+        public string GetRecentArticles()
+        {
+            MySqlRepository repo = new MySqlRepository();
+            List<article> articles = repo.GetArticles();
+            var result = new JsonResult(new List<Dictionary<string, object>>());
+            int i = 0;
+            foreach (var article in articles.OrderByDescending(a=>a.PublishedDate).Take(10))
+            {
+                article.Photo = MapUrl(article.Photo);
+                article.TitlePhoto = MapUrl(article.TitlePhoto);
+
+                object authorName;
+
+                switch (article.user.usertype.Tag)
+                {
+                    case UserTypes.Editor:
+                        authorName = new 
+                        {
+                            article.user.editor.First().FirstName, 
+                            article.user.editor.First().MiddleName, 
+                            article.user.editor.First().LastName
+                        }; 
+                        break;
+                        case UserTypes.Journalist:
+                        authorName = new 
+                        {
+                            article.user.journalist.First().FirstName, 
+                            article.user.journalist.First().MiddleName, 
+                            article.user.journalist.First().LastName
+                        }; 
+                        break;
+                        default :
+                        authorName = new
+                        {
+                            FirstName = "Администратор",
+                            MiddleName = "Администратор",
+                            LastName = "Администратор"
+                        };
+                        break;
+                }
+
+                result.AddObjectToResult(article,i);
+                result.AddObjectToResult(new{AuthorName=authorName}, i);
+                i++;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        [WebMethod]
+        public string GetRecentEvents()
+        {
+            MySqlRepository repo = new MySqlRepository();
+            List<article> articles = repo.GetEvents();
+            var result = new JsonResult(new List<Dictionary<string, object>>());
+            int i = 0;
+            foreach (var article in articles.OrderByDescending(a => a.PublishedDate).Take(10))
+            {
+                article.Photo = MapUrl(article.Photo);
+                article.TitlePhoto = MapUrl(article.TitlePhoto);
+
+                object authorName;
+
+                switch (article.user.usertype.Tag)
+                {
+                    case UserTypes.Editor:
+                        authorName = new
+                        {
+                            article.user.editor.First().FirstName,
+                            article.user.editor.First().MiddleName,
+                            article.user.editor.First().LastName
+                        };
+                        break;
+                    case UserTypes.Journalist:
+                        authorName = new
+                        {
+                            article.user.journalist.First().FirstName,
+                            article.user.journalist.First().MiddleName,
+                            article.user.journalist.First().LastName
+                        };
+                        break;
+                    default:
+                        authorName = new
+                        {
+                            FirstName = "Администратор",
+                            MiddleName = "Администратор",
+                            LastName = "Администратор"
+                        };
+                        break;
+                }
+
+                result.AddObjectToResult(article, i);
+                result.AddObjectToResult(new { AuthorName = authorName }, i);
+                i++;
             }
             return JsonConvert.SerializeObject(result);
         }

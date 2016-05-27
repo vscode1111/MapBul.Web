@@ -17,13 +17,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/MapBul.DBContext.dll">
-      <publishTime>04/15/2016 18:11:09</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/MapBul.Service.dll">
-      <publishTime>04/15/2016 15:21:35</publishTime>
+      <publishTime>05/26/2016 14:18:30</publishTime>
     </File>
     <File Include="bin/MapBul.SharedClasses.dll">
-      <publishTime>12/04/2016 18:00:01</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
       <publishTime>01/01/0001 00:00:00</publishTime>

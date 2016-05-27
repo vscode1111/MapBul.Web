@@ -83,5 +83,15 @@ namespace MapBul.Service
             FindChildCategoriesIteration(ref childCategories, id);
             return childCategories;
         }
+
+        public List<article> GetArticles()
+        {
+            return _db.article.ToList();
+        }
+
+        public List<article> GetEvents()
+        {
+            return _db.article.Where(a=>a.EventDate!=null).ToList();
+        }
     }
 }

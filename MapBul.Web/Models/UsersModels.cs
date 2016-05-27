@@ -73,7 +73,7 @@ namespace MapBul.Web.Models
         {
             PermittedCountries=new List<int>();
             PermittedCities=new List<int>();
-            PermittedRegions=new List<int>();
+            //PermittedRegions=new List<int>();
         }
         public NewEditorModel(editor editor)
         {
@@ -89,15 +89,15 @@ namespace MapBul.Web.Models
             Deleted = editor.user.Deleted;
             PermittedCountries=new List<int>();
             PermittedCities = new List<int>();
-            PermittedRegions = new List<int>();
+            //PermittedRegions = new List<int>();
             foreach (var countryPermission in editor.user.country_permission)
             {
                 PermittedCountries.Add(countryPermission.country.Id);
             }
-            foreach (var regionPermission in editor.user.region_permission)
+            /*foreach (var regionPermission in editor.user.region_permission)
             {
                 PermittedRegions.Add(regionPermission.region.Id);
-            }
+            }*/
             foreach (var cityPermission in editor.user.city_permission)
             {
                 PermittedCities.Add(cityPermission.city.Id);
@@ -119,7 +119,7 @@ namespace MapBul.Web.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public List<int> PermittedCountries { get; set; }
-        public List<int> PermittedRegions { get; set; }
+        //public List<int> PermittedRegions { get; set; }
         public List<int> PermittedCities { get; set; }
         public bool Deleted { get; set; }
     }
@@ -130,7 +130,7 @@ namespace MapBul.Web.Models
         {
             PermittedCountries=new List<int>();
             PermittedCities=new List<int>();
-            PermittedRegions=new List<int>();
+            //PermittedRegions=new List<int>();
         }
         public NewJournalistModel(journalist journalist)
         {
@@ -146,15 +146,15 @@ namespace MapBul.Web.Models
             Deleted = journalist.user.Deleted;
             PermittedCountries=new List<int>();
             PermittedCities = new List<int>();
-            PermittedRegions = new List<int>();
+            //PermittedRegions = new List<int>();
             foreach (var countryPermission in journalist.user.country_permission)
             {
                 PermittedCountries.Add(countryPermission.country.Id);
             }
-            foreach (var regionPermission in journalist.user.region_permission)
+            /*foreach (var regionPermission in journalist.user.region_permission)
             {
                 PermittedRegions.Add(regionPermission.region.Id);
-            }
+            }*/
             foreach (var cityPermission in journalist.user.city_permission)
             {
                 PermittedCities.Add(cityPermission.city.Id);
@@ -177,7 +177,7 @@ namespace MapBul.Web.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public List<int> PermittedCountries { get; set; }
-        public List<int> PermittedRegions { get; set; }
+        //public List<int> PermittedRegions { get; set; }
         public List<int> PermittedCities { get; set; }
         public bool Deleted { get; set; }
     }
@@ -222,7 +222,7 @@ namespace MapBul.Web.Models
         {
             PermittedCountries = new List<int>();
             PermittedCities = new List<int>();
-            PermittedRegions = new List<int>();
+            //PermittedRegions = new List<int>();
         }
         public NewGuideModel(guide guide)
         {
@@ -238,15 +238,15 @@ namespace MapBul.Web.Models
             Deleted = guide.user.Deleted;
             PermittedCountries = new List<int>();
             PermittedCities = new List<int>();
-            PermittedRegions = new List<int>();
+            //PermittedRegions = new List<int>();
             foreach (var countryPermission in guide.user.country_permission)
             {
                 PermittedCountries.Add(countryPermission.country.Id);
             }
-            foreach (var regionPermission in guide.user.region_permission)
+            /*foreach (var regionPermission in guide.user.region_permission)
             {
                 PermittedRegions.Add(regionPermission.region.Id);
-            }
+            }*/
             foreach (var cityPermission in guide.user.city_permission)
             {
                 PermittedCities.Add(cityPermission.city.Id);
@@ -266,7 +266,7 @@ namespace MapBul.Web.Models
         public string Email { get; set; }
         public bool Deleted { get; set; }
         public List<int> PermittedCountries { get; set; }
-        public List<int> PermittedRegions { get; set; }
+        //public List<int> PermittedRegions { get; set; }
         public List<int> PermittedCities { get; set; }
     }
 

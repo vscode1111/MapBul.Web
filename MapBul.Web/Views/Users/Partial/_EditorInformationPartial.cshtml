@@ -41,9 +41,9 @@
                     <div class="form-group">
                         @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>) ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите страны"}, {"multiple", ""}})
                     </div>
-                    <div class="form-group">
-                        @Html.ListBox("PermittedRegions", new MultiSelectList((List<region>) ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите регионы"}, {"multiple", ""}})
-                    </div>
+                    <!--<div class="form-group">
+                        Html.ListBox("PermittedRegions", new MultiSelectList((List<region>) ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите регионы"}, {"multiple", ""}})
+                    </div>-->
                     <div class="form-group">
                         @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
                     </div>

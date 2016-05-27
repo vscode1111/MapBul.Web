@@ -793,6 +793,7 @@
     <Content Include="Views\Articles\Partial\_ArticlesTablePartial.cshtml" />
     <Content Include="Views\Articles\Partial\_NewArticleModalPartial.cshtml" />
     <Content Include="Views\Articles\Partial\_EditArticleModalPartial.cshtml" />
+    <Content Include="Views\LegacyHtml.cshtml" />
     <None Include="Views\Users\Index.cshtml" />
     <None Include="Views\Markers\Index.cshtml" />
     <None Include="Views\Users\Partial\_AdminsTablePartial.cshtml" />

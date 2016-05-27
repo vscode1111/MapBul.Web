@@ -1,13 +1,27 @@
 ﻿@using System.Web.Optimization
 
-<div class="row" id="CitiesContainer">
-    @Html.Action("_CitiesPartial", "Dictionaries")
-</div>
-<div class="row" id="CategoriesContainer">
-    @Html.Action("_CategoriesPartial", "Dictionaries")
-</div>
+
+<div class="tabs-container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab-1">Категории</a></li>
+        <li class=""><a data-toggle="tab" href="#tab-2">Регионы и города</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+            <div class="panel-body" id="CategoriesContainer">
+                @Html.Action("_CategoriesPartial", "Dictionaries")
+            </div>
+        </div>
+        <div id="tab-2" class="tab-pane">
+            <div class="panel-body" id="CitiesContainer">
+                @Html.Action("_CitiesPartial", "Dictionaries")
+            </div>
+        </div>
+    </div>
+    <iframe width="300" height="200" src="http://www.montazh.online/Home/external"></iframe>
 
 
+</div>
 
 @section Styles{
     @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
@@ -25,6 +39,6 @@
     @Scripts.Render("~/plugins/nestable")
     @Scripts.Render("~/CustomScripts/Cities")
     @Scripts.Render("~/CustomScripts/Categories")
-
-
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places">
+</script>
 }
