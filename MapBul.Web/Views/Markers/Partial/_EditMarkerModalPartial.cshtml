@@ -100,13 +100,27 @@
                             <div class="col-sm-6">
                                 <label class="control-label">Фотография</label>
                                 <div class="col-sm-12">
-                                    <img class="col-sm-12" src="@Html.MapImage(Model.Photo)" />
+                                    @if (Model.Photo != null)
+                                    {
+                                        <img class="col-sm-12" src="@Html.MapImage(Model.Photo)" />
+                                    }
+                                    else
+                                    {
+                                        <label class="label-danger">Не задано</label>
+                                    }
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="control-label">Логотип</label>
                                 <div class="col-sm-12">
-                                    <img class="col-sm-12" src="@Html.MapImage(Model.Logo)" />
+                                    @if (Model.Logo != null)
+                                    {
+                                        <img class="col-sm-12" src="@Html.MapImage(Model.Logo)" />
+                                    }
+                                    else
+                                    {
+                                        <label class="label-danger">Не задано</label>
+                                    }
                                 </div>
                             </div>
                         </div>

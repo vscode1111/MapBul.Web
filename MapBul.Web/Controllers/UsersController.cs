@@ -144,7 +144,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
-                model.Password = TransformationProvider.GeneratePassword();
+                model.Password = StringTransformationProvider.GeneratePassword();
                 repo.AddNewEditor(model);
                 MailProvider.SendMailWithCredintails(model.Password, model.FirstName, model.MiddleName, model.Email);
             }
@@ -194,7 +194,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
-                model.Password = TransformationProvider.GeneratePassword();
+                model.Password = StringTransformationProvider.GeneratePassword();
                 repo.AddNewJournalist(model);
                 MailProvider.SendMailWithCredintails(model.Password, model.FirstName, model.MiddleName, model.Email);
             }
@@ -220,7 +220,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
-                //model.Password = TransformationProvider.GeneratePassword();
+                //model.Password = StringTransformationProvider.GeneratePassword();
                 repo.SaveJournalistChanges(model);
                 //MailProvider.SendMailWithCredintails(model.Password,model.FirstName,model.MiddleName,model.Email);
             }
@@ -247,7 +247,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
-                model.Password = TransformationProvider.GeneratePassword();
+                model.Password = StringTransformationProvider.GeneratePassword();
                 repo.AddNewAdmin(model);
                 MailProvider.SendMailWithCredintails(model.Password, "Администратор", "", model.Email);
             }

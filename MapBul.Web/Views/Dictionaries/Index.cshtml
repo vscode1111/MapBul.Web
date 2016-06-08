@@ -18,8 +18,6 @@
             </div>
         </div>
     </div>
-    <iframe width="300" height="200" src="http://www.montazh.online/Home/external"></iframe>
-
 
 </div>
 
@@ -28,6 +26,7 @@
     @Styles.Render("~/plugins/dataPickerStyles")
     @Styles.Render("~/Content/plugins/chosen/chosenStyles")
     @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/Content/plugins/colorpicker/colorpickerStyles")
 }
 
 @section Scripts{
@@ -36,9 +35,10 @@
     @Scripts.Render("~/plugins/dataPicker")
     @Scripts.Render("~/plugins/chosen")
     @Scripts.Render("~/plugins/switchery")
-    @Scripts.Render("~/plugins/nestable")
+    @Scripts.Render("~/plugins/nestable") 
+    @Scripts.Render("~/plugins/colorpicker")
     @Scripts.Render("~/CustomScripts/Cities")
     @Scripts.Render("~/CustomScripts/Categories")
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places">
-</script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+
 }

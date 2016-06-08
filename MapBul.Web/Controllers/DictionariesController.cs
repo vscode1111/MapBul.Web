@@ -109,21 +109,30 @@ namespace MapBul.Web.Controllers
 
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddNewCategory(category model, HttpPostedFileBase categoryIcon)
+        public bool AddNewCategory(category model, HttpPostedFileBase categoryIcon, HttpPostedFileBase categoryPin)
         {
             IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+
             string filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryIcon);
             model.Icon = filePath;
+
+            filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryPin);
+            model.Pin = filePath;
+
+            model.Color = model.Color.Replace("#", "");
             repo.AddNewCategory(model);
             return true;
         }
 
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool EditCategory(category model, HttpPostedFileBase categoryIcon)
+        public bool EditCategory(category model, HttpPostedFileBase categoryIcon, HttpPostedFileBase categoryPin)
         {
             IRepository repo = DependencyResolver.Current.GetService<IRepository>();
-            var previousIcon = repo.GetCategory(model.Id).Icon;
+            var prevCategory = repo.GetCategory(model.Id);
+            var previousIcon = prevCategory.Icon;
+            var previousPin = prevCategory.Pin;
+
             if (categoryIcon != null)
             {
                 FileProvider.FileProvider.DeleteFile(previousIcon);
@@ -132,7 +141,19 @@ namespace MapBul.Web.Controllers
             }
             else
                 model.Icon = previousIcon;
-            
+
+
+
+            if (categoryPin != null)
+            {
+                FileProvider.FileProvider.DeleteFile(previousPin);
+                string filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryPin);
+                model.Pin = filePath;
+            }
+            else
+                model.Pin = previousPin;
+
+            model.Color = model.Color.Replace("#", "");
             repo.EditCategory(model);
             return true;
         }

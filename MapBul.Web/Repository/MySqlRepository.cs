@@ -20,8 +20,8 @@ namespace MapBul.Web.Repository
 
         public user GetUserByLoginAndPassword(string email, string password)
         {
-            var md5Pass = TransformationProvider.Md5(password);
-            email = TransformationProvider.TransformEmail(email);
+            var md5Pass = StringTransformationProvider.Md5(password);
+            email = StringTransformationProvider.TransformEmail(email);
             user user = _db.user.FirstOrDefault(u => u.Email == email && md5Pass == u.Password);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
@@ -58,7 +58,7 @@ namespace MapBul.Web.Repository
 
         public void AddNewEditor(NewEditorModel model)
         {
-            model.Email = TransformationProvider.TransformEmail(model.Email);
+            model.Email = StringTransformationProvider.TransformEmail(model.Email);
             if (_db.user.Any(u => u.Email == model.Email))
                 throw new MyException(Errors.UserExists);
             var trans = _db.Database.BeginTransaction();
@@ -67,7 +67,7 @@ namespace MapBul.Web.Repository
                 var newUser = new user
                 {
                     Guid = Guid.NewGuid().ToString(),
-                    Password = TransformationProvider.Md5(model.Password),
+                    Password = StringTransformationProvider.Md5(model.Password),
                     Email = model.Email,
                     UserTypeId = GetUserTypeByTag(UserTypes.Editor),
                     Deleted = model.Deleted
@@ -110,8 +110,8 @@ namespace MapBul.Web.Repository
                 throw new MyException(Errors.UserNotFound);
 
             model.CopyTo(ref editor);
-            //editor.user.Password = TransformationProvider.Md5(model.Password);
-            editor.user.Email = TransformationProvider.TransformEmail(model.Email);
+            //editor.user.Password = StringTransformationProvider.Md5(model.Password);
+            editor.user.Email = StringTransformationProvider.TransformEmail(model.Email);
             editor.user.Deleted = model.Deleted;
 
             //сохранение новых прав
@@ -147,7 +147,7 @@ namespace MapBul.Web.Repository
 
         public void AddNewJournalist(NewJournalistModel model)
         {
-            model.Email = TransformationProvider.TransformEmail(model.Email);
+            model.Email = StringTransformationProvider.TransformEmail(model.Email);
             if (_db.user.Any(u => u.Email == model.Email))
                 throw new MyException(Errors.UserExists);
             var trans = _db.Database.BeginTransaction();
@@ -156,7 +156,7 @@ namespace MapBul.Web.Repository
                 var newUser = new user
                 {
                     Guid = Guid.NewGuid().ToString(),
-                    Password = TransformationProvider.Md5(model.Password),
+                    Password = StringTransformationProvider.Md5(model.Password),
                     Email = model.Email,
                     UserTypeId = GetUserTypeByTag(UserTypes.Journalist),
                     Deleted = model.Deleted
@@ -196,8 +196,8 @@ namespace MapBul.Web.Repository
                 throw new MyException(Errors.UserNotFound);
 
             model.CopyTo(ref journalist);
-            //editor.user.Password = TransformationProvider.Md5(model.Password);
-            journalist.user.Email = TransformationProvider.TransformEmail(model.Email);
+            //editor.user.Password = StringTransformationProvider.Md5(model.Password);
+            journalist.user.Email = StringTransformationProvider.TransformEmail(model.Email);
             journalist.user.Deleted = model.Deleted;
 
             //сохранение новых прав
@@ -306,12 +306,14 @@ namespace MapBul.Web.Repository
             existingCategory.Icon = model.Icon;
             existingCategory.Name = model.Name;
             existingCategory.ParentId = model.ParentId;
+            existingCategory.Color = model.Color;
+            existingCategory.Pin = model.Pin;
             _db.SaveChanges();
         }
 
         public void AddNewAdmin(NewAdminModel model)
         {
-            model.Email = TransformationProvider.TransformEmail(model.Email);
+            model.Email = StringTransformationProvider.TransformEmail(model.Email);
             if (_db.user.Any(u => u.Email == model.Email))
                 throw new MyException(Errors.UserExists);
             var trans = _db.Database.BeginTransaction();
@@ -320,7 +322,7 @@ namespace MapBul.Web.Repository
                 var newUser = new user
                 {
                     Guid = Guid.NewGuid().ToString(),
-                    Password = TransformationProvider.Md5(model.Password),
+                    Password = StringTransformationProvider.Md5(model.Password),
                     Email = model.Email,
                     UserTypeId = GetUserTypeByTag(UserTypes.Admin),
                     Deleted = false
@@ -683,8 +685,8 @@ namespace MapBul.Web.Repository
                 throw new MyException(Errors.UserNotFound);
 
             model.CopyTo(ref guide);
-            //editor.user.Password = TransformationProvider.Md5(model.Password);
-            guide.user.Email = TransformationProvider.TransformEmail(model.Email);
+            //editor.user.Password = StringTransformationProvider.Md5(model.Password);
+            guide.user.Email = StringTransformationProvider.TransformEmail(model.Email);
             guide.user.Deleted = model.Deleted;
 
             //сохранение новых прав
@@ -710,8 +712,8 @@ namespace MapBul.Web.Repository
                 throw new MyException(Errors.UserNotFound);
 
             model.CopyTo(ref tenant);
-            //editor.user.Password = TransformationProvider.Md5(model.Password);
-            tenant.user.Email = TransformationProvider.TransformEmail(model.Email);
+            //editor.user.Password = StringTransformationProvider.Md5(model.Password);
+            tenant.user.Email = StringTransformationProvider.TransformEmail(model.Email);
             tenant.user.Deleted = model.Deleted;
 
             _db.SaveChanges();

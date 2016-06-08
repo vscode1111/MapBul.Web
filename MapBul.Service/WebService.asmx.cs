@@ -21,6 +21,18 @@ namespace MapBul.Service
     // [System.Web.Script.Services.ScriptService]
     public class WebService : System.Web.Services.WebService
     {
+        #region private
+        private List<int> GetCategoriesBranch(category category)
+        {
+            var result = new List<int>();
+            var currentCategory = category;
+            while (currentCategory != null)
+            {
+                result.Add(currentCategory.Id);
+                currentCategory = currentCategory.category2;
+            }
+            return result;
+        }
 
         private string MapUrl(string filePath)
         {
@@ -35,13 +47,16 @@ namespace MapBul.Service
                     return user.editor.First();
                 case UserTypes.Journalist:
                     return user.journalist.First();
-                case UserTypesMobile.Tenant:
+                case UserTypes.Tenant:
                     return user.tenant.First();
                 default:
                     throw new MyException(Errors.NotFound);
             }
         }
 
+#endregion
+
+#region webMethods
         [WebMethod]
         public string Authorize(string email, string password)
         {
@@ -108,8 +123,9 @@ namespace MapBul.Service
                             marker.Name,
                             marker.Lat,
                             marker.Lng,
-                            Icon=MapUrl(marker.category.Icon),
+                            Icon=MapUrl(marker.category.Pin),
                             Logo=MapUrl(marker.Logo),
+                            Photo=MapUrl(marker.Photo),
                             marker.phone.First(p => p.Primary).Number,
                             marker.Site,
                             marker.Introduction,
@@ -154,7 +170,7 @@ namespace MapBul.Service
         }
 
         [WebMethod]
-        public string GetRootCategories()
+        public string GetRootCategories() 
         {
             MySqlRepository repo=new MySqlRepository();
             List<category> rootCategories = repo.GetRootCategories();
@@ -165,8 +181,7 @@ namespace MapBul.Service
                 rootCategory.Icon = MapUrl(rootCategory.Icon);
                 List<category> childCategories = repo.GetChildCategories(rootCategory.Id);
                 result.AddObjectToResult(rootCategory,index);
-                result.AddObjectToResult(new {Color="ab3412"},index);
-                result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { Color = "cd8f85", c.Id, c.ParentId, c.AddedDate, Icon = MapUrl(c.Icon), c.Name }).ToList() }, index);
+                result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { c.Id, c.ParentId, c.AddedDate, Icon = MapUrl(c.Icon), c.Name, c.Color }).ToList() }, index);
                 index++;
             }
             return JsonConvert.SerializeObject(result);
@@ -270,16 +285,56 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
-        private List<int> GetCategoriesBranch(category category)
+
+        [WebMethod]
+        public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
+            int baseCategoryId, float lat, float lng, string entryTicket, int discount, string street, string house,
+            string building, string floor, string site, string email, string photoBase64, string logoBase64, int[] subCategoryIds, string[] phones)
         {
-            var result=new List<int>();
-            var currentCategory = category;
-            while (currentCategory != null)
+            try
             {
-                result.Add(currentCategory.Id);
-                currentCategory = currentCategory.category2;
+                var repo = new MySqlRepository();
+                repo.CheckUser(userGuid);
+                var user = repo.GetUser(userGuid);
+                var userType = repo.GetMobileUserTypeById(user.Id);
+                var permittedUserTypes = new[] {UserTypes.Guide};
+                if (!permittedUserTypes.Contains(userType.Tag))
+                    throw new MyException(Errors.NotPermitted);
+
+                marker newMarker = new marker
+                {
+                    Name = name,
+                    Introduction = introduction,
+                    Description = description,
+                    CityId = cityId,
+                    BaseCategoryId = baseCategoryId,
+                    EntryTicket = entryTicket,
+                    Buliding = building,
+                    DiscountId = repo.GetDiscountId(discount),
+                    Email = email,
+                    Floor = floor,
+                    House = house,
+                    Lat = lat,
+                    Lng = lng,
+                    Site = site,
+                    Street = street,
+                    UserId = user.Id,
+                    StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id
+                };
+
             }
-            return result;
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Message));
+            }
         }
+
+        #endregion
+
+        
     }
 }

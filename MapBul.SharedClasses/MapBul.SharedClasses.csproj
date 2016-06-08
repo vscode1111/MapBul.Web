@@ -44,7 +44,7 @@
     <Compile Include="Constants\UserParameters.cs" />
     <Compile Include="Constants\UserTypes.cs" />
     <Compile Include="MailProvider.cs" />
-    <Compile Include="TransformationProvider.cs" />
+    <Compile Include="StringTransformationProvider.cs" />
     <Compile Include="MyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -20,6 +20,14 @@
                 <input id="EditCategoryIconInput" name="categoryIcon" type="file" accept="image/jpeg, image/png" class="fileinput"/>
             </div>
             <div class="form-group">
+                <label class="control-label">Пин категории</label>
+                <input id="EditCategoryPinInput" name="categoryPin" type="file" accept="image/jpeg, image/png" class="fileinput" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Цвет</label>
+                @Html.TextBoxFor(m => m.Color, new Dictionary<string, object> { { "placeholder", "Цвет" }, { "required", "" }, { "class", "form-control colorInputCategoryEdit" } })
+            </div>
+            <div class="form-group">
                 <input id="EditCategoryFormSubmit" type="button" class="btn btn-primary" value="Сохранить"/>
             </div>
 

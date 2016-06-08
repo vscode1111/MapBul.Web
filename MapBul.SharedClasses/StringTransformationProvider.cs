@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MapBul.SharedClasses
 {
-    public static class TransformationProvider
+    public static class StringTransformationProvider
     {
         public static string Md5(string input)
         {

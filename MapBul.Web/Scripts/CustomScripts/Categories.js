@@ -5,9 +5,11 @@
     jQuery.extend(jQuery.validator.messages, {
         required: "Заполните поле"
     });
+    $('.colorInput').colorpicker();
 }
 
 function OnEditCategoryDocumentReady() {
+    $('.colorInputCategoryEdit').colorpicker();
     $("#EditCategoryFormSubmit").click(SendEditCategoryForm);
 }
 
@@ -16,6 +18,10 @@ function SendEditCategoryForm() {
     var formData = new FormData(form);
     var file = document.getElementById("EditCategoryIconInput").files[0];
     formData.append("categoryIcon", file);
+
+    var file = document.getElementById("EditCategoryPinInput").files[0];
+    formData.append("categoryPin", file);
+
     $.ajax({
         url: "Dictionaries/EditCategory",
         data: formData,
@@ -59,6 +65,8 @@ function SendNewCategoryForm() {
     var formData = new FormData(form);
     var file = document.getElementById("NewCategoryIconInput").files[0];
     formData.append("categoryIcon", file);
+    file = document.getElementById("NewCategoryPinInput").files[0];
+    formData.append("categoryPin", file);
     $.ajax({
         url: "Dictionaries/AddNewCategory",
         data: formData,

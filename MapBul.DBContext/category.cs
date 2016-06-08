@@ -30,8 +30,16 @@ namespace MapBul.DBContext
         public DateTime AddedDate { get; set; }
 
         [Required]
+        [StringLength(10)]
+        public string Color { get; set; }
+
+        [Required]
         [StringLength(200)]
         public string Icon { get; set; }
+
+        [Required]
+        [StringLength(200)]
+        public string Pin { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<article> article { get; set; }

@@ -14,8 +14,8 @@ namespace MapBul.Service
 
         public user GetUserByEmailAndPassword(string email, string password)
         {
-            email = TransformationProvider.TransformEmail(email);
-            var md5Pass = TransformationProvider.Md5(password);
+            email = StringTransformationProvider.TransformEmail(email);
+            var md5Pass = StringTransformationProvider.Md5(password);
             var user =
                 _db.user.FirstOrDefault(
                     u =>
@@ -34,11 +34,11 @@ namespace MapBul.Service
             if(userType==null)
                 throw new MyException(Errors.NotFound);
             usertype userTypeMobile;
-            if (userType.Tag == UserTypes.Admin || userType.Tag == UserTypes.Editor || userType.Tag == UserTypesMobile.Guide)
-                userTypeMobile = _db.usertype.First(u=>u.Tag==UserTypesMobile.Guide);
+            if (userType.Tag == UserTypes.Admin || userType.Tag == UserTypes.Editor || userType.Tag == UserTypes.Guide)
+                userTypeMobile = _db.usertype.First(u=>u.Tag==UserTypes.Guide);
             else
             {
-                userTypeMobile = _db.usertype.First(u => u.Tag == UserTypesMobile.Tenant);
+                userTypeMobile = _db.usertype.First(u => u.Tag == UserTypes.Tenant);
             }
             return userTypeMobile;
         }
@@ -54,7 +54,7 @@ namespace MapBul.Service
 
         public List<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng)
         {
-            return _db.marker.ToList().Where(m => (m.Lat < Math.Max(p1Lat,p2Lat) && m.Lat > Math.Min(p1Lat,p2Lat)) && (m.Lng <  Math.Max(p1Lng,p2Lng) && m.Lng > Math.Min(p1Lng,p2Lng))).ToList();
+            return _db.marker.ToList().Where(m => (m.Lat < Math.Max(p1Lat,p2Lat) && m.Lat > Math.Min(p1Lat,p2Lat)) && (m.Lng <  Math.Max(p1Lng,p2Lng) && m.Lng > Math.Min(p1Lng,p2Lng))&&m.status.Tag==MarkerStatuses.Published).ToList();
         }
 
         public marker GetMarker(int markerId)
@@ -92,6 +92,21 @@ namespace MapBul.Service
         public List<article> GetEvents()
         {
             return _db.article.Where(a=>a.EventDate!=null).ToList();
+        }
+
+        public user GetUser(string userGuid)
+        {
+            return _db.user.First(u => u.Guid == userGuid);
+        }
+
+        public int GetDiscountId(int discount)
+        {
+            return _db.discount.First(d => d.Value == discount).Id;
+        }
+
+        public List<status> GetStatuses()
+        {
+            return _db.status.ToList();
         }
     }
 }
