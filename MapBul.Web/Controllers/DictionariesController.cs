@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
+using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
 using MapBul.Web.Models;
@@ -113,10 +114,10 @@ namespace MapBul.Web.Controllers
         {
             IRepository repo = DependencyResolver.Current.GetService<IRepository>();
 
-            string filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryIcon);
+            string filePath = FileProvider.SaveCategoryIcon(categoryIcon);
             model.Icon = filePath;
 
-            filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryPin);
+            filePath = FileProvider.SaveCategoryIcon(categoryPin);
             model.Pin = filePath;
 
             model.Color = model.Color.Replace("#", "");
@@ -135,8 +136,8 @@ namespace MapBul.Web.Controllers
 
             if (categoryIcon != null)
             {
-                FileProvider.FileProvider.DeleteFile(previousIcon);
-                string filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryIcon);
+                FileProvider.DeleteFile(previousIcon);
+                string filePath = FileProvider.SaveCategoryIcon(categoryIcon);
                 model.Icon = filePath;
             }
             else
@@ -146,8 +147,8 @@ namespace MapBul.Web.Controllers
 
             if (categoryPin != null)
             {
-                FileProvider.FileProvider.DeleteFile(previousPin);
-                string filePath = FileProvider.FileProvider.SaveCategoryIcon(categoryPin);
+                FileProvider.DeleteFile(previousPin);
+                string filePath = FileProvider.SaveCategoryIcon(categoryPin);
                 model.Pin = filePath;
             }
             else

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
+using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
 using MapBul.Web.Models;
@@ -81,8 +82,8 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
-            string photoPath = markerPhoto == null ? null : FileProvider.FileProvider.SaveMarkerPhoto(markerPhoto);
-            string logoPath = markerPhoto == null ? null : FileProvider.FileProvider.SaveMarkerLogo(markerLogo);
+            string photoPath = markerPhoto == null ? null : FileProvider.SaveMarkerPhoto(markerPhoto);
+            string logoPath = markerPhoto == null ? null : FileProvider.SaveMarkerLogo(markerLogo);
             model.Photo = photoPath;
             model.Logo = logoPath;
             repo.AddMarker(model, openTimes, closeTimes, userGuid);
@@ -103,14 +104,14 @@ namespace MapBul.Web.Controllers
             var userGuid = auth.UserGuid;
             if (markerPhoto != null)
             {
-                FileProvider.FileProvider.DeleteFile(model.Photo);
-                string filePath = FileProvider.FileProvider.SaveMarkerPhoto(markerPhoto);
+                FileProvider.DeleteFile(model.Photo);
+                string filePath = FileProvider.SaveMarkerPhoto(markerPhoto);
                 model.Photo = filePath;
             }
             if (markerLogo != null)
             {
-                FileProvider.FileProvider.DeleteFile(model.Logo);
-                string filePath = FileProvider.FileProvider.SaveMarkerLogo(markerLogo);
+                FileProvider.DeleteFile(model.Logo);
+                string filePath = FileProvider.SaveMarkerLogo(markerLogo);
                 model.Logo = filePath;
             }
             repo.EditMarker(model, openTimes, closeTimes, userGuid);
@@ -131,11 +132,4 @@ namespace MapBul.Web.Controllers
   
     }
 
-
-    [Serializable]
-    public class WorkTimeDay
-    {
-        public int WeekDayId { get; set; }
-        public TimeSpan? Time { get; set; }
-    }
 }

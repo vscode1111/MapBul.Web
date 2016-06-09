@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MapBul.DBContext;
+using MapBul.SharedClasses;
 using MapBul.Web.Controllers;
 using MapBul.Web.Models;
 

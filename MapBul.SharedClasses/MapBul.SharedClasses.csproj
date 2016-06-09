@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,10 +45,13 @@
     <Compile Include="Constants\MarkerStatuses.cs" />
     <Compile Include="Constants\UserParameters.cs" />
     <Compile Include="Constants\UserTypes.cs" />
+    <Compile Include="FileProvider.cs" />
+    <Compile Include="KeyValue.cs" />
     <Compile Include="MailProvider.cs" />
     <Compile Include="StringTransformationProvider.cs" />
     <Compile Include="MyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MapBul.DBContext\MapBul.DBContext.csproj">

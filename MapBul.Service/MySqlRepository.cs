@@ -96,7 +96,10 @@ namespace MapBul.Service
 
         public user GetUser(string userGuid)
         {
-            return _db.user.First(u => u.Guid == userGuid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            if(user==null)
+                throw new MyException(Errors.UserNotFound);
+            return user;
         }
 
         public int GetDiscountId(int discount)
@@ -107,6 +110,54 @@ namespace MapBul.Service
         public List<status> GetStatuses()
         {
             return _db.status.ToList();
+        }
+
+        public void AddMarker(marker marker, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, int userId, int[] subCategoryIds, string[] phonesStrings)
+        {
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                _db.marker.Add(marker);
+                _db.SaveChanges();
+
+                var subCategories =
+                    subCategoryIds.Select(sc => new subcategory {CategoryId = sc, MarkerId = marker.Id}).ToList();
+
+                var phones = phonesStrings.Select(p => new phone { Number = p, MarkerId = marker.Id, Primary = false }).ToList();
+                phones.First().Primary = true;
+
+                var workTimes =
+                    openTimes.Join(closeTimes.Select(ct => new { ct.WeekDayId, CloseTime = ct.Time }),
+                        ot => ot.WeekDayId, ct => ct.WeekDayId, (ot, ct) => new { ot.WeekDayId, OpenTime = ot.Time, ct.CloseTime }).Where(t => t.CloseTime != null && t.OpenTime != null).ToList(); 
+
+                _db.subcategory.AddRange(subCategories);
+                _db.phone.AddRange(phones);
+                _db.worktime.AddRange(workTimes.Select(t => new worktime { CloseTime = t.CloseTime.Value, OpenTime = t.OpenTime.Value, MarkerId = marker.Id, WeekDayId = t.WeekDayId }));
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
+        public List<city> GetPermittedCities(string userGuid)
+        {
+            var user = _db.user.First(u => u.Guid == userGuid);
+            var permittedCities = user.city_permission.Select(cp => cp).Select(city => city.city).ToList();
+            foreach (var city in from country in user.country_permission.Select(countryPermission => countryPermission.country) from city in country.city where !permittedCities.Contains(city) select city)
+            {
+                permittedCities.Add(city);
+            }
+            return permittedCities;
+        }
+
+        public bool HavePermissions(string guid, int cityId)
+        {
+            var permittedCities = GetPermittedCities(guid);
+            return permittedCities.Any(p => p.Id == cityId);
         }
     }
 }

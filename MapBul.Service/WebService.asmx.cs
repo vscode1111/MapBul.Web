@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
@@ -7,6 +9,7 @@ using System.Web.Services;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
 namespace MapBul.Service
@@ -179,9 +182,10 @@ namespace MapBul.Service
             foreach (var rootCategory in rootCategories)
             {
                 rootCategory.Icon = MapUrl(rootCategory.Icon);
+                rootCategory.Pin = MapUrl(rootCategory.Pin);
                 List<category> childCategories = repo.GetChildCategories(rootCategory.Id);
                 result.AddObjectToResult(rootCategory,index);
-                result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { c.Id, c.ParentId, c.AddedDate, Icon = MapUrl(c.Icon), c.Name, c.Color }).ToList() }, index);
+                result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { c.Id, c.ParentId, c.AddedDate, Pin=MapUrl(c.Pin), Icon = MapUrl(c.Icon), c.Name, c.Color }).ToList() }, index);
                 index++;
             }
             return JsonConvert.SerializeObject(result);
@@ -288,18 +292,34 @@ namespace MapBul.Service
 
         [WebMethod]
         public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
-            int baseCategoryId, float lat, float lng, string entryTicket, int discount, string street, string house,
-            string building, string floor, string site, string email, string photoBase64, string logoBase64, int[] subCategoryIds, string[] phones)
+            int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
+            string building, string floor, string site, string email, string photoBase64, int[] subCategoryIds, string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes)
         {
             try
             {
+
+
+                if (string.IsNullOrEmpty(entryTicket))
+                    entryTicket = "Нет";
+                
                 var repo = new MySqlRepository();
                 repo.CheckUser(userGuid);
                 var user = repo.GetUser(userGuid);
-                var userType = repo.GetMobileUserTypeById(user.Id);
+                var userType = repo.GetMobileUserTypeById(user.UserTypeId);
                 var permittedUserTypes = new[] {UserTypes.Guide};
+
+
                 if (!permittedUserTypes.Contains(userType.Tag))
                     throw new MyException(Errors.NotPermitted);
+                if (!repo.HavePermissions(user.Guid, cityId))
+                    throw new MyException(Errors.NotPermitted);
+
+
+                
+                var bytes = Convert.FromBase64String(photoBase64);
+
+                var photoPath = FileProvider.SaveMarkerPhoto(bytes);
+                var logoPath = FileProvider.SaveMarkerLogo(bytes);
 
                 marker newMarker = new marker
                 {
@@ -314,14 +334,59 @@ namespace MapBul.Service
                     Email = email,
                     Floor = floor,
                     House = house,
-                    Lat = lat,
-                    Lng = lng,
+                    Lat = (float)lat,
+                    Lng = (float)lng,
                     Site = site,
                     Street = street,
                     UserId = user.Id,
-                    StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id
+                    StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id,
+                    Photo = photoPath,
+                    Logo = logoPath, 
                 };
 
+                repo.AddMarker(newMarker,
+                    openTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
+                        .ToList(),
+                    closeTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
+                        .ToList(), user.Id, subCategoryIds,phones);
+
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (DbEntityValidationException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.EntityValidationErrors.First().ValidationErrors.First().PropertyName+" "+e.EntityValidationErrors.First().ValidationErrors.First().ErrorMessage));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+            
+            return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+        }
+
+        [WebMethod]
+        public string GetPermittedCities(string userGuid)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                var user = repo.GetUser(userGuid);
+                var result = new JsonResult(new List<Dictionary<string, object>>());
+
+
+                var permittedCities = repo.GetPermittedCities(userGuid);
+
+                var i = 0;
+                foreach (var permittedCity in permittedCities)
+                {
+                    result.AddObjectToResult(new { permittedCity.PlaceId, permittedCity.Id, permittedCity.Name }, i);
+                    i++;
+                }
+                        
+                return JsonConvert.SerializeObject(result);
             }
             catch (MyException e)
             {
@@ -329,8 +394,9 @@ namespace MapBul.Service
             }
             catch (Exception e)
             {
-                return JsonConvert.SerializeObject(new JsonResult(e.Message));
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
             }
+
         }
 
         #endregion

@@ -299,7 +299,7 @@ function OnMarkerPositionChanged() {
 
 
 function OnEditMarkerAddressChanged() {    
-    var address = $("#EditMarkerHouseInput").val() + ", " + $("#EditMarkerStreetInput").val() + ", " + $("#EditMarkerCitySelect option:selected").text();
+    var address = $("#EditMarkerHouseInput").val() + ", " + $("#EditMarkerStreetInput").val() + ", " + $("#MarkerCitySelect option:selected").text();
 
     window.geocoder.geocode({ 'address': address }, function(results, status) {
         if (status !== "OK")

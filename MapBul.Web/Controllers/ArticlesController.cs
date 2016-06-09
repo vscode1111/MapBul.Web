@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
+using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
 using MapBul.Web.Models;
@@ -48,9 +49,9 @@ namespace MapBul.Web.Controllers
         public bool AddNewArticle(NewArticleModel model, HttpPostedFileBase articlePhoto, HttpPostedFileBase articleTitlePhoto)
         {
             if (articlePhoto != null)
-                model.Photo = FileProvider.FileProvider.SaveArticlePhoto(articlePhoto);
+                model.Photo = FileProvider.SaveArticlePhoto(articlePhoto);
             if(articleTitlePhoto!=null)
-                model.TitlePhoto = FileProvider.FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
+                model.TitlePhoto = FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
 
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
@@ -95,13 +96,13 @@ namespace MapBul.Web.Controllers
             var userGuid = auth.UserGuid;
             if (articlePhoto != null)
             {
-                FileProvider.FileProvider.DeleteFile(model.Photo);
-                model.Photo = FileProvider.FileProvider.SaveArticlePhoto(articlePhoto);
+                FileProvider.DeleteFile(model.Photo);
+                model.Photo = FileProvider.SaveArticlePhoto(articlePhoto);
             }
             if (articleTitlePhoto != null)
             {
-                FileProvider.FileProvider.DeleteFile(model.TitlePhoto);
-                model.TitlePhoto = FileProvider.FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
+                FileProvider.DeleteFile(model.TitlePhoto);
+                model.TitlePhoto = FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
             }
             repo.EditArticle(model, userGuid);
 

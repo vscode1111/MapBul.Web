@@ -168,7 +168,6 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MarkersController.cs" />
     <Compile Include="ExternalRequest\ExternalRequestProvider.cs" />
-    <Compile Include="FileProvider\FileProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
