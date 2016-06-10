@@ -13,6 +13,8 @@ namespace MapBul.DBContext
 
         public int UserId { get; set; }
 
+        public bool Superuser { get; set; }
+
         public virtual user user { get; set; }
     }
 }

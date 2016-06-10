@@ -10,10 +10,10 @@
     </div>
     <div class="ibox-content">
         <div class="panel-body">
-            @if (Html.IsUserInRoles(UserTypes.Admin))
-            {
+            <!--if (Html.IsUserInRoles(UserTypes.Admin))-->
+            <!--{-->
                 <input type="button" class="btn btn-primary" data-actionurl="@Url.Action("_NewJournalistPartial", "Users")" value="Новый журналист" id="NewJornalistButton"/>
-            }
+            <!--}-->
         </div>
         <div class="table-responsive" id="JournalistsTable">
             <table class="table table-striped table-bordered table-hover dataTable">

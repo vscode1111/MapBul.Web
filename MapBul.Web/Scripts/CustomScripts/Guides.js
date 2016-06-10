@@ -1,4 +1,5 @@
 ﻿function OnGuidesDocumentReady() {
+    $("#NewGuideButton").click(OnNewGuideClick);
     $(".GuideDescriptionRow").click(OnGuideRowClick);
     $('#GuidesTable table').dataTable({
         "pageLength": 30,
@@ -18,6 +19,31 @@
             }
         }
     });
+}
+
+function OnNewGuideClick() {
+    var url = $(this).attr("data-actionurl");
+    $.ajax({
+        url: url,
+        type: "POST",
+        success: function (data) {
+            $("#ModalContent").html(data);
+            $("#Modal").modal("show");
+        },
+        error: function () {
+            ViewNotification('Ошибка', 'error');
+        }
+    });
+}
+
+function AddNewGuideSuccess(data) {
+    if (data.success) {
+        $("#Modal").modal("hide");
+        RefreshGuidesTable();
+        ViewNotification("Гид добавлен", "success");
+    } else {
+        ViewNotification(data.errorReason, "error");
+    }
 }
 
 function OnGuideRowClick() {

@@ -808,6 +808,7 @@
     <Content Include="Views\Users\Partial\_TenantsTablePartial.cshtml" />
     <Content Include="Views\Users\Partial\_TenantInformationPartial.cshtml" />
     <Content Include="Views\Users\Partial\_GuideInformationPartial.cshtml" />
+    <Content Include="Views\Users\Partial\_NewGuideModalPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

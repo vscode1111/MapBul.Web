@@ -39,7 +39,10 @@
                 <div class="col-md-7">
                     <div class="form-group">
                         <label class="control-label">Заблокирован</label>
-                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> { { "class", "checkbox" } })
+                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})
+                    </div>
+                    <div class="form-group">
+                        @Ajax.ActionLink("Удалить", "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshTenantsTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
                     </div>
                 </div>
             </div>

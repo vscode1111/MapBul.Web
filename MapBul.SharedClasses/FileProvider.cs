@@ -140,7 +140,7 @@ namespace MapBul.SharedClasses
                     float k = 0;
                     if (image.Width < image.Height)
                         k = 300f / image.Width;
-                    if (image.Width < image.Height)
+                    if (image.Width >= image.Height)
                         k = 300f / image.Height;
                     resizedImage = CompressImage(image, (int)(k * image.Width), (int)(k * image.Height));
                 }
@@ -166,12 +166,12 @@ namespace MapBul.SharedClasses
                 Image resizedImage;
                 using (var image = Image.FromFile(savePath))
                 {
-                    /*float k = 0;
+                    float k = 0;
                     if (image.Width < image.Height)
-                        k = 300f/image.Width;
-                    if (image.Width < image.Height)
-                        k = 300f / image.Height;*/
-                    resizedImage = CompressImage(image, 300, 300);
+                        k = 300f / image.Width;
+                    if (image.Width >= image.Height)
+                        k = 300f / image.Height;
+                    resizedImage = CompressImage(image, (int)(k * image.Width), (int)(k * image.Height));
                 }
                 resizedImage.Save(savePath);
             }

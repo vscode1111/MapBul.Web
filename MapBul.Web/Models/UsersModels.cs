@@ -261,6 +261,7 @@ namespace MapBul.Web.Models
                     propertyInfo.SetValue(guide, propertyInfo.GetValue(this));
                 }
             }
+            guide.EditorId = EditorId;
         }
         public string Password { get; set; }
         public string Email { get; set; }

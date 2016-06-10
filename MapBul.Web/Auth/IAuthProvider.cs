@@ -9,5 +9,6 @@
         string UserType { get; }
         string UserGuid { get; }
         int UserId { get; }
+        bool IsSuperAdmin { get; }
     }
 }

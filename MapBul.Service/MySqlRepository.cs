@@ -159,5 +159,62 @@ namespace MapBul.Service
             var permittedCities = GetPermittedCities(guid);
             return permittedCities.Any(p => p.Id == cityId);
         }
+
+        public List<category> GetCategories()
+        {
+            return _db.category.ToList();
+        }
+
+        public void AddNewTenant(string email, string firstName, string middleName, string lastName, DateTime birthDate, string gender, string phone, string address)
+        {
+            if(_db.user.Any(u=>u.Email==email))
+                throw new MyException(Errors.UserExists);
+            var trans = _db.Database.BeginTransaction();
+            var password = StringTransformationProvider.GeneratePassword();
+            try
+            {
+                var newUser = new user
+                {
+                    Email = email,
+                    Deleted = false,
+                    Guid = Guid.NewGuid().ToString(),
+                    Password = StringTransformationProvider.Md5(password),
+                    UserTypeId = _db.usertype.First(t => t.Tag == UserTypes.Tenant).Id
+                };
+                _db.user.Add(newUser);
+                _db.SaveChanges();
+                _db.tenant.Add(new tenant
+                {
+                    Address = address,
+                    BirthDate = birthDate,
+                    UserId = newUser.Id,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    MiddleName = middleName,
+                    Gender = gender,
+                    Phone = phone
+                });
+                _db.SaveChanges();
+                trans.Commit();
+                MailProvider.SendMailWithCredintails(password,firstName,middleName,email);
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
+
+        }
+
+        public void RecoverPassword(string email)
+        {
+            var tenant = _db.tenant.FirstOrDefault(t => t.user.Email == email);
+            if(tenant==null)
+                throw new MyException(Errors.UserNotFound);
+            var password = StringTransformationProvider.GeneratePassword();
+            tenant.user.Password = StringTransformationProvider.Md5(password);
+            _db.SaveChanges();
+            MailProvider.SendMailWithCredintails(password,tenant.FirstName,tenant.MiddleName,tenant.LastName);
+        }
     }
 }

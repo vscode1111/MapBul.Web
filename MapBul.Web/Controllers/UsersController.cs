@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
@@ -10,18 +11,18 @@ namespace MapBul.Web.Controllers
     public class UsersController : Controller
     {
         [HttpGet]
-        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult Index()
         {
             return View();
         }
 
-#region partials
+        #region partials
 
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _AdminsTablePartial()
         {
-            AdminsListModel model=new AdminsListModel();
+            AdminsListModel model = new AdminsListModel();
             return PartialView("Partial/_AdminsTablePartial", model);
         }
 
@@ -45,7 +46,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewEditorPartial()
         {
-            var model=new NewEditorModel();
+            var model = new NewEditorModel();
             var repo = DependencyResolver.Current.GetService<IRepository>();
             ViewBag.Countries = repo.GetCountries();
 //            ViewBag.Regions = repo.GetRegions();
@@ -58,16 +59,16 @@ namespace MapBul.Web.Controllers
         public ActionResult _EditorInformationPartial(int editorId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewEditorModel model=new NewEditorModel(repo.GetEditor(editorId));
+            NewEditorModel model = new NewEditorModel(repo.GetEditor(editorId));
             ViewBag.Countries = repo.GetCountries();
 //            ViewBag.Regions = repo.GetRegions();
             ViewBag.Cities = repo.GetCities();
 
-            return PartialView("Partial/_EditorInformationPartial",model);
+            return PartialView("Partial/_EditorInformationPartial", model);
         }
 
         [HttpPost]
-        [MyAuth(Roles = UserTypes.Admin)]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _NewJournalistPartial()
         {
             var model = new NewJournalistModel();
@@ -76,6 +77,7 @@ namespace MapBul.Web.Controllers
 //            ViewBag.Regions = repo.GetRegions();
             ViewBag.Cities = repo.GetCities();
             ViewBag.Editors = repo.GetEditors();
+            ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
             return PartialView("Partial/_NewJournalistPartial", model);
         }
 
@@ -131,12 +133,18 @@ namespace MapBul.Web.Controllers
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             NewGuideModel model = new NewGuideModel(repo.GetGuide(guideId));
+            ViewBag.Countries = repo.GetCountries();
+            //            ViewBag.Regions = repo.GetRegions();
+            ViewBag.Cities = repo.GetCities();
+            ViewBag.Editors = repo.GetEditors();
+            ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
             return PartialView("Partial/_GuideInformationPartial", model);
         }
 
-#endregion
+        #endregion
 
-#region actions
+        #region actions
+
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult AddNewEditor(NewEditorModel model)
@@ -150,11 +158,11 @@ namespace MapBul.Web.Controllers
             }
             catch (MyException e)
             {
-                    return new JsonResult
-                    {
-                        JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                        Data = new {success = false, errorReason = e.Error.Message}
-                    };
+                return new JsonResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                    Data = new {success = false, errorReason = e.Error.Message}
+                };
             }
             return new JsonResult
             {
@@ -174,21 +182,21 @@ namespace MapBul.Web.Controllers
             }
             catch (MyException e)
             {
-                    return new JsonResult
-                    {
-                        JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                        Data = new { success = false, errorReason = e.Error.Message}
-                    };
+                return new JsonResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                    Data = new {success = false, errorReason = e.Error.Message}
+                };
             }
             return new JsonResult
             {
                 JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                Data = new { success = true }
+                Data = new {success = true}
             };
         }
 
         [HttpPost]
-        [MyAuth(Roles = UserTypes.Admin)]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult AddNewJournalist(NewJournalistModel model)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -203,13 +211,13 @@ namespace MapBul.Web.Controllers
                 return new JsonResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                    Data = new { success = false, errorReason = e.Error.Message }
+                    Data = new {success = false, errorReason = e.Error.Message}
                 };
             }
             return new JsonResult
             {
                 JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                Data = new { success = true }
+                Data = new {success = true}
             };
         }
 
@@ -229,13 +237,13 @@ namespace MapBul.Web.Controllers
                 return new JsonResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                    Data = new { success = false, errorReason = e.Error.Message }
+                    Data = new {success = false, errorReason = e.Error.Message}
                 };
             }
             return new JsonResult
             {
                 JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                Data = new { success = true }
+                Data = new {success = true}
             };
         }
 
@@ -243,7 +251,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult AddNewAdmin(NewAdminModel model)
         {
-            
+
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
@@ -256,18 +264,18 @@ namespace MapBul.Web.Controllers
                 return new JsonResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                    Data = new { success = false, errorReason = e.Error.Message }
+                    Data = new {success = false, errorReason = e.Error.Message}
                 };
             }
             return new JsonResult
             {
                 JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                Data = new { success = true }
+                Data = new {success = true}
             };
         }
 
         [HttpPost]
-        [MyAuth(Roles = UserTypes.Admin)]
+        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
         public ActionResult EditGuide(NewGuideModel model)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
@@ -280,13 +288,13 @@ namespace MapBul.Web.Controllers
                 return new JsonResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                    Data = new { success = false, errorReason = e.Error.Message }
+                    Data = new {success = false, errorReason = e.Error.Message}
                 };
             }
             return new JsonResult
             {
                 JsonRequestBehavior = JsonRequestBehavior.DenyGet,
-                Data = new { success = true }
+                Data = new {success = true}
             };
         }
 
@@ -304,6 +312,47 @@ namespace MapBul.Web.Controllers
                 return new JsonResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                    Data = new {success = false, errorReason = e.Error.Message}
+                };
+            }
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                Data = new {success = true}
+            };
+        }
+
+        #endregion
+
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult DeleteAdmin(int adminId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.DeleteAdmin(adminId);
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                Data = new { success=true }
+            };
+        }
+
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
+        public ActionResult AddNewGuide(NewGuideModel model)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            try
+            {
+                model.Password = StringTransformationProvider.GeneratePassword();
+                repo.AddNewGuide(model);
+                MailProvider.SendMailWithCredintails(model.Password, model.FirstName, model.MiddleName, model.Email);
+            }
+            catch (MyException e)
+            {
+                return new JsonResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.DenyGet,
                     Data = new { success = false, errorReason = e.Error.Message }
                 };
             }
@@ -314,8 +363,35 @@ namespace MapBul.Web.Controllers
             };
         }
 
-#endregion
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
+        public ActionResult _NewGuideModalPartial()
+        {
+            var model = new NewGuideModel();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            ViewBag.Countries = repo.GetCountries();
+            //            ViewBag.Regions = repo.GetRegions();
+            ViewBag.Cities = repo.GetCities();
+            ViewBag.Editors = repo.GetEditors();
+            ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
+            return PartialView("Partial/_NewGuideModalPartial",model);
+        }
 
-        
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public ActionResult DeleteUser(int userId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.DeleteUser(userId);
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                Data = new
+                {
+                    success = true
+                }
+            };
+        }
+
     }
 }

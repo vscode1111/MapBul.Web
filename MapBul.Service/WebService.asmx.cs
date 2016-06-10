@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Services;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
 namespace MapBul.Service
@@ -25,6 +22,7 @@ namespace MapBul.Service
     public class WebService : System.Web.Services.WebService
     {
         #region private
+
         private List<int> GetCategoriesBranch(category category)
         {
             var result = new List<int>();
@@ -39,7 +37,7 @@ namespace MapBul.Service
 
         private string MapUrl(string filePath)
         {
-            return "http://"+HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"]+"/" + filePath;
+            return "http://" + HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"] + "/" + filePath;
         }
 
         private object GetUserDescriptor(user user)
@@ -57,21 +55,31 @@ namespace MapBul.Service
             }
         }
 
-#endregion
+        #endregion
 
-#region webMethods
+        #region webMethods
+
         [WebMethod]
         public string Authorize(string email, string password)
         {
             try
             {
                 MySqlRepository repo = new MySqlRepository();
-                var user = repo.GetUserByEmailAndPassword(email, password);  //вытащили пользователя
+                var user = repo.GetUserByEmailAndPassword(email, password); //вытащили пользователя
 
                 dynamic userDescriptor = GetUserDescriptor(user);
 
                 var userType = repo.GetMobileUserTypeById(user.UserTypeId); //вытащили его тип
-                var result = new JsonResult(new List<Dictionary<string, object>>{new Dictionary<string, object>{{"FirstName",userDescriptor.FirstName},{"UserTypeTag",userType.Tag},{"UserTypeDescription",userType.Description}}});
+                var result =
+                    new JsonResult(new List<Dictionary<string, object>>
+                    {
+                        new Dictionary<string, object>
+                        {
+                            {"FirstName", userDescriptor.FirstName},
+                            {"UserTypeTag", userType.Tag},
+                            {"UserTypeDescription", userType.Description}
+                        }
+                    });
                 result.AddObjectToResult(user, 0);
                 return JsonConvert.SerializeObject(result);
             }
@@ -90,10 +98,10 @@ namespace MapBul.Service
         {
             try
             {
-                MySqlRepository repo=new MySqlRepository();
+                MySqlRepository repo = new MySqlRepository();
                 usertype userType = repo.GetMobileUserTypeById(id);
                 var result = new JsonResult(new List<Dictionary<string, object>>());
-                result.AddObjectToResult(userType,0);
+                result.AddObjectToResult(userType, 0);
                 return JsonConvert.SerializeObject(result);
             }
             catch (MyException e)
@@ -126,19 +134,20 @@ namespace MapBul.Service
                             marker.Name,
                             marker.Lat,
                             marker.Lng,
-                            Icon=MapUrl(marker.category.Pin),
-                            Logo=MapUrl(marker.Logo),
-                            Photo=MapUrl(marker.Photo),
-                            marker.phone.First(p => p.Primary).Number,
-                            marker.Site,
-                            marker.Introduction,
-                            WorkTime=marker.worktime.Select(wt=>new
+                            Icon = MapUrl(marker.category.Pin),
+                            Logo = MapUrl(marker.Logo),
+                            // Photo=MapUrl(marker.Photo),
+                            // marker.phone.First(p => p.Primary).Number,
+                            // marker.Site,
+                            // marker.Introduction,
+                            WorkTime = marker.worktime.Select(wt => new
                             {
                                 wt.OpenTime,
                                 wt.CloseTime,
                                 wt.weekday.Id
                             }).ToList(),
-                            CategoriesBranch=GetCategoriesBranch(marker.category)
+                            CategoriesBranch = GetCategoriesBranch(marker.category),
+                            SubCategories = marker.subcategory.Select(s => s.category.Name).ToList()
                         }, markers.IndexOf(marker));
                 }
 
@@ -157,35 +166,74 @@ namespace MapBul.Service
         [WebMethod]
         public string GetMarkerDescription(int markerId)
         {
-            var repo=new MySqlRepository();
+            var repo = new MySqlRepository();
             marker marker = repo.GetMarker(markerId);
-            JsonResult result=new JsonResult(new List<Dictionary<string, object>>());
+            JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+
+            var categories = repo.GetCategories();
 
             marker.Photo = MapUrl(marker.Photo);
-            result.AddObjectToResult(marker,0);
+            marker.Logo = MapUrl(marker.Logo);
+            result.AddObjectToResult(marker, 0);
             result.AddObjectToResult(new
             {
-                Phones = marker.phone.Select(p=>new {p.Primary,p.Number}).ToList(),
+                Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
                 Discount = marker.discount.Value,
-                Subcategories = marker.subcategory.Select(s=>s.category.Id).ToList()
+                Subcategories = marker.subcategory.Select(s => new {s.category.Id, s.category.Name}).ToList(),
+                CityName = marker.city.Name,
+                Pin = MapUrl(marker.category.Pin),
+                Icon = MapUrl(marker.category.Icon),
+                WorkTime = marker.worktime.Select(wt => new
+                {
+                    wt.OpenTime,
+                    wt.CloseTime,
+                    wt.weekday.Id
+                }).ToList(),
+                marker.category.Color,
+                CategoriesBranch =
+                    GetCategoriesBranch(marker.category)
+                        .Select(
+                            number =>
+                                new
+                                {
+                                    categories.First(c => c.Id == number).Id,
+                                    categories.First(c => c.Id == number).Name
+                                })
+                        .ToList()
             }, 0);
             return JsonConvert.SerializeObject(result);
         }
 
         [WebMethod]
-        public string GetRootCategories() 
+        public string GetRootCategories()
         {
-            MySqlRepository repo=new MySqlRepository();
+            MySqlRepository repo = new MySqlRepository();
             List<category> rootCategories = repo.GetRootCategories();
             int index = 0;
-            var result=new JsonResult(new List<Dictionary<string, object>>());
+            var result = new JsonResult(new List<Dictionary<string, object>>());
             foreach (var rootCategory in rootCategories)
             {
                 rootCategory.Icon = MapUrl(rootCategory.Icon);
                 rootCategory.Pin = MapUrl(rootCategory.Pin);
                 List<category> childCategories = repo.GetChildCategories(rootCategory.Id);
-                result.AddObjectToResult(rootCategory,index);
-                result.AddObjectToResult(new { ChildCategories = childCategories.Select(c => new { c.Id, c.ParentId, c.AddedDate, Pin=MapUrl(c.Pin), Icon = MapUrl(c.Icon), c.Name, c.Color }).ToList() }, index);
+                result.AddObjectToResult(rootCategory, index);
+                result.AddObjectToResult(
+                    new
+                    {
+                        ChildCategories =
+                            childCategories.Select(
+                                c =>
+                                    new
+                                    {
+                                        c.Id,
+                                        c.ParentId,
+                                        c.AddedDate,
+                                        Pin = MapUrl(c.Pin),
+                                        Icon = MapUrl(c.Icon),
+                                        c.Name,
+                                        c.Color
+                                    }).ToList()
+                    }, index);
                 index++;
             }
             return JsonConvert.SerializeObject(result);
@@ -198,7 +246,7 @@ namespace MapBul.Service
             List<article> articles = repo.GetArticles();
             var result = new JsonResult(new List<Dictionary<string, object>>());
             int i = 0;
-            foreach (var article in articles.OrderByDescending(a=>a.PublishedDate).Take(10))
+            foreach (var article in articles.OrderByDescending(a => a.PublishedDate).Take(10))
             {
                 article.Photo = MapUrl(article.Photo);
                 article.TitlePhoto = MapUrl(article.TitlePhoto);
@@ -208,22 +256,22 @@ namespace MapBul.Service
                 switch (article.user.usertype.Tag)
                 {
                     case UserTypes.Editor:
-                        authorName = new 
+                        authorName = new
                         {
-                            article.user.editor.First().FirstName, 
-                            article.user.editor.First().MiddleName, 
+                            article.user.editor.First().FirstName,
+                            article.user.editor.First().MiddleName,
                             article.user.editor.First().LastName
-                        }; 
+                        };
                         break;
-                        case UserTypes.Journalist:
-                        authorName = new 
+                    case UserTypes.Journalist:
+                        authorName = new
                         {
-                            article.user.journalist.First().FirstName, 
-                            article.user.journalist.First().MiddleName, 
+                            article.user.journalist.First().FirstName,
+                            article.user.journalist.First().MiddleName,
                             article.user.journalist.First().LastName
-                        }; 
+                        };
                         break;
-                        default :
+                    default:
                         authorName = new
                         {
                             FirstName = "Администратор",
@@ -233,8 +281,8 @@ namespace MapBul.Service
                         break;
                 }
 
-                result.AddObjectToResult(article,i);
-                result.AddObjectToResult(new{AuthorName=authorName}, i);
+                result.AddObjectToResult(article, i);
+                result.AddObjectToResult(new {AuthorName = authorName}, i);
                 i++;
             }
             return JsonConvert.SerializeObject(result);
@@ -283,7 +331,7 @@ namespace MapBul.Service
                 }
 
                 result.AddObjectToResult(article, i);
-                result.AddObjectToResult(new { AuthorName = authorName }, i);
+                result.AddObjectToResult(new {AuthorName = authorName}, i);
                 i++;
             }
             return JsonConvert.SerializeObject(result);
@@ -293,7 +341,8 @@ namespace MapBul.Service
         [WebMethod]
         public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
-            string building, string floor, string site, string email, string photoBase64, int[] subCategoryIds, string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes)
+            string building, string floor, string site, string email, string photoBase64, int[] subCategoryIds,
+            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes)
         {
             try
             {
@@ -301,7 +350,7 @@ namespace MapBul.Service
 
                 if (string.IsNullOrEmpty(entryTicket))
                     entryTicket = "Нет";
-                
+
                 var repo = new MySqlRepository();
                 repo.CheckUser(userGuid);
                 var user = repo.GetUser(userGuid);
@@ -315,7 +364,7 @@ namespace MapBul.Service
                     throw new MyException(Errors.NotPermitted);
 
 
-                
+
                 var bytes = Convert.FromBase64String(photoBase64);
 
                 var photoPath = FileProvider.SaveMarkerPhoto(bytes);
@@ -334,21 +383,21 @@ namespace MapBul.Service
                     Email = email,
                     Floor = floor,
                     House = house,
-                    Lat = (float)lat,
-                    Lng = (float)lng,
+                    Lat = (float) lat,
+                    Lng = (float) lng,
                     Site = site,
                     Street = street,
                     UserId = user.Id,
                     StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id,
                     Photo = photoPath,
-                    Logo = logoPath, 
+                    Logo = logoPath,
                 };
 
                 repo.AddMarker(newMarker,
                     openTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
                         .ToList(),
                     closeTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
-                        .ToList(), user.Id, subCategoryIds,phones);
+                        .ToList(), user.Id, subCategoryIds, phones);
 
             }
             catch (MyException e)
@@ -357,13 +406,16 @@ namespace MapBul.Service
             }
             catch (DbEntityValidationException e)
             {
-                return JsonConvert.SerializeObject(new JsonResult(e.EntityValidationErrors.First().ValidationErrors.First().PropertyName+" "+e.EntityValidationErrors.First().ValidationErrors.First().ErrorMessage));
+                return
+                    JsonConvert.SerializeObject(
+                        new JsonResult(e.EntityValidationErrors.First().ValidationErrors.First().PropertyName + " " +
+                                       e.EntityValidationErrors.First().ValidationErrors.First().ErrorMessage));
             }
             catch (Exception e)
             {
                 return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
             }
-            
+
             return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
         }
 
@@ -373,7 +425,6 @@ namespace MapBul.Service
             try
             {
                 var repo = new MySqlRepository();
-                var user = repo.GetUser(userGuid);
                 var result = new JsonResult(new List<Dictionary<string, object>>());
 
 
@@ -382,10 +433,10 @@ namespace MapBul.Service
                 var i = 0;
                 foreach (var permittedCity in permittedCities)
                 {
-                    result.AddObjectToResult(new { permittedCity.PlaceId, permittedCity.Id, permittedCity.Name }, i);
+                    result.AddObjectToResult(new {permittedCity.PlaceId, permittedCity.Id, permittedCity.Name}, i);
                     i++;
                 }
-                        
+
                 return JsonConvert.SerializeObject(result);
             }
             catch (MyException e)
@@ -399,7 +450,46 @@ namespace MapBul.Service
 
         }
 
-        #endregion
+        [WebMethod]
+        public string RegisterTenant(string email, string firstName, string middleName, string lastName,
+            DateTime birthDate, string gender, string phone, string address)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                repo.AddNewTenant(email, firstName, middleName, lastName, birthDate, gender, phone, address);
+                return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
+
+        [WebMethod]
+        public string RecoverPassword(string email)
+        {
+            try
+            {
+                var repo=new MySqlRepository();
+                repo.RecoverPassword(email);
+                return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
+
+    #endregion
 
         
     }

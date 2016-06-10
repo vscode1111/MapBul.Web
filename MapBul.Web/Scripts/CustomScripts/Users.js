@@ -2,6 +2,14 @@
     
 }
 
+function DeleteSuccess(data, refreshFunction) {
+    if (data.success) {
+        ViewNotification("Пользователь удален", "success");
+        $("#Modal").modal("hide");
+        refreshFunction();
+    }
+}
+
 
 function AjaxRequestWithoutParams(url) {
     $.ajax({

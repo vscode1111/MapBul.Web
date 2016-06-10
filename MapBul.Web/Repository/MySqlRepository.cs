@@ -258,6 +258,57 @@ namespace MapBul.Web.Repository
             _db.SaveChanges();
         }
 
+        public void DeleteAdmin(int adminId)
+        {
+            _db.user.Remove(_db.admin.First(a => a.Id == adminId).user);
+            _db.SaveChanges();
+        }
+
+        public void AddNewGuide(NewGuideModel model)
+        {
+            model.Email = StringTransformationProvider.TransformEmail(model.Email);
+            if (_db.user.Any(u => u.Email == model.Email))
+                throw new MyException(Errors.UserExists);
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                var newUser = new user
+                {
+                    Guid = Guid.NewGuid().ToString(),
+                    Password = StringTransformationProvider.Md5(model.Password),
+                    Email = model.Email,
+                    UserTypeId = GetUserTypeByTag(UserTypes.Journalist),
+                    Deleted = model.Deleted
+                };
+                _db.user.Add(newUser);
+                _db.SaveChanges();
+                guide newEditor = new guide();
+                model.CopyTo(ref newEditor);
+                newEditor.UserId = newUser.Id;
+                _db.guide.Add(newEditor);
+                _db.country_permission.AddRange(
+                    model.PermittedCountries.Select(c => new country_permission { CountryId = c, UserId = newUser.Id }));
+                _db.city_permission.AddRange(
+                    model.PermittedCities.Select(c => new city_permission { CityId = c, UserId = newUser.Id }));
+                //                _db.region_permission.AddRange(
+                //                    model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = newUser.Id}));
+
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
+        public void DeleteUser(int userId)
+        {
+            _db.user.Remove(_db.user.First(u => u.Id == userId));
+            _db.SaveChanges();
+        }
+
         private country GetCountry(int countryId)
         {
             return _db.country.First(c => c.Id == countryId);

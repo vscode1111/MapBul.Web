@@ -1,6 +1,7 @@
 ﻿
 @using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
+@using MapBul.Web.Helpers
 @model MapBul.Web.Models.NewJournalistModel
 <div class="ibox">
     <div class="ibox-title">
@@ -47,8 +48,15 @@
                         @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.ListBoxFor(m => m.EditorId, ((List<editor>) ViewBag.Editors).Select(e => new SelectListItem {Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите редактора"}})
-                    </div>
+                        @if (Html.IsUserInRoles(UserTypes.Admin))
+                        {
+                            @Html.ListBoxFor(m => m.EditorId, ((List<editor>) ViewBag.Editors).Select(e => new SelectListItem {Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите редактора"}})
+                        }
+                        else
+                        {
+                            @Html.Hidden("EditorId",((user)ViewBag.User).editor.First().Id)
+                        }
+                            </div>
                     <div class="form-group">
                         <label class="control-label">Заблокирован</label>
                         @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})

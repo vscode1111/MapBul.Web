@@ -55,5 +55,8 @@ namespace MapBul.Web.Repository
         List<journalist> GetJournalists(string userGuid);
         List<guide> GetGuides(string userGuid);
         void AddCity(string name, int countryId, string placeId, float latConverted, float lngConverted);
+        void DeleteAdmin(int adminId);
+        void AddNewGuide(NewGuideModel model);
+        void DeleteUser(int userId);
     }
 }

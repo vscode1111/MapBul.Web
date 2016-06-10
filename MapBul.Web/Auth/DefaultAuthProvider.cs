@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -89,6 +90,15 @@ namespace MapBul.Web.Auth
                 IRepository db = DependencyResolver.Current.GetService<IRepository>();
                 user user = db.GetUserByGuid(HttpContext.Current.User.Identity.Name);
                 return user.Id;
+            }
+        }
+
+        public bool IsSuperAdmin
+        {
+            get
+            {
+                IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+                return repo.GetAdmins().First(a => a.user.Guid == HttpContext.Current.User.Identity.Name).Superuser;
             }
         }
     }

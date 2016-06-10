@@ -15,64 +15,69 @@
 
     </div>
     <div class="panel-body">
-        @using (Ajax.BeginForm("EditGuide", "Users", new AjaxOptions { HttpMethod = "POST", OnSuccess = "EditGuideSuccess", OnFailure = "ViewNotification('Не удалось сохранить изменения','error')", AllowCache = false }))
+        @using (Ajax.BeginForm("EditGuide", "Users", new AjaxOptions {HttpMethod = "POST", OnSuccess = "EditGuideSuccess", OnFailure = "ViewNotification('Не удалось сохранить изменения','error')", AllowCache = false}))
         {
             @Html.HiddenFor(m => m.Id)
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Фамилия" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBoxFor(m => m.LastName, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Фамилия"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Имя" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBoxFor(m => m.FirstName, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Имя"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.MiddleName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Отчество" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBoxFor(m => m.MiddleName, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Отчество"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.DropDownListFor(m => m.Gender, UserParameters.Sex.Select(s => new SelectListItem { Text = s, Value = s }), new Dictionary<string, object> { { "class", "form-control" }, { "required", "Пол" }, { isDisabled, "" } })
+                        @Html.DropDownListFor(m => m.Gender, UserParameters.Sex.Select(s => new SelectListItem {Text = s, Value = s}), new Dictionary<string, object> {{"class", "form-control"}, {"required", "Пол"}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Телефон" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Телефон"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Адрес" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Адрес"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBox("BirthDate", Model.BirthDate.ToString("dd.MM.yyyy"), new Dictionary<string, object> { { "class", "form-control datepicker" }, { "placeholder", "Дата рождения" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBox("BirthDate", Model.BirthDate.ToString("dd.MM.yyyy"), new Dictionary<string, object> {{"class", "form-control datepicker"}, {"placeholder", "Дата рождения"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Email, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Email" }, { "required", "" }, { isReadonly, "" } })
+                        @Html.TextBoxFor(m => m.Email, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Email"}, {"required", ""}})
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
-                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>)ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите страны" }, { "multiple", "" }, { isDisabled, "" } })
+                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>) ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите страны"}, {"multiple", ""}})
                     </div>
                     <!--<div class="form-group">
                         Html.ListBox("PermittedRegions", new MultiSelectList((List<region>)ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите регионы" }, { "multiple", "" }, { isDisabled, "" } })
                     </div>-->
                     <div class="form-group">
-                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>)ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите города" }, { "multiple", "" }, { isDisabled, "" } })
+                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.DropDownListFor(m => m.EditorId, ((List<editor>)ViewBag.Editors).Select(e => new SelectListItem { Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString(), Selected = Model.EditorId == e.Id }).Union(new List<SelectListItem> { new SelectListItem { Selected = Model.EditorId == null, Value = "null", Text = "Нет" } }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите редактора" }, { isDisabled, "" } })
+
+                        @if (isAdmin)
+                        {
+                            @Html.DropDownListFor(m => m.EditorId, ((List<editor>) ViewBag.Editors).Select(e => new SelectListItem {Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString(), Selected = Model.EditorId == e.Id}).Union(new List<SelectListItem> {new SelectListItem {Selected = Model.EditorId == null, Value = "null", Text = "Нет"}}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите редактора"}})
+
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(m => m.EditorId)
+                        }
                     </div>
                     <div class="form-group">
                         <label class="control-label">Заблокирован</label>
-                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> { { "class", "checkbox" }, { isDisabled, "" } })
+                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})
+                    </div>
+                    <div class="form-group">
+                        @Ajax.ActionLink("Удалить", "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshGuidesTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                @if (isAdmin)
-                {
-                    <input type="submit" class="btn btn-primary" value="Сохранить" />
-                }
-                else
-                {
-                    <input type="submit" class="btn btn-primary" disabled="disabled" value="Сохранить" />
-                }
+                <input type="submit" class="btn btn-primary" value="Сохранить"/>
             </div>
         }
     </div>

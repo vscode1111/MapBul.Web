@@ -1,4 +1,10 @@
-﻿@model MapBul.Web.Models.AdminsListModel
+﻿@using MapBul.Web.Auth
+@model MapBul.Web.Models.AdminsListModel
+
+@{
+    var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+}
+
 <div class="ibox">
     <div class="ibox-title">
         <h3>Администраторы</h3>
@@ -14,6 +20,10 @@
                     <th>№</th>
                     <th>Дата регистрации</th>
                     <th>Email</th>
+                    @if (auth.IsSuperAdmin)
+                    {
+                        <th></th>
+                    }
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +39,16 @@
                         <td>
                             @admin.user.Email
                         </td>
+                        @if (auth.IsSuperAdmin && !admin.Superuser)
+                        {
+                            <td>
+                                @Ajax.ActionLink("Удалить", "DeleteAdmin", new { adminId = admin.Id }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ViewNotification('Администратор удален','success'); RefreshAdminsTable();", OnFailure = "ViewNotification('Ошибка','error')" }, new { @class = "btn btn-primary" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                     </tr>
                 }
                 </tbody>
