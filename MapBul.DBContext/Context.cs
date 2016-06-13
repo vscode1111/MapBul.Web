@@ -11,6 +11,7 @@ namespace MapBul.DBContext
             : base("name=Context")
         {
         }
+
         public virtual DbSet<admin> admin { get; set; }
         public virtual DbSet<article> article { get; set; }
         public virtual DbSet<articlesubcategory> articlesubcategory { get; set; }
@@ -34,6 +35,7 @@ namespace MapBul.DBContext
         public virtual DbSet<usertype> usertype { get; set; }
         public virtual DbSet<weekday> weekday { get; set; }
         public virtual DbSet<worktime> worktime { get; set; }
+        public virtual DbSet<marker_request_session> marker_request_session { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -66,6 +68,14 @@ namespace MapBul.DBContext
                 .IsUnicode(false);
 
             modelBuilder.Entity<category>()
+                .Property(e => e.Color)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<category>()
+                .Property(e => e.Pin)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<category>()
                 .HasMany(e => e.article)
                 .WithRequired(e => e.category)
                 .HasForeignKey(e => e.BaseCategoryId);
@@ -80,6 +90,26 @@ namespace MapBul.DBContext
                 .HasMany(e => e.marker)
                 .WithRequired(e => e.category)
                 .HasForeignKey(e => e.BaseCategoryId);
+
+            modelBuilder.Entity<city>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<city>()
+                .Property(e => e.PlaceId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<country>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<country>()
+                .Property(e => e.PlaceId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<country>()
+                .Property(e => e.Code)
+                .IsUnicode(false);
 
             modelBuilder.Entity<editor>()
                 .Property(e => e.FirstName)
@@ -203,12 +233,24 @@ namespace MapBul.DBContext
                 .IsUnicode(false);
 
             modelBuilder.Entity<marker>()
+                .Property(e => e.Logo)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<marker>()
                 .HasMany(e => e.article)
                 .WithOptional(e => e.marker)
                 .WillCascadeOnDelete();
 
             modelBuilder.Entity<phone>()
                 .Property(e => e.Number)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<region>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<region>()
+                .Property(e => e.PlaceId)
                 .IsUnicode(false);
 
             modelBuilder.Entity<status>()
@@ -282,32 +324,8 @@ namespace MapBul.DBContext
                 .Property(e => e.Description)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<city>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<country>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<region>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<city>()
-                .Property(e => e.PlaceId)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<country>()
-                .Property(e => e.PlaceId)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<region>()
-                .Property(e => e.PlaceId)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<country>()
-                .Property(e => e.Code)
+            modelBuilder.Entity<marker_request_session>()
+                .Property(e => e.SessionId)
                 .IsUnicode(false);
         }
     }

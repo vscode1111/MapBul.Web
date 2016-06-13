@@ -163,6 +163,77 @@ namespace MapBul.Service
             }
         }
 
+
+        [WebMethod]
+        public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng,string sessionId)
+        {
+            try
+            {
+                MySqlRepository repo = new MySqlRepository();
+                var markers = repo.GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng, sessionId);
+
+                JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+
+                int i = 0;
+
+                foreach (var marker in markers)
+                {
+                    result.AddObjectToResult(
+                        new
+                        {
+                            marker.Id,
+                            marker.Name,
+                            marker.Lat,
+                            marker.Lng,
+                            Icon = MapUrl(marker.category.Pin),
+                            Logo = MapUrl(marker.Logo),
+                            WorkTime = marker.worktime.Select(wt => new
+                            {
+                                wt.OpenTime,
+                                wt.CloseTime,
+                                wt.weekday.Id
+                            }).ToList(),
+                            CategoriesBranch = GetCategoriesBranch(marker.category),
+                            SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
+                            marker.Wifi
+                        }, i);
+                    i++;
+                }
+
+                return JsonConvert.SerializeObject(result);
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Message));
+            }
+        }
+
+        [WebMethod]
+        public string RemoveRequestSession(string sessionId)
+        {
+            try
+            {
+                MySqlRepository repo = new MySqlRepository();
+                repo.RemoveRequestSession(sessionId);
+
+                JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+                return JsonConvert.SerializeObject(result);
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Message));
+            }
+        }
+
+
         [WebMethod]
         public string GetMarkerDescription(int markerId)
         {

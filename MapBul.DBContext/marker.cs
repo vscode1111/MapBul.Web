@@ -13,6 +13,7 @@ namespace MapBul.DBContext
         public marker()
         {
             article = new HashSet<article>();
+            marker_request_session = new HashSet<marker_request_session>();
             phone = new HashSet<phone>();
             subcategory = new HashSet<subcategory>();
             worktime = new HashSet<worktime>();
@@ -83,6 +84,7 @@ namespace MapBul.DBContext
         [StringLength(200)]
         public string Logo { get; set; }
 
+        [Column(TypeName = "bit")]
         public bool Wifi { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -93,6 +95,9 @@ namespace MapBul.DBContext
         public virtual city city { get; set; }
 
         public virtual discount discount { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<marker_request_session> marker_request_session { get; set; }
 
         public virtual status status { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MapBul.DBContext;
@@ -215,6 +216,24 @@ namespace MapBul.Service
             tenant.user.Password = StringTransformationProvider.Md5(password);
             _db.SaveChanges();
             MailProvider.SendMailWithCredintails(password,tenant.FirstName,tenant.MiddleName,tenant.user.Email);
+        }
+
+        public IEnumerable<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId)
+        {
+            var allMarkers = GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng);
+            var requestSession = _db.marker_request_session.Where(s=>s.SessionId==sessionId);
+            var filteredMarkers = allMarkers.Where(m => requestSession.All(s => m.Id != s.MarkerId)).ToList();
+            var sessionRecords=filteredMarkers.Select(f => new marker_request_session {MarkerId = f.Id, SessionId = sessionId});
+            _db.marker_request_session.AddRange(sessionRecords);
+            _db.SaveChanges();
+            return filteredMarkers;
+
+        }
+
+        public void RemoveRequestSession(string sessionId)
+        {
+            _db.marker_request_session.RemoveRange(_db.marker_request_session.Where(s => s.SessionId == sessionId));
+            _db.SaveChanges();
         }
     }
 }

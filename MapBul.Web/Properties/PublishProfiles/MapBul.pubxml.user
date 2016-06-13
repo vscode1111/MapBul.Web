@@ -26,13 +26,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/MapBul.DBContext.dll">
-      <publishTime>06/13/2016 12:37:22</publishTime>
+      <publishTime>06/13/2016 17:32:21</publishTime>
     </File>
     <File Include="bin/MapBul.SharedClasses.dll">
-      <publishTime>06/13/2016 12:37:22</publishTime>
+      <publishTime>06/13/2016 17:32:21</publishTime>
     </File>
     <File Include="bin/MapBul.Web.dll">
-      <publishTime>06/13/2016 12:37:23</publishTime>
+      <publishTime>06/13/2016 17:32:40</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>01/01/0001 00:00:00</publishTime>
