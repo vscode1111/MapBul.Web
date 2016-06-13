@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Constants\Errors.cs" />
     <Compile Include="Constants\MarkerStatuses.cs" />
+    <Compile Include="Constants\ServiceSettings.cs" />
     <Compile Include="Constants\UserParameters.cs" />
     <Compile Include="Constants\UserTypes.cs" />
     <Compile Include="FileProvider.cs" />

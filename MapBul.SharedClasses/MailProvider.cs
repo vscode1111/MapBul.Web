@@ -4,13 +4,13 @@ using System.Net.Mail;
 
 namespace MapBul.SharedClasses
 {
-    public static class  MailProvider
+    public static class MailProvider
     {
         public static void SendMailWithCredintails(string password, string firstName, string middleName, string email)
         {
-           try
+            try
             {
-                MailMessage message = new MailMessage { From = new MailAddress("MapBul<mapbulapp@yandex.ru>") };
+                MailMessage message = new MailMessage {From = new MailAddress("MapBul<mapbulapp@yandex.ru>")};
 
                 message.To.Add(new MailAddress(email));
                 message.Subject = "Регистрация на сервисе MapBul";
@@ -27,10 +27,10 @@ namespace MapBul.SharedClasses
                 client.EnableSsl = true;
                 client.Send(message);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 // ignored
-           }
+            }
         }
 
 

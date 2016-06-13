@@ -121,9 +121,11 @@ namespace MapBul.Service
             try
             {
                 MySqlRepository repo = new MySqlRepository();
-                List<marker> markers = repo.GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng);
+                var markers = repo.GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng);
 
                 JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+
+                int i = 0;
 
                 foreach (var marker in markers)
                 {
@@ -136,10 +138,6 @@ namespace MapBul.Service
                             marker.Lng,
                             Icon = MapUrl(marker.category.Pin),
                             Logo = MapUrl(marker.Logo),
-                            // Photo=MapUrl(marker.Photo),
-                            // marker.phone.First(p => p.Primary).Number,
-                            // marker.Site,
-                            // marker.Introduction,
                             WorkTime = marker.worktime.Select(wt => new
                             {
                                 wt.OpenTime,
@@ -147,8 +145,10 @@ namespace MapBul.Service
                                 wt.weekday.Id
                             }).ToList(),
                             CategoriesBranch = GetCategoriesBranch(marker.category),
-                            SubCategories = marker.subcategory.Select(s => s.category.Name).ToList()
-                        }, markers.IndexOf(marker));
+                            SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
+                            marker.Wifi
+                        }, i);
+                    i++;
                 }
 
                 return JsonConvert.SerializeObject(result);
@@ -189,7 +189,7 @@ namespace MapBul.Service
                     wt.CloseTime,
                     wt.weekday.Id
                 }).ToList(),
-                marker.category.Color,
+                repo.GetCategories().First(c=>c.Id==GetCategoriesBranch(marker.category).Last()).Color,
                 CategoriesBranch =
                     GetCategoriesBranch(marker.category)
                         .Select(
@@ -240,13 +240,29 @@ namespace MapBul.Service
         }
 
         [WebMethod]
-        public string GetRecentArticles()
+        public string GetRecentArticles(bool refresh = false, DateTime? existingDateTime = null)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetArticles();
             var result = new JsonResult(new List<Dictionary<string, object>>());
             int i = 0;
-            foreach (var article in articles.OrderByDescending(a => a.PublishedDate).Take(10))
+            List<article> filteredArticles;
+
+            if (existingDateTime != null && refresh)
+                filteredArticles =
+                    articles.Where(a => a.PublishedDate > existingDateTime)
+                        .OrderByDescending(a => a.PublishedDate)
+                        .ToList();
+            else if (existingDateTime != null)
+                filteredArticles =
+                    articles.Where(a => a.PublishedDate < existingDateTime)
+                        .OrderByDescending(a => a.PublishedDate)
+                        .Take(ServiceSettings.ArticleOrderingCount)
+                        .ToList();
+            else
+                filteredArticles = articles.OrderByDescending(a => a.PublishedDate).Take(ServiceSettings.ArticleOrderingCount).ToList();
+
+            foreach (var article in filteredArticles)
             {
                 article.Photo = MapUrl(article.Photo);
                 article.TitlePhoto = MapUrl(article.TitlePhoto);
@@ -282,20 +298,42 @@ namespace MapBul.Service
                 }
 
                 result.AddObjectToResult(article, i);
-                result.AddObjectToResult(new {AuthorName = authorName}, i);
+                string markerAddress=null;
+                if (article.marker != null)
+                    markerAddress = article.marker.city.country.Name + ", " + article.marker.city.Name + ", " +
+                                    article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
+
+                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress}, i);
+                result.AddObjectToResult(new{Subcategories = article.articlesubcategory.Select(a=>a.category.Name).ToList()},i);
+
                 i++;
             }
             return JsonConvert.SerializeObject(result);
         }
 
         [WebMethod]
-        public string GetRecentEvents()
+        public string GetRecentEvents(bool refresh = false, DateTime? existingDateTime = null)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetEvents();
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            int i = 0;
-            foreach (var article in articles.OrderByDescending(a => a.PublishedDate).Take(10))
+            int i = 0; List<article> filteredArticles;
+
+            if (existingDateTime != null && refresh)
+                filteredArticles =
+                    articles.Where(a => a.PublishedDate > existingDateTime)
+                        .OrderByDescending(a => a.PublishedDate)
+                        .ToList();
+            else if (existingDateTime != null)
+                filteredArticles =
+                    articles.Where(a => a.PublishedDate < existingDateTime)
+                        .OrderByDescending(a => a.PublishedDate)
+                        .Take(ServiceSettings.ArticleOrderingCount)
+                        .ToList();
+            else
+                filteredArticles = articles.OrderByDescending(a => a.PublishedDate).Take(ServiceSettings.ArticleOrderingCount).ToList();
+
+            foreach (var article in filteredArticles)
             {
                 article.Photo = MapUrl(article.Photo);
                 article.TitlePhoto = MapUrl(article.TitlePhoto);
@@ -330,8 +368,14 @@ namespace MapBul.Service
                         break;
                 }
 
-                result.AddObjectToResult(article, i);
-                result.AddObjectToResult(new {AuthorName = authorName}, i);
+                result.AddObjectToResult(article, i); string markerAddress = null;
+                if (article.marker != null)
+                    markerAddress = article.marker.city.country.Name + ", " + article.marker.city.Name + ", " +
+                                    article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
+
+                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress }, i);
+                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList() }, i);
+
                 i++;
             }
             return JsonConvert.SerializeObject(result);

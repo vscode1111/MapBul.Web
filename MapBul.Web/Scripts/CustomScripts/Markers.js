@@ -8,6 +8,10 @@
     $('.clockpicker').clockpicker();
     $("#MarkerLatInput").focusout(OnMarkerCoordinateChanged);
     $("#MarkerLngInput").focusout(OnMarkerCoordinateChanged);
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green'
+    });
     MapInit();
 
     jQuery.extend(jQuery.validator.messages, {
@@ -26,6 +30,10 @@ function OnEditMarkerDocumentReady() {
     $('.clockpicker').clockpicker();
     $("#MarkerLatInput").focusout(OnMarkerCoordinateChanged);
     $("#MarkerLngInput").focusout(OnMarkerCoordinateChanged);
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green'
+    });
     MapInit();
 
     jQuery.extend(jQuery.validator.messages, {

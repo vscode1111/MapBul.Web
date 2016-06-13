@@ -52,9 +52,9 @@ namespace MapBul.Service
         }
 
 
-        public List<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng)
+        public IEnumerable<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng)
         {
-            return _db.marker.ToList().Where(m => (m.Lat < Math.Max(p1Lat,p2Lat) && m.Lat > Math.Min(p1Lat,p2Lat)) && (m.Lng <  Math.Max(p1Lng,p2Lng) && m.Lng > Math.Min(p1Lng,p2Lng))&&m.status.Tag==MarkerStatuses.Published).ToList();
+            return _db.marker.ToList().Where(m => (m.Lat < Math.Max(p1Lat,p2Lat) && m.Lat > Math.Min(p1Lat,p2Lat)) && (m.Lng <  Math.Max(p1Lng,p2Lng) && m.Lng > Math.Min(p1Lng,p2Lng))&&m.status.Tag==MarkerStatuses.Published);
         }
 
         public marker GetMarker(int markerId)
@@ -86,12 +86,12 @@ namespace MapBul.Service
 
         public List<article> GetArticles()
         {
-            return _db.article.ToList();
+            return _db.article.Where(a=>a.status.Tag==MarkerStatuses.Published).ToList();
         }
 
         public List<article> GetEvents()
         {
-            return _db.article.Where(a=>a.EventDate!=null).ToList();
+            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published).Where(a => a.EventDate != null).ToList();
         }
 
         public user GetUser(string userGuid)
@@ -214,7 +214,7 @@ namespace MapBul.Service
             var password = StringTransformationProvider.GeneratePassword();
             tenant.user.Password = StringTransformationProvider.Md5(password);
             _db.SaveChanges();
-            MailProvider.SendMailWithCredintails(password,tenant.FirstName,tenant.MiddleName,tenant.LastName);
+            MailProvider.SendMailWithCredintails(password,tenant.FirstName,tenant.MiddleName,tenant.user.Email);
         }
     }
 }
