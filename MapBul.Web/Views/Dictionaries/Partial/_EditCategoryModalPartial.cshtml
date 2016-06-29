@@ -7,6 +7,7 @@
     <div class="ibox-content">
         <form action="/" method="POST" id="EditCategoryForm" enctype="multipart/form-data">
             @Html.HiddenFor(m=>m.Id)
+            @Html.HiddenFor(m=>m.ForArticle)
             <div class="form-group">
                 <label class="control-label">Имя категории</label>
                 @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", "Название"}, {"required", ""}, {"class", "form-control"}})

@@ -19,12 +19,15 @@
                         @Html.TextAreaFor(m => m.Text, new Dictionary<string, object> { { "placeholder", "Текст" }, { "class", "form-control" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.EventDate, new Dictionary<string, object> { { "placeholder", "Дата события" }, { "class", "form-control datepicker" } })
+                        @Html.TextBoxFor(m => m.StartDate, new Dictionary<string, object> {{"placeholder", "Дата начала события"}, {"class", "form-control datepicker"}})
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.EndDate, new Dictionary<string, object> { { "placeholder", "Дата окончания события" }, { "class", "form-control datepicker" } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Фотография заголовка</label>
                         <input type="file" id="NewArticleTitlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
-                    </div>NewArticlePhotoInput
+                    </div>
                     <div class="form-group">
                         <label class="control-label">Фотография статьи</label>
                         <input type="file" id="NewArticlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
@@ -39,9 +42,13 @@
                         <label class="control-label">Тэги</label>
                         @Html.ListBoxFor(m => m.SubCategories, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "multiple", "" }, { "data-placeholder", "Выберите тэги" } })
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="MarkerSelectContainer">
                         <label class="control-label">Привязка к маркеру</label>
-                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>)ViewBag.Markers).Select(c => new SelectListItem { Text = c.Name+", "+c.city.Name+", "+c.city.country.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Text = "Нет", Selected = true, Value = null } }), new Dictionary<string, object> { { "id", "NewArticleMarkerSelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
+                        @Html.DropDownListFor(m => m.MarkerId, ((List<marker>) ViewBag.Markers).Select(c => new SelectListItem {Text = c.Name + ", " + c.city.Name + ", " + c.city.country.Name, Value = c.Id.ToString()}).Union(new List<SelectListItem> {new SelectListItem {Text = "Нет", Selected = true, Value = null}}), new Dictionary<string, object> {{"id", "NewArticleMarkerSelect"}, {"class", "form-control chosenselect"}, {"required", ""}})
+                    </div>
+                    <div class="form-group" id="CitySelectContainer">
+                        <label class="control-label">Привязка к городу</label>
+                        @Html.DropDownListFor(m => m.CityId, ((List<city>)ViewBag.Cities).Select(c => new SelectListItem { Text = c.Name + ", " + c.country.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Text = "Нет", Selected = true, Value = null } }), new Dictionary<string, object> { { "id", "NewArticleCitySelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Статус</label>

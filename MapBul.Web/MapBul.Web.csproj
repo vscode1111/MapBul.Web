@@ -321,7 +321,8 @@
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\CustomScripts\Admins.js" />
     <Content Include="Scripts\CustomScripts\Articles.js" />
-    <Content Include="Scripts\CustomScripts\Categories.js" />
+    <Content Include="Scripts\CustomScripts\ArticleCategories.js" />
+    <Content Include="Scripts\CustomScripts\MarkerCategories.js" />
     <Content Include="Scripts\CustomScripts\Cities.js" />
     <Content Include="Scripts\CustomScripts\Dictionaries.js" />
     <Content Include="Scripts\CustomScripts\Editors.js" />

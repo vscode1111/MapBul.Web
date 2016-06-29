@@ -24,7 +24,7 @@ namespace MapBul.Web.Repository
         void SaveJournalistChanges(NewJournalistModel model);
         void AddCountry(string name, string placeId, string code);
        /* void AddRegion(string name, int countryId, string placeId);*/
-        List<category> GetCategories();
+        List<category> GetMarkerCategories();
         void SaveCategoriesStructure(List<NestableElement> structure);
         void AddNewCategory(category model);
         category GetCategory(int categoryId);
@@ -58,5 +58,7 @@ namespace MapBul.Web.Repository
         void DeleteAdmin(int adminId);
         void AddNewGuide(NewGuideModel model);
         void DeleteUser(int userId);
+        List<category> GetArticleCategories();
+
     }
 }

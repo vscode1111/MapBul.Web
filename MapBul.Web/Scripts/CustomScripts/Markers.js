@@ -30,6 +30,8 @@ function OnEditMarkerDocumentReady() {
     $('.clockpicker').clockpicker();
     $("#MarkerLatInput").focusout(OnMarkerCoordinateChanged);
     $("#MarkerLngInput").focusout(OnMarkerCoordinateChanged);
+
+    
     $('.i-checks').iCheck({
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green'
@@ -40,6 +42,7 @@ function OnEditMarkerDocumentReady() {
         required: "Заполните поле"
     });
 }
+
 
 
 function OnMarkerCoordinateChanged() {
@@ -240,7 +243,7 @@ function ChangeCitySelect(result) {
             return;
         }
         fullAddress += component.long_name;
-        if (component.types.indexOf("locality") !== -1) {
+        if (component.types.indexOf("locality") !== -1 || component.types.indexOf('administrative_area_level_3')!==-1) {
             localities++;
             window.geocoder.geocode({ 'address': fullAddress }, function (results, status) {
                 if (status === "OK") {

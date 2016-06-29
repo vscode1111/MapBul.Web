@@ -1,26 +1,26 @@
-﻿function OnCategoriesDocumentReady() {
-    $('#nestable').nestable({}).on('change', OnCategoriesStructureChanged);
-    $("#NewCategoryFormSubmit").click(SendNewCategoryForm);
-    $("#EditCategoryButton").click(OnEditCategoryClick);
+﻿function OnArticleCategoriesDocumentReady() {
+    $('#nestableArticle').nestable({}).on('change', OnArticleCategoriesStructureChanged);
+    $("#NewArticleCategoryFormSubmit").click(SendNewArticleCategoryForm);
+    $("#EditArticleCategoryButton").click(OnEditArticleCategoryClick);
     jQuery.extend(jQuery.validator.messages, {
         required: "Заполните поле"
     });
     $('.colorInput').colorpicker();
 }
 
-function OnEditCategoryDocumentReady() {
+function OnEditArticleCategoryDocumentReady() {
     $('.colorInputCategoryEdit').colorpicker();
-    $("#EditCategoryFormSubmit").click(SendEditCategoryForm);
+    $("#EditCategoryFormSubmit").click(SendEditArticleCategoryForm);
 }
 
-function SendEditCategoryForm() {
+function SendEditArticleCategoryForm() {
     var form = document.getElementById("EditCategoryForm");
     var formData = new FormData(form);
     var file = document.getElementById("EditCategoryIconInput").files[0];
-    formData.append("categoryIcon", file);
+    formData.append("CategoryIcon", file);
 
     var file = document.getElementById("EditCategoryPinInput").files[0];
-    formData.append("categoryPin", file);
+    formData.append("CategoryPin", file);
 
     $.ajax({
         url: "Dictionaries/EditCategory",
@@ -29,7 +29,7 @@ function SendEditCategoryForm() {
         processData: false,
         type: "POST",
         success: function() {
-            AddNewCategorySuccess();
+            AddNewArticleCategorySuccess();
             $("#Modal").modal("hide");
         },
         error:function() {
@@ -39,8 +39,8 @@ function SendEditCategoryForm() {
     return false;
 }
 
-function OnEditCategoryClick() {
-    var categoryId = $("#EditCategorySelect").val();
+function OnEditArticleCategoryClick() {
+    var categoryId = $("#EditArticleCategorySelect").val();
     $.ajax({
         url: "Dictionaries/_EditCategoryModalPartial",
         type: "POST",
@@ -48,7 +48,7 @@ function OnEditCategoryClick() {
         success: function (data) {
             $("#ModalContent").html(data);
             $("#Modal").modal("show");
-            OnEditCategoryDocumentReady();
+            OnEditArticleCategoryDocumentReady();
         },
         error: function () {
             ViewNotification('Ошибка', 'error');
@@ -56,24 +56,24 @@ function OnEditCategoryClick() {
     });
 }
 
-function SendNewCategoryForm() {
-    if (!($("#NewCategoryForm").valid())) {
+function SendNewArticleCategoryForm() {
+    if (!($("#NewArticleCategoryForm").valid())) {
         ViewNotification("Заполните обязательные поля!", "error");
         return 0;
     }
-    var form = document.getElementById("NewCategoryForm");
+    var form = document.getElementById("NewArticleCategoryForm");
     var formData = new FormData(form);
-    var file = document.getElementById("NewCategoryIconInput").files[0];
-    formData.append("categoryIcon", file);
-    file = document.getElementById("NewCategoryPinInput").files[0];
-    formData.append("categoryPin", file);
+    var file = document.getElementById("NewArticleCategoryIconInput").files[0];
+    formData.append("ArticleCategoryIcon", file);
+    file = document.getElementById("NewArticleCategoryPinInput").files[0];
+    formData.append("ArticleCategoryPin", file);
     $.ajax({
         url: "Dictionaries/AddNewCategory",
         data: formData,
         contentType: false,
         processData: false,
         type: "POST",
-        success: AddNewCategorySuccess,
+        success: AddNewArticleCategorySuccess,
         error: function() {
             ViewNotification("Ошибка", "error");
         }
@@ -81,13 +81,13 @@ function SendNewCategoryForm() {
     return false;
 }
 
-function RefreshCategoriesPage() {
+function RefreshArticleCategoriesPage() {
     $.ajax({
-        url: "Dictionaries/_CategoriesPartial",
+        url: "Dictionaries/_ArticleCategoriesPartial",
         type: "POST",
         success: function (data) {
-            $("#CategoriesContainer").html(data);
-            OnCategoriesDocumentReady();
+            $("#ArticleCategoriesContainer").html(data);
+            OnArticleCategoriesDocumentReady();
         },
         error: function () {
             ViewNotification('Ошибка', 'error');
@@ -95,12 +95,12 @@ function RefreshCategoriesPage() {
     });
 }
 
-function AddNewCategorySuccess() {
+function AddNewArticleCategorySuccess() {
     ViewNotification("Категория сохранена", "success");
-    RefreshCategoriesPage();
+    RefreshArticleCategoriesPage();
 }
 
-function OnCategoriesStructureChanged(e) {
+function OnArticleCategoriesStructureChanged(e) {
     var list = e.length ? e : $(e.target);
     var string = window.JSON.stringify(list.nestable('serialize'));
     SendNewStructure(string);
@@ -121,4 +121,4 @@ function SendNewStructure(string) {
     });
 }
 
-$(document).ready(OnCategoriesDocumentReady);
+$(document).ready(OnArticleCategoriesDocumentReady);

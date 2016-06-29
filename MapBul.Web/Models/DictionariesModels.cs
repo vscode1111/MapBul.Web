@@ -21,12 +21,15 @@ namespace MapBul.Web.Models
 
     public class CategoriesModel
     {
-        public CategoriesModel()
+        public CategoriesModel(bool forArticle=false)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            Categories=repo.GetCategories();
+            Categories = forArticle ? repo.GetArticleCategories() : repo.GetMarkerCategories();
+            ForArticle = forArticle;
         }
+
         public List<category> Categories { get; set; }
+        public bool ForArticle { get; set; }
  
     }
 }

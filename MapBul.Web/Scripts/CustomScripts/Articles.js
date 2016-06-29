@@ -1,7 +1,10 @@
 ﻿function OnNewArticleDocumentReady() {
     $("#NewArticleFormSubmit").click(OnNewArticleFormSubmit);
     $('.chosenselect').chosen();
-    $('.datepicker').datepicker({language:"ru"});
+    $('.datepicker').datepicker({ language: "ru" });
+
+    $("#NewArticleMarkerSelect_chosen").click(OnNewArticleMarkerSelectClick);
+    $("#NewArticleCitySelect_chosen").click(OnNewArticleCitySelectClick);
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Заполните поле"
@@ -12,6 +15,9 @@ function OnEditArticleDocumentReady() {
     $("#EditArticleFormSubmit").click(OnEditArticleFormSubmit);
     $('.chosenselect').chosen();
     $('.datepicker').datepicker({ language: "ru" });
+
+    $("#EditArticleMarkerSelect_chosen").click(OnEditArticleMarkerSelectClick);
+    $("#EditArticleCitySelect_chosen").click(OnEditArticleCitySelectClick);
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Заполните поле"
@@ -67,6 +73,43 @@ function OnArticlesDocumentReady() {
             });
         });
     });
+}
+
+function OnEditArticleMarkerSelectClick() {
+    $("#EditArticleMarkerSelect").removeAttr("disabled");
+    $("#EditArticleMarkerSelect").trigger("chosen:updated");
+
+    $("#EditArticleCitySelect").val("Нет");
+    $("#EditArticleCitySelect").attr("disabled", "disabled");
+    $("#EditArticleCitySelect").trigger("chosen:updated");
+}
+
+function OnEditArticleCitySelectClick() {
+    $("#EditArticleCitySelect").removeAttr("disabled");
+    $("#EditArticleCitySelect").trigger("chosen:updated");
+
+    $("#EditArticleMarkerSelect").val("Нет");
+    $("#EditArticleMarkerSelect").attr("disabled", "disabled");
+    $("#EditArticleMarkerSelect").trigger("chosen:updated");
+}
+
+
+function OnNewArticleMarkerSelectClick() {
+    $("#NewArticleMarkerSelect").removeAttr("disabled");
+    $("#NewArticleMarkerSelect").trigger("chosen:updated");
+
+    $("#NewArticleCitySelect").val("Нет");
+    $("#NewArticleCitySelect").attr("disabled", "disabled");
+    $("#NewArticleCitySelect").trigger("chosen:updated");
+}
+
+function OnNewArticleCitySelectClick() {
+    $("#NewArticleCitySelect").removeAttr("disabled");
+    $("#NewArticleCitySelect").trigger("chosen:updated");
+
+    $("#NewArticleMarkerSelect").val("Нет");
+    $("#NewArticleMarkerSelect").attr("disabled", "disabled");
+    $("#NewArticleMarkerSelect").trigger("chosen:updated");
 }
 
 function OnEditArticleClick() {

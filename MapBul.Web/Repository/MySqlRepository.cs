@@ -315,9 +315,14 @@ namespace MapBul.Web.Repository
         }
 
 
-        public List<category> GetCategories()
+        public List<category> GetMarkerCategories()
         {
-            return _db.category.ToList();
+            return _db.category.Where(c => !c.ForArticle).ToList();
+        }
+
+        public List<category> GetArticleCategories()
+        {
+            return _db.category.Where(c=>c.ForArticle).ToList();
         }
 
         private void UpdateCategoryParent(NestableElement structure, int? parrentId)
@@ -570,6 +575,7 @@ namespace MapBul.Web.Repository
                 article.BaseCategoryId = model.BaseCategoryId;
                 article.AuthorId = adder.Id;
                 article.MarkerId = model.MarkerId;
+                article.CityId = model.CityId;
                 if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
                 {
                     article.EditorId = adder.Id;
@@ -633,6 +639,7 @@ namespace MapBul.Web.Repository
                 model.CopyTo(article);
                 article.BaseCategoryId = model.BaseCategoryId;
                 article.MarkerId = model.MarkerId;
+                article.CityId = model.CityId;
 
                 if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
                 {

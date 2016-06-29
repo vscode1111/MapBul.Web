@@ -46,15 +46,21 @@ namespace MapBul.DBContext
 
         public int? MarkerId { get; set; }
 
-        public DateTime? EventDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         public int StatusId { get; set; }
 
         public int BaseCategoryId { get; set; }
 
+        public DateTime? EndDate { get; set; }
+
+        public int? CityId { get; set; }
+
         public virtual user user { get; set; }
 
         public virtual category category { get; set; }
+
+        public virtual city city { get; set; }
 
         public virtual user user1 { get; set; }
 

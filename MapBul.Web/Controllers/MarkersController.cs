@@ -44,7 +44,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var model = new NewMarkerModel();
             ViewBag.Cities = repo.GetCities();
-            ViewBag.Categories = repo.GetCategories();
+            ViewBag.Categories = repo.GetMarkerCategories();
             ViewBag.Discounts = repo.GetDiscounts();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             ViewBag.WeekDays = repo.GetWeekDays();
@@ -61,7 +61,7 @@ namespace MapBul.Web.Controllers
             marker marker = repo.GetMarker(markerId);
             NewMarkerModel model = new NewMarkerModel(marker);
             ViewBag.Cities = repo.GetCities();
-            ViewBag.Categories = repo.GetCategories();
+            ViewBag.Categories = repo.GetMarkerCategories();
             ViewBag.Discounts = repo.GetDiscounts();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             ViewBag.WeekDays = repo.GetWeekDays();

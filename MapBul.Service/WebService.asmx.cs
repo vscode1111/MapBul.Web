@@ -241,7 +241,7 @@ namespace MapBul.Service
             marker marker = repo.GetMarker(markerId);
             JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
 
-            var categories = repo.GetCategories();
+            var categories = repo.GetMarkerCategories();
 
             marker.Photo = MapUrl(marker.Photo);
             marker.Logo = MapUrl(marker.Logo);
@@ -260,7 +260,7 @@ namespace MapBul.Service
                     wt.CloseTime,
                     wt.weekday.Id
                 }).ToList(),
-                repo.GetCategories().First(c=>c.Id==GetCategoriesBranch(marker.category).Last()).Color,
+                repo.GetMarkerCategories().First(c=>c.Id==GetCategoriesBranch(marker.category).Last()).Color,
                 CategoriesBranch =
                     GetCategoriesBranch(marker.category)
                         .Select(
@@ -279,7 +279,7 @@ namespace MapBul.Service
         public string GetRootCategories()
         {
             MySqlRepository repo = new MySqlRepository();
-            List<category> rootCategories = repo.GetRootCategories();
+            List<category> rootCategories = repo.GetRootMarkerCategories();
             int index = 0;
             var result = new JsonResult(new List<Dictionary<string, object>>());
             foreach (var rootCategory in rootCategories)

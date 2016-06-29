@@ -99,6 +99,11 @@ namespace MapBul.DBContext
                 .Property(e => e.PlaceId)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<city>()
+                .HasMany(e => e.article)
+                .WithOptional(e => e.city)
+                .WillCascadeOnDelete();
+
             modelBuilder.Entity<country>()
                 .Property(e => e.Name)
                 .IsUnicode(false);

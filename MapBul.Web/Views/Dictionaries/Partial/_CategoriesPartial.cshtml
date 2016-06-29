@@ -1,14 +1,16 @@
 ﻿@using MapBul.Web.Helpers
 @model MapBul.Web.Models.CategoriesModel
+@{ string articleOrMarker = Model.ForArticle ? "Article" : "Marker";}
+
 <div class="col-md-6">
     <div class="ibox">
         <div class="ibox-title">
             <h3>Структура категорий</h3>
         </div>
         <div class="ibox-content">
-            <div class="dd" id="nestable">
+            <div class="dd" id="nestable@(articleOrMarker)">
                 <ol class="dd-list">
-                    @foreach (var category in Model.Categories.Where(c => c.ParentId == null))
+                    @foreach (var category in Model.Categories.Where(c => c.ParentId == null && c.ForArticle==Model.ForArticle))
                     {
                         <li class="dd-item" data-id="@category.Id">
                             <div data-id="@category.Id" class="dd-handle EditCategoryButton"><img style="width: 30px;" src="@Html.MapImage(category.Icon)" /> @category.Name </div>
@@ -27,7 +29,9 @@
 </div>
 
 <div class="col-md-3" id="NewCategoryContainer">
-    @Html.Action("_NewCategoryPartial")
+    @{
+        @Html.Action(Model.ForArticle ? "_NewArticleCategoryPartial" : "_NewMarkerCategoryPartial");
+    }
 </div>
 
 <div class="col-md-3" id="EditCategoryContainer">

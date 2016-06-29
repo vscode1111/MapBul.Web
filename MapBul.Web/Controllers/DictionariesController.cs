@@ -45,23 +45,40 @@ namespace MapBul.Web.Controllers
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             category model = repo.GetCategory(categoryId);
-            ViewBag.Categories = repo.GetCategories().Where(c => c.Id != model.Id).ToList();
+            var categories = model.ForArticle ? repo.GetArticleCategories() : repo.GetMarkerCategories();
+            ViewBag.Categories = categories.Where(c => c.Id != model.Id).ToList();
             return PartialView("Partial/_EditCategoryModalPartial", model);
         }
 
         [MyAuth(Roles = UserTypes.Admin)]
-        public ActionResult _CategoriesPartial()
+        public ActionResult _MarkerCategoriesPartial()
         {
             var model = new CategoriesModel();
             return PartialView("Partial/_CategoriesPartial", model);
         }
 
         [MyAuth(Roles = UserTypes.Admin)]
-        public ActionResult _NewCategoryPartial()
+        public ActionResult _ArticleCategoriesPartial()
         {
-            var model = new category();
+            var model = new CategoriesModel(true);
+            return PartialView("Partial/_CategoriesPartial", model);
+        }
+
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult _NewMarkerCategoryPartial()
+        {
+            var model = new category {ForArticle = false};
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            ViewBag.Categories = repo.GetCategories();
+            ViewBag.Categories = repo.GetMarkerCategories();
+            return PartialView("Partial/_NewCategoryPartial", model);
+        }
+
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult _NewArticleCategoryPartial()
+        {
+            var model = new category{ForArticle = true};
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            ViewBag.Categories = repo.GetArticleCategories();
             return PartialView("Partial/_NewCategoryPartial", model);
         }
 #endregion
@@ -160,6 +177,7 @@ namespace MapBul.Web.Controllers
         }
 #endregion
 
+        
     }
 
 }

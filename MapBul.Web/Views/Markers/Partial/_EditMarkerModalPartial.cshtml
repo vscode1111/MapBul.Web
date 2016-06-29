@@ -35,7 +35,7 @@
                         @Html.TextBoxFor(m => m.EntryTicket, new Dictionary<string, object> {{"placeholder", "Входной билет*"}, {"class", "form-control"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBox("Phones", Model.Phones.FirstOrDefault(), new Dictionary<string, object> {{"placeholder", "Телефон*"}, {"class", "form-control"}, {"required", ""}, {"data-mask", "(999)999-99-99"}})
+                        @Html.TextBox("Phones", Model.Phones.FirstOrDefault()??"", new Dictionary<string, object> { { "placeholder", "Телефон*" }, { "class", "form-control" }, { "required", "" }, { "data-mask", "+?9999999999999999999999999" }, { "data-placeholder", " " } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Базовая категория</label>
@@ -142,42 +142,42 @@
                     <div class="panel-heading border-bottom">
                         <h3>Время работы</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" style="padding-bottom: 90px">
                         <table class="table">
                             <thead>
-                            <tr>
-                                <th></th>
-                                @foreach (var weekDay in ((List<weekday>) ViewBag.WeekDays))
-                                {
-                                    <th>@weekDay.Description</th>
-                                }
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    @foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                    {
+                                        <th>@weekDay.Description</th>
+                                    }
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Открытие</td>
-                                @foreach (var weekDay in ((List<weekday>) ViewBag.WeekDays))
-                                {
-                                    var tmpWorkTime = Model.WorkTimes.FirstOrDefault(wt => wt.WeekDayId == weekDay.Id);
-                                    <td>
-                                        <div class="input-group clockpicker" data-autoclose="true">
-                                            <input data-weekdayid="@weekDay.Id" class="OpenTime form-control" type="text" value="@(tmpWorkTime != null ? tmpWorkTime.OpenTime.ToString(@"hh\:mm") : "")"/>
-                                        </div>
-                                    </td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>Закрытие</td>
-                                @foreach (var weekDay in ((List<weekday>) ViewBag.WeekDays))
-                                {
-                                    var tmpWorkTime = Model.WorkTimes.FirstOrDefault(wt => wt.WeekDayId == weekDay.Id);
-                                    <td>
-                                        <div class="input-group clockpicker" data-autoclose="true">
-                                            <input data-weekdayid="@weekDay.Id" class="CloseTime form-control" type="text" value="@(tmpWorkTime != null ? tmpWorkTime.CloseTime.ToString(@"hh\:mm") : "")"/>
-                                        </div>
-                                    </td>
-                                }
-                            </tr>
+                                <tr>
+                                    <td>Открытие</td>
+                                    @foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                    {
+                                        var tmpWorkTime = Model.WorkTimes.FirstOrDefault(wt => wt.WeekDayId == weekDay.Id);
+                                        <td>
+                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                <input data-weekdayid="@weekDay.Id" class="OpenTime form-control" type="text" value="@(tmpWorkTime != null ? tmpWorkTime.OpenTime.ToString(@"hh\:mm") : "")" />
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>Закрытие</td>
+                                    @foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                    {
+                                        var tmpWorkTime = Model.WorkTimes.FirstOrDefault(wt => wt.WeekDayId == weekDay.Id);
+                                        <td>
+                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                <input data-weekdayid="@weekDay.Id" class="CloseTime form-control" type="text" value="@(tmpWorkTime != null ? tmpWorkTime.CloseTime.ToString(@"hh\:mm") : "")" />
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
                             </tbody>
                         </table>
                     </div>

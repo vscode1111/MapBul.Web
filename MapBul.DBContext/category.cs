@@ -41,6 +41,10 @@ namespace MapBul.DBContext
         [StringLength(200)]
         public string Pin { get; set; }
 
+        [Column(TypeName = "bit")]
+        public bool ForArticle { get; set; }
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<article> article { get; set; }
 

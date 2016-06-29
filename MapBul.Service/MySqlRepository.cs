@@ -63,9 +63,9 @@ namespace MapBul.Service
             return _db.marker.First(m => m.Id == markerId);
         }
 
-        public List<category> GetRootCategories()
+        public List<category> GetRootMarkerCategories()
         {
-            return _db.category.Where(c => c.ParentId == null).ToList();
+            return _db.category.Where(c => c.ParentId == null && !c.ForArticle).ToList();
         }
 
         private void FindChildCategoriesIteration(ref List<category> categories, int parentId )
@@ -92,7 +92,7 @@ namespace MapBul.Service
 
         public List<article> GetEvents()
         {
-            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published).Where(a => a.EventDate != null).ToList();
+            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published).Where(a => a.StartDate != null).ToList();
         }
 
         public user GetUser(string userGuid)
@@ -125,7 +125,8 @@ namespace MapBul.Service
                     subCategoryIds.Select(sc => new subcategory {CategoryId = sc, MarkerId = marker.Id}).ToList();
 
                 var phones = phonesStrings.Select(p => new phone { Number = p, MarkerId = marker.Id, Primary = false }).ToList();
-                phones.First().Primary = true;
+                if(phones.Any())
+                    phones.First().Primary = true;
 
                 var workTimes =
                     openTimes.Join(closeTimes.Select(ct => new { ct.WeekDayId, CloseTime = ct.Time }),
@@ -161,9 +162,9 @@ namespace MapBul.Service
             return permittedCities.Any(p => p.Id == cityId);
         }
 
-        public List<category> GetCategories()
+        public List<category> GetMarkerCategories()
         {
-            return _db.category.ToList();
+            return _db.category.Where(c=>!c.ForArticle).ToList();
         }
 
         public void AddNewTenant(string email, string firstName, string middleName, string lastName, DateTime birthDate, string gender, string phone, string address)

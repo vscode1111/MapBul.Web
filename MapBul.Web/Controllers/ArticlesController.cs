@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
@@ -38,9 +37,10 @@ namespace MapBul.Web.Controllers
             var userGuid = auth.UserGuid;
             var repo = DependencyResolver.Current.GetService<IRepository>();
             NewArticleModel model = new NewArticleModel();
-            ViewBag.Categories = repo.GetCategories();
+            ViewBag.Categories = repo.GetArticleCategories();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             ViewBag.Markers = repo.GetMarkers();
+            ViewBag.Cities = repo.GetCities();
             return PartialView("Partial/_NewArticleModalPartial",model);
         }
 
@@ -80,9 +80,10 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             article article=repo.GetArticle(articleId);
             var model=new NewArticleModel(article);
-            ViewBag.Categories = repo.GetCategories();
+            ViewBag.Categories = repo.GetArticleCategories();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             ViewBag.Markers = repo.GetMarkers();
+            ViewBag.Cities = repo.GetCities();
             return PartialView("Partial/_EditArticleModalPartial",model);
         }
 

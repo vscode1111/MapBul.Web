@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Net.Mime;
 using System.Web;
 using System.Web.Hosting;
 using MapBul.SharedClasses.Constants;
@@ -128,23 +127,35 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerLogo(HttpPostedFileBase markerLogo)
         {
-            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
+            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() +
+                                 markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
                 markerLogo.SaveAs(savePath);
-                Image resizedImage;
+                Bitmap cuttedImage;
                 using (var image = Image.FromFile(savePath))
                 {
                     float k = 0;
                     if (image.Width < image.Height)
-                        k = 300f / image.Width;
+                        k = 300f/image.Width;
                     if (image.Width >= image.Height)
-                        k = 300f / image.Height;
-                    resizedImage = CompressImage(image, (int)(k * image.Width), (int)(k * image.Height));
+                        k = 300f/image.Height;
+                    var resizedImage = CompressImage(image, (int) (k*image.Width), (int) (k*image.Height));
+                    Rectangle cropRect = new Rectangle(resizedImage.Width > 300 ? (resizedImage.Width - 300)/2 : 0,
+                        resizedImage.Height > 300 ? (resizedImage.Height - 300)/2 : 0, 300, 300);
+
+                    cuttedImage = new Bitmap(cropRect.Width, cropRect.Height);
+
+                    using (Graphics g = Graphics.FromImage(cuttedImage))
+                    {
+                        g.DrawImage(resizedImage, new Rectangle(0, 0, cuttedImage.Width, cuttedImage.Height),
+                            cropRect,
+                            GraphicsUnit.Pixel);
+                    }
                 }
-                resizedImage.Save(savePath);
+                cuttedImage.Save(savePath);
             }
             else
                 throw new MyException(Errors.UnknownError);
@@ -163,7 +174,7 @@ namespace MapBul.SharedClasses
                     imageFile.Write(markerLogo, 0, markerLogo.Length);
                     imageFile.Flush();
                 }
-                Image resizedImage;
+                Bitmap cuttedImage;
                 using (var image = Image.FromFile(savePath))
                 {
                     float k = 0;
@@ -171,9 +182,20 @@ namespace MapBul.SharedClasses
                         k = 300f / image.Width;
                     if (image.Width >= image.Height)
                         k = 300f / image.Height;
-                    resizedImage = CompressImage(image, (int)(k * image.Width), (int)(k * image.Height));
+                    var resizedImage = CompressImage(image, (int)(k * image.Width), (int)(k * image.Height));
+                    Rectangle cropRect = new Rectangle(resizedImage.Width > 300 ? (resizedImage.Width - 300) / 2 : 0,
+                        resizedImage.Height > 300 ? (resizedImage.Height - 300) / 2 : 0, 300, 300);
+
+                    cuttedImage = new Bitmap(cropRect.Width, cropRect.Height);
+
+                    using (Graphics g = Graphics.FromImage(cuttedImage))
+                    {
+                        g.DrawImage(resizedImage, new Rectangle(0, 0, cuttedImage.Width, cuttedImage.Height),
+                            cropRect,
+                            GraphicsUnit.Pixel);
+                    }
                 }
-                resizedImage.Save(savePath);
+                cuttedImage.Save(savePath);
             }
             else
                 throw new MyException(Errors.UnknownError);

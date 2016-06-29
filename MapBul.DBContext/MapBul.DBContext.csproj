@@ -64,6 +64,7 @@
     <Compile Include="category.cs" />
     <Compile Include="city.cs" />
     <Compile Include="city_permission.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="country.cs" />
     <Compile Include="country_permission.cs" />
     <Compile Include="discount.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="journalist.cs" />
     <Compile Include="marker.cs" />
     <Compile Include="marker_request_session.cs" />
-    <Compile Include="Context.cs" />
     <Compile Include="phone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="region.cs" />

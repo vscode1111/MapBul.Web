@@ -22,7 +22,9 @@ namespace MapBul.Web
             bundles.Add(new ScriptBundle("~/CustomScripts/Cities").Include(
                       "~/Scripts/CustomScripts/Cities.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Categories").Include(
-                      "~/Scripts/CustomScripts/Categories.js", new MyCssRewriteUrlTransform()));
+                      "~/Scripts/CustomScripts/ArticleCategories.js", 
+                      "~/Scripts/CustomScripts/MarkerCategories.js"));
+
 
 
             bundles.Add(new ScriptBundle("~/CustomScripts/Shared").Include(

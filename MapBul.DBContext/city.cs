@@ -12,6 +12,7 @@ namespace MapBul.DBContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public city()
         {
+            article = new HashSet<article>();
             city_permission = new HashSet<city_permission>();
             marker = new HashSet<marker>();
         }
@@ -31,6 +32,9 @@ namespace MapBul.DBContext
         [Required]
         [StringLength(100)]
         public string PlaceId { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<article> article { get; set; }
 
         public virtual country country { get; set; }
 
