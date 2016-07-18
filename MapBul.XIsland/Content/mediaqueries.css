@@ -1,0 +1,57 @@
+﻿@media screen and (max-width:1024px) {
+	NAV	{ position:fixed; top:0; left:0; width:1024px; margin-left:0; }
+	.inner_section	{ width:100%; }
+	.inner_section .picture IMG	{ height:auto; width:100%; }
+}
+
+@media screen and (max-width:640px) {
+	NAV .wrapper .nav_item .nav_events,
+	NAV .wrapper .nav_item .nav_articles	{ padding-left:25px; }
+	
+	.events_filter	{ margin:10px 0; }
+	.events_filter .datepick	{ margin:0 5px; }
+	
+	.list_row LI	{ height:100px; }
+	.list_row LI .list_link	{ padding:10px; height:80px; }
+	.list_row LI .list_link IMG	{ max-width:80px; max-height:80px; position:absolute; left:10px; top:10px; }
+	.list_row LI .list_link .subj_block	{ font-size:16px; width:auto; height:70px; padding:15px 0; margin:0 20px 0 90px; height:60px; line-height:20px; float:none; }
+	.list_row LI .list_link .post_date	{ font-size:12px; height:70px; width:70px; position:absolute; right:30px; top:4px; padding:4px 0; }
+	.list_row LI .list_link .open_btn	{ height:80px; width:8px; background-size:contain; height:70px; padding:5px 0; position:absolute; top:0; right:10px; }
+	.list_row LI .tags_line	{ font-size:12px; white-space:nowrap; text-overflow:ellipsis; overflow-x:hidden; left:100px; bottom:9px; }
+	
+	#events_list_row .list_row LI .list_link .subj_block	{ padding:0; }
+	#events_list_row .list_row LI .list_link .subj_block .date_line	{ font-size:14px; white-space:nowrap; text-overflow:ellipsis; overflow-x:hidden; margin:-2px 0 3px 0; }
+	
+	.inner_section .picture .event_info	{ padding:5px 10px 10px 10px; box-sizing:border-box; }
+	.inner_section .picture .event_info .location_line	{ margin-top:0; }
+	.inner_section .content	{ padding:5px 10px 0 10px; }
+	.inner_section .picture .event_info .date_line,
+	.inner_section .picture .event_info .location_line	{ font-size:16px; }
+	.inner_section .author	{ line-height:11px; }
+	.inner_section .post_date	{ font-size:14px; line-height:14px; margin-bottom:0; }
+	.inner_section .subj_line	{ font-size:16px; line-height:12px; margin-bottom:5px; }
+	.inner_section .tags_line	{ font-size:12px; }
+	.inner_section P	{ line-height:20px; margin-top:2px; }
+	
+	.list #bottom_row .wrapper,
+	.item #bottom_row .wrapper	{ height:80px; }
+	#bottom_row .wrapper .logo	{ left:10px; bottom:10px; }
+	#bottom_row .wrapper .download_block	{ left:auto; right:10px; }
+	#bottom_row .wrapper .download_block A	{ margin:0 3px; }
+	#bottom_row .wrapper .download_block A,
+	#bottom_row .wrapper .download_block A IMG	{ width:113px; height:33px; }
+}
+
+@media screen and (max-width:360px) {
+	.list_row LI .list_link .post_date	{ font-size:10px; }
+	.list_row LI .list_link .subj_block	{ font-size:14px; }
+	
+	#events_list_row .list_row LI .list_link .subj_block .date_line	{ font-size:10px; }
+	
+	.list #bottom_row .wrapper,
+	.item #bottom_row .wrapper	{ height:60px; }
+	#bottom_row .wrapper .download_block	{ bottom:10px; }
+	#bottom_row .wrapper .logo	{ bottom:15px; width:36px; height:28px; }
+	#bottom_row .wrapper .logo:after,
+	#bottom_row .wrapper .logo:before	{ width:36px; height:28px; }
+}

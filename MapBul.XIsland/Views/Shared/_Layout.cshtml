@@ -1,0 +1,46 @@
+﻿<html>
+<head>
+    <meta content='initial-scale=1, width=device-width, user-scalable=no' name='viewport'>
+    <title></title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,700&subset=latin,cyrillic-ext,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
+    <link href='style.css' rel='stylesheet' type='text/css'>
+    <link href='mediaqueries.css' rel='stylesheet' type='text/css'>
+    <script type='text/javascript' src='js/jquery-2.1.4.min.js'></script>
+
+</head>
+<body>
+    <nav>
+        <div class='wrapper'>
+            <a href='events.html' class='nav_item'>
+                <div class='nav_events'>Календарь</div>
+            </a>
+            <a href='articles.html' class='nav_item'>
+                <div class='nav_articles'>Статьи</div>
+            </a>
+            <br class='clear'>
+        </div>
+    </nav>
+    <section id='map_row'>
+        <div class='wrapper'>
+            @RenderBody()
+        </div>
+    </section>
+    <section id='bottom_row'>
+        <div class='wrapper'>
+            <a href='index.html' class='logo'></a>
+            <div class='download_block'>
+                <a href='#'><img src='src/appstore.png'></a>
+                <a href='#'><img src='src/googleplay.png'></a>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class='wrapper'>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+
