@@ -1,0 +1,46 @@
+﻿@using System.Web.Optimization
+@using MapBul.XIsland.Helpers
+@model MapBul.XIsland.Models.EventsListModel
+<div class="events_filter">
+
+    @using(Ajax.BeginForm("_EventsListPartial",new AjaxOptions{HttpMethod = "POST", UpdateTargetId = "PopupWindow"})){
+        <div>
+            Даты @Html.TextBoxFor(m => m.StartDateTime, new { name = "StartDateTime", @class = "datepick" })<span>—</span>@Html.TextBoxFor(m => m.EndDateTime, new { name = "EndDateTime", @class = "datepick" })<input value="" type="submit" class="submit"/>
+        </div>
+    }
+
+
+</div>
+<div class="wrapper">
+    <ul class="list_row">
+        @foreach (var item in Model.Events)
+        {
+            <li>
+                <a class="list_link" href="#" data-id="@item.Id" data-url="@Url.Action("_EventInfoPartial")">
+                    <img src="@Html.MapImage(item.TitlePhoto)">
+                    <div class="subj_block">
+                        <div class="date_line">Дата события: <strong>@(item.StartDate!=null?item.StartDate.Value.ToString("dd.MM.yyyy"):"Не указано")</strong>
+                        </div>
+                        @item.Title
+                    </div>
+                    <div class="open_btn"></div>
+                    <div class="post_date">@(item.PublishedDate != null ? item.PublishedDate.Value.ToString("dd.MM.yyyy") : "Не указано")</div>
+                    <br class="clear">
+                </a>
+                <div class="tags_line">
+                    @foreach (var tag in item.articlesubcategory)
+                    {
+                        <a href="#">#@tag.category.Name</a>
+                    }
+                </div>
+
+            </li>
+        }
+    </ul>
+</div>
+
+@Scripts.Render("~/js/custom/events")
+
+<script type="text/javascript">
+    EventsListDocumentReady();
+</script>

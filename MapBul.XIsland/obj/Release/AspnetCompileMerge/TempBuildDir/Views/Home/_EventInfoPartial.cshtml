@@ -1,0 +1,22 @@
+﻿@using MapBul.XIsland.Helpers
+@model MapBul.DBContext.article
+<div class="wrapper">
+    <div class="picure_container">
+        <div class="picture">
+            <img src="@Html.MapImage(Model.Photo)" alt="">
+        </div>
+    </div>
+    <div class="content">
+        <div class="author">@Html.GetUserName(Model.user)</div>
+        <div class="post_date">@(Model.PublishedDate!=null?Model.PublishedDate.Value.ToString("dd.MM.yyyy"):"Не указано")</div>
+        <br class="clear">
+        <div class="subj_line">@Model.Title</div>
+        <div class="tags_line">
+            @foreach (var tag in Model.articlesubcategory)
+            {
+                <a href="#">#@tag.category.Name</a>
+            }
+        </div>
+        <p class="text">@Model.Text</p>
+    </div>
+</div>

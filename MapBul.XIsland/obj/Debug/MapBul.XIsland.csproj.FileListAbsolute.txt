@@ -46,3 +46,10 @@ C:\AKryuchkov\MBWeb\MapBul.XIsland\obj\Debug\MapBul.XIsland.csproj.App.config
 C:\AKryuchkov\MBWeb\MapBul.XIsland\obj\Debug\MapBul.XIsland.csprojResolveAssemblyReference.cache
 C:\AKryuchkov\MBWeb\MapBul.XIsland\obj\Debug\MapBul.XIsland.dll
 C:\AKryuchkov\MBWeb\MapBul.XIsland\obj\Debug\MapBul.XIsland.pdb
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\Ninject.dll
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\Ninject.Web.Common.dll
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\Ninject.Web.Mvc.dll
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\WebActivatorEx.dll
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\Ninject.xml
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\Ninject.Web.Common.xml
+C:\AKryuchkov\MBWeb\MapBul.XIsland\bin\Ninject.Web.Mvc.xml

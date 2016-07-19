@@ -445,7 +445,7 @@ namespace MapBul.Service
                                     article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
 
                 result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress }, i);
-                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList() }, i);
+                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList(), StopDate=article.EndDate }, i);
 
                 i++;
             }
