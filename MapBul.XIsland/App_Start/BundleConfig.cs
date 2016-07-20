@@ -24,8 +24,8 @@ namespace MapBul.XIsland
             bundles.Add(new StyleBundle("~/plugins/css/datePicker").Include(
                         "~/Content/pickmeup.css"));
 
-            bundles.Add(new StyleBundle("~/css/style").Include(
-                        "~/Content/mediaqueries.css", "~/Content/style.css"));
+            bundles.Add(new StyleBundle("~/css/style").Include("~/Content/style.css",
+                        "~/Content/mediaqueries.css"));
 
         }
     }

@@ -10,6 +10,17 @@ function onDocumentReady() {
         InitGoogleMap(null);
     }
     
+    $(document).bind("ajaxSend", StartLoadingAnimation).bind("ajaxComplete", StopLoadingAnimation);
+}
+
+function StartLoadingAnimation() {
+    $("#PopupWindow").hide();
+    $("#Loading").show();
+}
+function StopLoadingAnimation() {
+    $("#Loading").hide();
+    $("#PopupWindow").show();
+
 }
 
 function InitGoogleMap(position) {
@@ -29,6 +40,7 @@ function InitGoogleMap(position) {
 function OpenInfo() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
+    $("body").addClass("item");
     $.ajax({
         url: url,
         data: { id: id },
@@ -47,6 +59,7 @@ function OpenInfo() {
 function OpenDataList() {
     var sender = $(this);
     var url = sender.attr("data-url");
+    $("body").addClass("list");
     $.ajax({
         url: url,
         type: "POST",
@@ -55,8 +68,8 @@ function OpenDataList() {
             CloseDataLists();
             $("#PopupWindow").html(data);
             $("#PopupWindow").show();
-            $("body").addClass("list");
             sender.addClass("active");
+            $("body").addClass("list");
         },
         error: function() {
 

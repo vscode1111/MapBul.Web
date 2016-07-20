@@ -11,7 +11,7 @@
 
 
 </div>
-<div class="wrapper">
+<div class="wrapper" id="events_list_row">
     <ul class="list_row">
         @foreach (var item in Model.Events)
         {
@@ -19,7 +19,8 @@
                 <a class="list_link" href="#" data-id="@item.Id" data-url="@Url.Action("_EventInfoPartial")">
                     <img src="@Html.MapImage(item.TitlePhoto)">
                     <div class="subj_block">
-                        <div class="date_line">Дата события: <strong>@(item.StartDate!=null?item.StartDate.Value.ToString("dd.MM.yyyy"):"Не указано")</strong>
+                        <div class="date_line">
+                            Дата события: <strong>@(item.StartDate != null ? item.StartDate.Value.ToString("dd.MM.yyyy") : "Не указано")</strong>
                         </div>
                         @item.Title
                     </div>
