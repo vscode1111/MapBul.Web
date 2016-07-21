@@ -15,7 +15,7 @@
 	.list_row LI .list_link	{ padding:10px; height:80px; }
 	.list_row LI .list_link IMG	{ max-width:80px; max-height:80px; position:absolute; left:10px; top:10px; }
 	.list_row LI .list_link .subj_block	{ font-size:16px; width:auto; height:66px; padding:15px 0; margin:0 20px 0 90px; line-height:16px; float:none; }
-	.list_row LI .list_link .post_date	{ font-size:12px; height:70px; width:70px; position:absolute; right:30px; top:4px; padding:4px 0; }
+	.list_row LI .list_link .post_date	{ font-size:12px; width: 70px;position: absolute;right: 30px;padding: 0px 0 0 0;height: 22px;bottom: 0px; }
 	.list_row LI .list_link .open_btn	{ height:80px; width:8px; background-size:contain; height:70px; padding:5px 0; position:absolute; top:0; right:10px; }
 	.list_row LI .tags_line	{ font-size:12px; white-space:nowrap; text-overflow:ellipsis; overflow-x:hidden; left:100px; bottom:9px; }
 	

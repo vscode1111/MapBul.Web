@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MapBul.DBContext;
 using MapBul.SharedClasses.Constants;
@@ -13,8 +14,8 @@ namespace MapBul.XIsland.Repository
         public List<article> GetEvents()
         {
             return
-                _db.article.Where(a => a.status.Tag == MarkerStatuses.Published && a.StartDate != null)
-                    .OrderByDescending(a => a.PublishedDate)
+                _db.article.Where(a => a.status.Tag == MarkerStatuses.Published && a.StartDate != null&&a.StartDate>DateTime.Now)
+                    .OrderBy(a => a.StartDate)
                     .Take(20)
                     .ToList();
         }

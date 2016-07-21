@@ -20,7 +20,7 @@
                     <img src="@Html.MapImage(item.TitlePhoto)">
                     <div class="subj_block">
                         <div class="date_line">
-                            Дата события: <strong>@(item.StartDate != null ? item.StartDate.Value.ToString("dd.MM.yyyy") : "Не указано")</strong>
+                            Дата события: <strong>@(item.StartDate != null ? item.StartDate.Value.ToString("dd.MM.yyyy") : "Не указано")@(item.EndDate != null ? " - "+item.EndDate.Value.ToString("dd.MM.yyyy") : "")</strong>
                         </div>
                         @item.Title
                     </div>

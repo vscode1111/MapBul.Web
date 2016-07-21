@@ -35,6 +35,10 @@ function InitGoogleMap(position) {
             zoom: 3
         });
     }
+    map.addListener('click', function() {
+        CloseInfo();
+        CloseDataLists();
+    });
 }
 
 function OpenInfo() {

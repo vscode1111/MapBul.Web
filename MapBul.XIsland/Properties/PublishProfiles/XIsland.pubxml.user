@@ -32,7 +32,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/MapBul.XIsland.dll">
-      <publishTime>07/20/2016 14:58:11</publishTime>
+      <publishTime>07/21/2016 12:41:15</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -101,13 +101,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Content/mediaqueries.css">
-      <publishTime>07/20/2016 16:41:15</publishTime>
+      <publishTime>07/21/2016 17:35:08</publishTime>
     </File>
     <File Include="Content/pickmeup.css">
-      <publishTime>07/20/2016 12:34:52</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Content/style.css">
-      <publishTime>07/20/2016 15:41:44</publishTime>
+      <publishTime>07/21/2016 17:41:11</publishTime>
     </File>
     <File Include="Images/appstore.png">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -146,7 +146,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Scripts/Custom/Index.js">
-      <publishTime>07/20/2016 14:44:34</publishTime>
+      <publishTime>07/21/2016 17:06:07</publishTime>
     </File>
     <File Include="Scripts/jquery-3.1.0.js">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -185,13 +185,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Views/Home/_EventInfoPartial.cshtml">
-      <publishTime>07/20/2016 16:32:45</publishTime>
+      <publishTime>07/21/2016 17:15:35</publishTime>
     </File>
     <File Include="Views/Home/_EventsListPartial.cshtml">
-      <publishTime>07/20/2016 16:06:51</publishTime>
+      <publishTime>07/21/2016 17:15:35</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>07/20/2016 14:32:18</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Views/Shared/_Navigation.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>

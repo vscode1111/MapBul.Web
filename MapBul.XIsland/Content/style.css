@@ -51,7 +51,7 @@ NAV .wrapper .nav_item .nav_articles	{ background:url(../Images/articles_ico.png
 .list_row LI .list_link IMG	{ float:left; margin-right:20px; max-width:120px}
 .list_row LI .list_link .subj_block	{ float:left; height:90px; font-size:18px; font-weight:400; height:72px; overflow:hidden; line-height:24px; margin-top:9px; margin-bottom:3px; }
 .list_row LI .list_link .subj_block .date_line	{ font-size:16px; line-height:16px; margin:5px 0 3px 0; }
-.list_row LI .list_link .post_date	{ float:right; height:90px; padding:15px 0; font-size:16px; font-weight:100; line-height:14px; }
+.list_row LI .list_link .post_date	{     float: right;padding: 15px 0;font-size: 16px;font-weight: 100;line-height: 14px;height: 90px;position: absolute;right: 30px;}
 .list_row LI .list_link .open_btn	{ background:url(../Images/open_ico.png) right center no-repeat; float:right; width:33px; height:120px; opacity:0.5; transition:opacity 0.3s; -webkit-transition:opacity 0.3s; }
 .list_row LI .list_link:hover .open_btn	{ opacity:1; }
 .list_row LI .tags_line	{ position:absolute; left:160px; bottom:41px; font-size:16px; font-weight:400; }

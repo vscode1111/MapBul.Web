@@ -9,7 +9,7 @@
         <div class='picture'>
             <img src="@Html.MapImage(Model.Photo)" alt="">
             <div class='event_info'>
-                <div class='date_line'>Дата события: <strong>@(Model.StartDate != null ? Model.StartDate.Value.ToString("dd.MM.yyyy") : "Не указано")</strong></div>
+                <div class='date_line'>Дата события: <strong>@(Model.StartDate != null ? Model.StartDate.Value.ToString("dd.MM.yyyy") : "Не указано")@(Model.EndDate != null ? " - " + Model.EndDate.Value.ToString("dd.MM.yyyy") : "")</strong></div>
                 <div class='location_line'>Место события: <strong>@((Model.city!=null&&Model.city.country!=null)?Model.city.country.Name+", "+Model.city.Name:"Не указано")</strong></div>
             </div>
         </div>
