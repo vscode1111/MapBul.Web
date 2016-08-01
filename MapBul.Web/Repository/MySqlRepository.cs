@@ -277,7 +277,7 @@ namespace MapBul.Web.Repository
                     Guid = Guid.NewGuid().ToString(),
                     Password = StringTransformationProvider.Md5(model.Password),
                     Email = model.Email,
-                    UserTypeId = GetUserTypeByTag(UserTypes.Journalist),
+                    UserTypeId = GetUserTypeByTag(UserTypes.Guide),
                     Deleted = model.Deleted
                 };
                 _db.user.Add(newUser);

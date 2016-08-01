@@ -50,6 +50,8 @@ namespace MapBul.Service
                     return user.journalist.First();
                 case UserTypes.Tenant:
                     return user.tenant.First();
+                case UserTypes.Guide:
+                    return user.guide.First();
                 default:
                     throw new MyException(Errors.NotFound);
             }
