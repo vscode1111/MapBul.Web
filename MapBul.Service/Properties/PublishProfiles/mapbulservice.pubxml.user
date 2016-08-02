@@ -17,13 +17,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/MapBul.DBContext.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>06/29/2016 17:13:08</publishTime>
     </File>
     <File Include="bin/MapBul.Service.dll">
-      <publishTime>08/01/2016 11:04:09</publishTime>
+      <publishTime>08/02/2016 10:41:19</publishTime>
     </File>
     <File Include="bin/MapBul.SharedClasses.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/02/2016 10:41:19</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -38,10 +38,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>04/05/2016 11:21:59</publishTime>
+      <publishTime>05/04/2016 11:21:59</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>01/08/2016 11:21:51</publishTime>
     </File>
     <File Include="WebService.asmx">
       <publishTime>01/01/0001 00:00:00</publishTime>

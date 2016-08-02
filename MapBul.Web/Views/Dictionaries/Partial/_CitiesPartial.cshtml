@@ -9,6 +9,7 @@
                 <thead>
                 <tr>
                     <th>Страна</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -16,7 +17,11 @@
                 {
                     <tr>
                         <td>@country.Name</td>
+                        <td>
+                            <input data-id="@country.Id" type="button" class="DeleteCountryButton btn btn-danger" value="Удалить" />
+                        </td>
                     </tr>
+
                 }
                 </tbody>
             </table>
@@ -44,6 +49,7 @@
                     <th>Город</th>
                     <!--<th>Регион</th>-->
                     <th>Страна</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,6 +59,9 @@
                         <td>@city.Name</td>
                         <!--<td>city.region.Name</td>-->
                         <td>@city.country.Name</td>
+                        <td>
+                            <input data-id="@city.Id" type="button" class="DeleteCityButton btn btn-danger" value="Удалить" />
+                        </td>
                     </tr>
                 }
                 </tbody>

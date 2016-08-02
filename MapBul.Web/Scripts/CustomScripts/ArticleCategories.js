@@ -11,6 +11,7 @@
 function OnEditArticleCategoryDocumentReady() {
     $('.colorInputCategoryEdit').colorpicker();
     $("#EditCategoryFormSubmit").click(SendEditArticleCategoryForm);
+    $("#DeleteCategoryButton").click(OnDeleteArticleCategoryClick);
 }
 
 function SendEditArticleCategoryForm() {
@@ -55,6 +56,25 @@ function OnEditArticleCategoryClick() {
         }
     });
 }
+
+function OnDeleteArticleCategoryClick() {
+    var categoryId = $("#EditCategoryForm input[name=Id]").val();
+    $.ajax({
+        url: "Dictionaries/DeleteCategory",
+        type: "POST",
+        data: { categoryId: categoryId },
+        success: function (data) {
+            if (data.success) {
+                $("#Modal").modal("hide");
+                RefreshArticleCategoriesPage();
+            }
+        },
+        error: function () {
+            ViewNotification('Ошибка', 'error');
+        }
+    });
+}
+
 
 function SendNewArticleCategoryForm() {
     if (!($("#NewArticleCategoryForm").valid())) {

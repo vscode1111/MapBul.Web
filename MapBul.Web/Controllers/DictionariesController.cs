@@ -14,6 +14,9 @@ using Newtonsoft.Json;
 
 namespace MapBul.Web.Controllers
 {
+    /// <summary>
+    /// Класс для десериализации древовидной структуры категорий
+    /// </summary>
     [Serializable]
     public class NestableElement
     {
@@ -23,6 +26,10 @@ namespace MapBul.Web.Controllers
 
     public class DictionariesController : Controller
     {
+        /// <summary>
+        /// Главная страница раздела словарей
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult Index()
@@ -32,6 +39,10 @@ namespace MapBul.Web.Controllers
 
 #region partials
 
+        /// <summary>
+        /// частичное представление списка городов и стран
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _CitiesPartial()
         {
@@ -39,6 +50,11 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_CitiesPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна редактирования категории
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _EditCategoryModalPartial(int categoryId)
@@ -50,6 +66,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditCategoryModalPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление страницы категорий маркеров
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _MarkerCategoriesPartial()
         {
@@ -57,6 +77,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_CategoriesPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление страницы категорий статей
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _ArticleCategoriesPartial()
         {
@@ -64,6 +88,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_CategoriesPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление блока добавления новой категории маркеров
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewMarkerCategoryPartial()
         {
@@ -73,6 +101,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewCategoryPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление блока добавления новой категории статей
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewArticleCategoryPartial()
         {
@@ -84,6 +116,56 @@ namespace MapBul.Web.Controllers
 #endregion
 
 #region actions
+
+        /// <summary>
+        /// Метод удаления категории
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult DeleteCategory(int categoryId)
+        {
+            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.DeleteCategory(categoryId);
+            return new JsonResult {JsonRequestBehavior = JsonRequestBehavior.DenyGet, Data = new {success = true}};
+        }
+
+        /// <summary>
+        /// метод удаления страны
+        /// </summary>
+        /// <param name="countryId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult DeleteCountry(int countryId)
+        {
+            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.DeleteCountry(countryId);
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.DenyGet, Data = new { success = true } };
+        }
+
+        /// <summary>
+        /// Метод удаления города
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin)]
+        public ActionResult DeleteCity(int cityId)
+        {
+            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.DeleteCity(cityId);
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.DenyGet, Data = new { success = true } };
+        }
+
+        /// <summary>
+        /// метод добавления новой страны
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="placeId"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public bool AddCountry(string name, string placeId, string code)
@@ -102,6 +184,15 @@ namespace MapBul.Web.Controllers
             return true;
         }*/
 
+        /// <summary>
+        /// метод добавления нового города
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="countryId"></param>
+        /// <param name="placeId"></param>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public bool AddCity(string name, int countryId, string placeId, string lat, string lng)
@@ -115,6 +206,11 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        /// <summary>
+        /// метод изменения древовидной структуры категорий
+        /// </summary>
+        /// <param name="structure">Новая структура категорий приходит в виде JSON строки</param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public bool SaveCategoriesStructure(string structure)
@@ -125,6 +221,13 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Метод добавления новой категории
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="categoryIcon"></param>
+        /// <param name="categoryPin"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public bool AddNewCategory(category model, HttpPostedFileBase categoryIcon, HttpPostedFileBase categoryPin)
@@ -142,6 +245,13 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        /// <summary>
+        /// метод сохранения изменений в категории
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="categoryIcon"></param>
+        /// <param name="categoryPin"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public bool EditCategory(category model, HttpPostedFileBase categoryIcon, HttpPostedFileBase categoryPin)

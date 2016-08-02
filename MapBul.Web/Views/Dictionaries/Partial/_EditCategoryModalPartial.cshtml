@@ -29,7 +29,15 @@
                 @Html.TextBoxFor(m => m.Color, new Dictionary<string, object> { { "placeholder", "Цвет" }, { "required", "" }, { "class", "form-control colorInputCategoryEdit" } })
             </div>
             <div class="form-group">
-                <input id="EditCategoryFormSubmit" type="button" class="btn btn-primary" value="Сохранить"/>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <input id="EditCategoryFormSubmit" type="button" class="btn btn-primary" value="Сохранить"/>
+                    </div>
+                    <div class="col-xs-6">
+                        <input id="DeleteCategoryButton" type="button" class="btn btn-danger" value="Удалить" />
+                    </div>
+
+                </div>
             </div>
 
         </form>

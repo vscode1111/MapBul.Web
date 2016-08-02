@@ -14,6 +14,10 @@ namespace MapBul.Web.Controllers
 {
     public class MarkersController : Controller
     {
+        /// <summary>
+        /// Главная страница раздела маркеров
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult Index()
@@ -24,6 +28,10 @@ namespace MapBul.Web.Controllers
 
 #region partials
 
+        /// <summary>
+        /// Частичное представление списка маркеров
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _MarkersTablePartial()
         {
@@ -35,6 +43,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_MarkersTablePartial",model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна формы добавления нового маркера
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewMarkerModalPartial()
@@ -51,6 +63,11 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewMarkerModalPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна формы редактирования маркера
+        /// </summary>
+        /// <param name="markerId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _EditMarkerModalPartial(int markerId)
@@ -73,6 +90,16 @@ namespace MapBul.Web.Controllers
 
 #region actions
 
+
+        /// <summary>
+        /// метод добавления нового маркера
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="openTimesString"></param>
+        /// <param name="closeTimesString"></param>
+        /// <param name="markerPhoto"></param>
+        /// <param name="markerLogo"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo)
@@ -91,6 +118,15 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        /// <summary>
+        /// метод сохранения изменений маркера
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="openTimesString"></param>
+        /// <param name="closeTimesString"></param>
+        /// <param name="markerPhoto"></param>
+        /// <param name="markerLogo"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public bool EditMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
@@ -119,12 +155,32 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Метод изменения статуса маркера
+        /// </summary>
+        /// <param name="markerId"></param>
+        /// <param name="statusId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public bool ChangeMarkerStatus(int markerId, int statusId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.ChangeMarkerStatus(markerId, statusId);
+            return true;
+        }
+
+        /// <summary>
+        /// метод удаления маркера
+        /// </summary>
+        /// <param name="markerId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public bool DeleteMarker(int markerId)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            repo.DeleteMarker(markerId);
             return true;
         }
 

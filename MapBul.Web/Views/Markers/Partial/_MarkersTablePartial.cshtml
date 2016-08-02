@@ -26,6 +26,7 @@
                             <th>Категория</th>
                             <th>Сайт</th>
                             <th>Статус</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -59,6 +60,7 @@
                                     }
                                     @Html.DropDownList("MarkerSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "MarkerSatusSelect form-control chosenselect"}, {"data-markerid", marker.Id}})
                                 </td>
+                                <td><input type="button" value="Удалить" data-id="@marker.Id" class="DeleteMarkerButton btn btn-danger" /></td>
                             </tr>
                         }
                         </tbody>
@@ -90,6 +92,7 @@
                             <th>Сайт</th>
                             <th>Автор</th>
                             <th>Статус</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -134,6 +137,7 @@
                                     }
                                     @Html.DropDownList("MarkerSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "MarkerSatusSelect form-control chosenselect"}, {"data-markerid", marker.Id}})
                                 </td>
+                                <td><input type="button" value="Удалить" data-id="@marker.Id" class="DeleteMarkerButton btn btn-danger" /></td>
                             </tr>
                         }
                         </tbody>

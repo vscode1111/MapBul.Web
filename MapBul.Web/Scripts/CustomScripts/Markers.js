@@ -345,8 +345,30 @@ function OnNewMarkerAddressChanged() {
 function OnMarkersDocumentReady() {
     $('.chosenselect').chosen();
     $("#NewMarkerButton").click(OnNewMarkerClick);
+    $(".DeleteMarkerButton").click(OnMarkerDeleteClick);
     $(".EditMarkerLink").each(function(index, item) {
         $(item).click(OnEditMarkerClick);
+    });
+    $(".MarkerSatusSelect").each(function (index, value) {
+        $(value).change(function () {
+            var markerId = $(this).attr("data-markerid");
+            var statusId = $(this).val();
+            var url = "Markers/ChangeMarkerStatus";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    markerId: markerId,
+                    statusId: statusId
+                },
+                success: function () {
+                    ViewNotification("Статус изменен", "success");
+                },
+                error: function () {
+                    ViewNotification('Ошибка', 'error');
+                }
+            });
+        });
     });
     $('.dataTable').each(function(index, item) {
         $(item).dataTable({
@@ -366,28 +388,6 @@ function OnMarkersDocumentReady() {
                     "previous": "Предыдущая"
                 }
             }
-        });
-    });
-
-    $(".MarkerSatusSelect").each(function(index,value) {
-        $(value).change(function() {
-            var markerId = $(this).attr("data-markerid");
-            var statusId = $(this).val();
-            var url = "Markers/ChangeMarkerStatus";
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    markerId: markerId,
-                    statusId: statusId
-                },
-                success: function () {
-                    ViewNotification("Статус изменен","success");
-                },
-                error: function () {
-                    ViewNotification('Ошибка', 'error');
-                }
-            });
         });
     });
 }
@@ -411,7 +411,25 @@ function OnNewMarkerClick() {
 
 
 
-
+function OnMarkerDeleteClick() {
+    var id = $(this).attr("data-id");
+    $.ajax({
+        url: "Markers/DeleteMarker",
+        type: "POST",
+        data: { markerId: id },
+        success: function (data) {
+            if (data) {
+                ViewNotification("Маркер удален", "success");
+                RefreshMarkersPage();
+            } else {
+                ViewNotification('Ошибка', 'error');
+            }
+        },
+        error: function () {
+            ViewNotification('Ошибка', 'error');
+        }
+    });
+}
 
 
 

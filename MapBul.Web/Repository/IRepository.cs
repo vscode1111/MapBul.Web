@@ -59,6 +59,10 @@ namespace MapBul.Web.Repository
         void AddNewGuide(NewGuideModel model);
         void DeleteUser(int userId);
         List<category> GetArticleCategories();
-
+        void DeleteCategory(int categoryId);
+        void DeleteCountry(int countryId);
+        void DeleteCity(int cityId);
+        void DeleteMarker(int markerId);
+        void DeleteArticle(int articleId);
     }
 }

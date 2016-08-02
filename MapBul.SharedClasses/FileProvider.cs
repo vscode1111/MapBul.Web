@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Hosting;
 using MapBul.SharedClasses.Constants;
@@ -74,11 +76,62 @@ namespace MapBul.SharedClasses
             if (siteRoot != null)
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                using (var imageFile = new FileStream(savePath, FileMode.Create))
+                using (var stream = new MemoryStream(markerPhoto))
+                {
+                    Bitmap firstBitmap = new Bitmap(stream);
+
+
+
+                    if (Array.IndexOf(firstBitmap.PropertyIdList, 274) > -1)
+                    {
+                        var orientation = (int)firstBitmap.GetPropertyItem(274).Value[0];
+                        switch (orientation)
+                        {
+                            case 1:
+                                // No rotation required.
+                                break;
+                            case 2:
+                                firstBitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                                break;
+                            case 3:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                break;
+                            case 4:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+                                break;
+                            case 5:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
+                                break;
+                            case 6:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                break;
+                            case 7:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate270FlipX);
+                                break;
+                            case 8:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                break;
+                        }
+                        // This EXIF data is now invalid and should be removed.
+                        firstBitmap.RemovePropertyItem(274);
+                    }
+
+
+
+
+
+                    /*var newItem = (PropertyItem)FormatterServices.GetUninitializedObject(typeof(PropertyItem));
+                    newItem.Id = 274;
+                    newItem.Value = new byte[] { 1 };
+                    firstBitmap.SetPropertyItem(newItem);*/
+                    firstBitmap.Save(savePath);
+                }
+
+                /*using (var imageFile = new FileStream(savePath, FileMode.Create))
                 {
                     imageFile.Write(markerPhoto, 0, markerPhoto.Length);
                     imageFile.Flush();
-                }
+                }*/
             }
             else
                 throw new MyException(Errors.UnknownError);
@@ -169,10 +222,55 @@ namespace MapBul.SharedClasses
             if (siteRoot != null)
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                using (var imageFile = new FileStream(savePath, FileMode.Create))
+                using (var stream = new MemoryStream(markerLogo))
                 {
-                    imageFile.Write(markerLogo, 0, markerLogo.Length);
-                    imageFile.Flush();
+                    Bitmap firstBitmap = new Bitmap(stream);
+
+
+
+                    if (Array.IndexOf(firstBitmap.PropertyIdList, 274) > -1)
+                    {
+                        var orientation = (int)firstBitmap.GetPropertyItem(274).Value[0];
+                        switch (orientation)
+                        {
+                            case 1:
+                                // No rotation required.
+                                break;
+                            case 2:
+                                firstBitmap.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                                break;
+                            case 3:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                break;
+                            case 4:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+                                break;
+                            case 5:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
+                                break;
+                            case 6:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                break;
+                            case 7:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate270FlipX);
+                                break;
+                            case 8:
+                                firstBitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                break;
+                        }
+                        // This EXIF data is now invalid and should be removed.
+                        firstBitmap.RemovePropertyItem(274);
+                    }
+
+
+
+
+
+                    /*var newItem = (PropertyItem)FormatterServices.GetUninitializedObject(typeof(PropertyItem));
+                    newItem.Id = 274;
+                    newItem.Value = new byte[] { 1 };
+                    firstBitmap.SetPropertyItem(newItem);*/
+                    firstBitmap.Save(savePath);
                 }
                 Bitmap cuttedImage;
                 using (var image = Image.FromFile(savePath))

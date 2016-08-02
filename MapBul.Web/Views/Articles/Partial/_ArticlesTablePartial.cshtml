@@ -24,6 +24,7 @@
                             <th>Категория</th>
                             <th>Текст</th>
                             <th>Статус</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -52,6 +53,7 @@
                                     }
                                     @Html.DropDownList("ArticleSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "ArticleSatusSelect form-control chosenselect"}, {"data-articleid", article.Id}})
                                 </td>
+                                <td><input type="button" value="Удалить" data-id="@article.Id" class="DeleteArticleButton btn btn-danger"/></td>
                             </tr>
                         }
                         </tbody>
@@ -84,6 +86,7 @@
                             <th>Текст</th>
                             <th>Автор</th>
                             <th>Статус</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -123,6 +126,7 @@
                                     }
                                     @Html.DropDownList("ArticleSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "ArticleSatusSelect form-control chosenselect"}, {"data-articleid", article.Id}})
                                 </td>
+                                <td><input type="button" value="Удалить" data-id="@article.Id" class="DeleteArticleButton btn btn-danger" /></td>
                             </tr>
                         }
                         </tbody>

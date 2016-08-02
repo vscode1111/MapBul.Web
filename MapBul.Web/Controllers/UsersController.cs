@@ -10,6 +10,10 @@ namespace MapBul.Web.Controllers
 {
     public class UsersController : Controller
     {
+        /// <summary>
+        /// главная страница раздела пользователей
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult Index()
@@ -19,6 +23,10 @@ namespace MapBul.Web.Controllers
 
         #region partials
 
+        /// <summary>
+        /// частичное представление списка администраторов
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _AdminsTablePartial()
         {
@@ -26,6 +34,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_AdminsTablePartial", model);
         }
 
+        /// <summary>
+        /// частичное представление списка редакторов
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _EditorsTablePartial()
         {
@@ -33,6 +45,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditorsTablePartial", model);
         }
 
+        /// <summary>
+        /// частичное представление списка журналистов
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _JournalistsTablePartial()
         {
@@ -42,6 +58,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_JournalistsTablePartial", model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна добавления нового редактора
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewEditorPartial()
@@ -54,6 +74,11 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewEditorPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна внесения изменений в карточку редактора
+        /// </summary>
+        /// <param name="editorId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _EditorInformationPartial(int editorId)
@@ -67,6 +92,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_EditorInformationPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна добавления нового журналиста
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _NewJournalistPartial()
@@ -81,6 +110,11 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewJournalistPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление изменения карточки журналиста
+        /// </summary>
+        /// <param name="journalistId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _JournalistInformationPartial(int journalistId)
@@ -94,6 +128,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_JournalistInformationPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление модального окна добавления администратора 
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewAdminModalPartial()
@@ -102,6 +140,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_NewAdminModalPartial", model);
         }
 
+        /// <summary>
+        /// частичное представление списка гидов
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _GuidesTablePartial()
         {
@@ -111,6 +153,10 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_GuidesTablePartial", model);
         }
 
+        /// <summary>
+        /// частичное представление списка жителей
+        /// </summary>
+        /// <returns></returns>
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _TenantsTablePartial()
         {
@@ -118,6 +164,11 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_TenantsTablePartial", model);
         }
 
+        /// <summary>
+        /// частичное представление внесения изменений в карточку жителя
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _TenantInformationPartial(int tenantId)
@@ -127,6 +178,11 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_TenantInformationPartial", model);
         }
 
+        /// <summary>
+        /// Частичное представление внесения изменений в карточку гида
+        /// </summary>
+        /// <param name="guideId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult _GuideInformationPartial(int guideId)
@@ -141,10 +197,33 @@ namespace MapBul.Web.Controllers
             return PartialView("Partial/_GuideInformationPartial", model);
         }
 
+        /// <summary>
+        /// Частичное представление модального окна добавления гида
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public ActionResult _NewGuideModalPartial()
+        {
+            var model = new NewGuideModel();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            ViewBag.Countries = repo.GetCountries();
+            //            ViewBag.Regions = repo.GetRegions();
+            ViewBag.Cities = repo.GetCities();
+            ViewBag.Editors = repo.GetEditors();
+            ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
+            return PartialView("Partial/_NewGuideModalPartial", model);
+        }
+
         #endregion
 
         #region actions
 
+        /// <summary>
+        /// метод добовления нового редактора
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult AddNewEditor(NewEditorModel model)
@@ -171,6 +250,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// метод сохранения изменений редактора
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult EditEditor(NewEditorModel model)
@@ -195,6 +279,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// метод добавления нового журналиста
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult AddNewJournalist(NewJournalistModel model)
@@ -221,6 +310,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// Метод сохранения изменений журналиста
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult EditJournalist(NewJournalistModel model)
@@ -247,6 +341,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// Метод добавления нового администратора
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult AddNewAdmin(NewAdminModel model)
@@ -274,6 +373,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// Метод сохранения изменений гида
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
         public ActionResult EditGuide(NewGuideModel model)
@@ -298,6 +402,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// метод сохранения изменений жителя
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult EditTenant(NewTenantModel model)
@@ -322,8 +431,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
-        #endregion
-
+        /// <summary>
+        /// метод удаления администратора
+        /// </summary>
+        /// <param name="adminId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult DeleteAdmin(int adminId)
@@ -337,6 +449,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// метод добавления нового гида
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
         public ActionResult AddNewGuide(NewGuideModel model)
@@ -363,20 +480,11 @@ namespace MapBul.Web.Controllers
             };
         }
 
-        [HttpPost]
-        [MyAuth(Roles = UserTypes.Admin+", "+UserTypes.Editor)]
-        public ActionResult _NewGuideModalPartial()
-        {
-            var model = new NewGuideModel();
-            var repo = DependencyResolver.Current.GetService<IRepository>();
-            ViewBag.Countries = repo.GetCountries();
-            //            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
-            ViewBag.Editors = repo.GetEditors();
-            ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
-            return PartialView("Partial/_NewGuideModalPartial",model);
-        }
-
+        /// <summary>
+        /// метод удаления пользователей
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public ActionResult DeleteUser(int userId)
@@ -392,6 +500,9 @@ namespace MapBul.Web.Controllers
                 }
             };
         }
+
+        #endregion
+
 
     }
 }

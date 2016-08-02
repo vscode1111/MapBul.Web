@@ -5,7 +5,6 @@
 
     $("#NewArticleMarkerSelect_chosen").click(OnNewArticleMarkerSelectClick);
     $("#NewArticleCitySelect_chosen").click(OnNewArticleCitySelectClick);
-
     jQuery.extend(jQuery.validator.messages, {
         required: "Заполните поле"
     });
@@ -28,6 +27,9 @@ function OnArticlesDocumentReady() {
     $(".EditArticleLink").each(function (index, item) {
         $(item).click(OnEditArticleClick);
     });
+
+    $(".DeleteArticleButton").click(OnArticleDeleteClick);
+
 
     $('.dataTable').each(function (index, item) {
         $(item).dataTable({
@@ -72,6 +74,26 @@ function OnArticlesDocumentReady() {
                 }
             });
         });
+    });
+}
+
+function OnArticleDeleteClick() {
+    var id = $(this).attr("data-id");
+    $.ajax({
+        url: "Articles/DeleteArticle",
+        type: "POST",
+        data: { articleId: id },
+        success:function(data) {
+            if (data) {
+                ViewNotification("Статья удалена", "success");
+                RefreshArticlesPage();
+            } else {
+                ViewNotification('Ошибка', 'error');
+            }
+        },
+        error:function() {
+            ViewNotification('Ошибка', 'error');
+        }
     });
 }
 

@@ -7,6 +7,10 @@ namespace MapBul.Web.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Главная страница сайта
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Journalist + ", " + UserTypes.Editor)]
         public ActionResult Index()

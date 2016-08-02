@@ -7,7 +7,7 @@ var newCityLng;
 var newCityPlaceId;
 var newCityName;
 function OnDictionariesPageReady() {
-    $('.chosenselect').chosen();
+    $(".chosenselect").chosen();
     $("#NewCountryButton").click(NewCountryButtonClick);
     //$("#NewRegionButton").click(NewRegionButtonClick);
     $("#NewCityButton").click(NewCityButtonClick);
@@ -16,7 +16,11 @@ function OnDictionariesPageReady() {
 
     $("#CountrySelectForCity").change(OnCountrySelectForCityChanged);
 
-    $('.CitiesTable').dataTable({
+    $(".DeleteCountryButton").click(OnCountryDeleteClick);
+    $(".DeleteCityButton").click(OnCityDeleteClick);
+
+
+    $(".CitiesTable").dataTable({
         "pageLength": 30,
         "autoWidth": true,
         "language": {
@@ -36,22 +40,58 @@ function OnDictionariesPageReady() {
     });
     geocoder = new window.google.maps.Geocoder();
     countryAutocomplete = new window.google.maps.places.Autocomplete(
-    (document.getElementById('NewCountryInput')),
-    { types: ['(regions)'] });
+    (document.getElementById("NewCountryInput")),
+    { types: ["(regions)"] });
     /*regionAutocomplete=new window.google.maps.places.Autocomplete(
     (document.getElementById('NewRegionInput')), { types: ['(regions)'] });
     regionAutocomplete.addListener('place_changed', OnRegionsInputChanged);*/
 
     cityAutocomplete = new window.google.maps.places.Autocomplete(
-        document.getElementById('NewCityInput'),
+        document.getElementById("NewCityInput"),
         {
-            types: ['(cities)'],
+            types: ["(cities)"],
             componentRestrictions: { country: $("#CountrySelectForCity option:selected").attr("data-countrycode") }
         });
 
-    cityAutocomplete.addListener('place_changed', OnCitiesInputChanged);
+    cityAutocomplete.addListener("place_changed", OnCitiesInputChanged);
 
-}  
+}
+
+function OnCountryDeleteClick() {
+    var id = $(this).attr("data-id");
+    $.ajax({
+        url: "Dictionaries/DeleteCountry",
+        type: "POST",
+        data:{countryId:id},
+        success: function (data) {
+            if (data.success) {
+                RefreshCitiesPage();
+                ViewNotification("Страна удалена", "success");
+            }
+        },
+        error: function () {
+            ViewNotification("Ошибка", "error");
+        }
+    });
+}
+
+function OnCityDeleteClick() {
+    var id = $(this).attr("data-id");
+    $.ajax({
+        url: "Dictionaries/DeleteCity",
+        type: "POST",
+        data: { cityId: id },
+        success: function (data) {
+            if (data.success) {
+                RefreshCitiesPage();
+                ViewNotification("Город удален", "success");
+            }
+        },
+        error: function () {
+            ViewNotification("Ошибка", "error");
+        }
+    });
+}
 
 function OnCountrySelectForCityChanged() {
     var country = $("#CountrySelectForCity option:selected").attr("data-countrycode");
@@ -67,7 +107,7 @@ function RefreshCitiesPage() {
             OnDictionariesPageReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification("Ошибка", "error");
         }
     });
 }
@@ -84,7 +124,7 @@ function NewCountryButtonClick() {
     window.geocoder.geocode({ 'address': value }, function(results, status) {
 
         if (status !== "OK") {
-            ViewNotification("Страна не найдена", 'error');
+            ViewNotification("Страна не найдена", "error");
             return;
         }
         var countryName = results[0].address_components[0].long_name;
@@ -93,7 +133,7 @@ function NewCountryButtonClick() {
         var code = results[0].address_components[0].short_name;
 
         if (types.indexOf("country") === -1) {
-            ViewNotification("Страна не найдена", 'error');
+            ViewNotification("Страна не найдена", "error");
             return;
         }
 
@@ -105,12 +145,12 @@ function NewCountryButtonClick() {
                 placeId: placeId,
                 code: code
     },
-            success: function(data) {
-                ViewNotification("Страна добавлена", 'success');
+            success: function() {
+                ViewNotification("Страна добавлена", "success");
                 RefreshCitiesPage();
             },
             error: function() {
-                ViewNotification("Не удалось добавить", 'error');
+                ViewNotification("Не удалось добавить", "error");
             }
         });
     });
@@ -183,12 +223,12 @@ function NewCityButtonClick() {
             lat: newCityLat,
             lng: newCityLng
         },
-        success: function(data) {
-            ViewNotification("Город добавлен", 'success');
+        success: function() {
+            ViewNotification("Город добавлен", "success");
             RefreshCitiesPage();
         },
         error: function() {
-            ViewNotification("Не удалось добавить", 'error');
+            ViewNotification("Не удалось добавить", "error");
         }
     });
 }

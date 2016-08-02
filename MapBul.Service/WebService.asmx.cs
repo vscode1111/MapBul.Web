@@ -22,7 +22,11 @@ namespace MapBul.Service
     public class WebService : System.Web.Services.WebService
     {
         #region private
-
+        /// <summary>
+        /// Метод возвращает список ИД категорий от данной до корневой
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         private List<int> GetCategoriesBranch(category category)
         {
             var result = new List<int>();
@@ -34,12 +38,20 @@ namespace MapBul.Service
             }
             return result;
         }
-
+        /// <summary>
+        /// Метод возвращает полный URL до файла
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         private string MapUrl(string filePath)
         {
             return "http://" + HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"] + "/" + filePath;
         }
-
+        /// <summary>
+        /// Метод возвращает описатель пользователя в зависимости от его типа
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private object GetUserDescriptor(user user)
         {
             switch (user.usertype.Tag)
@@ -61,6 +73,12 @@ namespace MapBul.Service
 
         #region webMethods
 
+        /// <summary>
+        /// Метод проверки адреса электронной почты и пароля пользователя
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [WebMethod]
         public string Authorize(string email, string password)
         {
@@ -94,7 +112,12 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-
+        /// <summary>
+        /// Метод возвращает тип пользователя в виде строки по его ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userGuid"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetUserTypeById(int id, string userGuid)
         {
@@ -116,7 +139,14 @@ namespace MapBul.Service
             }
         }
 
-
+        /// <summary>
+        /// Метод возвращает список маркеров в указанном прямоугольнике
+        /// </summary>
+        /// <param name="p1Lat"></param>
+        /// <param name="p1Lng"></param>
+        /// <param name="p2Lat"></param>
+        /// <param name="p2Lng"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng)
         {
@@ -165,7 +195,15 @@ namespace MapBul.Service
             }
         }
 
-
+        /// <summary>
+        /// Метод возвращает список непереданных в данной сессии маркеров в указанном прямоугольнике
+        /// </summary>
+        /// <param name="p1Lat"></param>
+        /// <param name="p1Lng"></param>
+        /// <param name="p2Lat"></param>
+        /// <param name="p2Lng"></param>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng,string sessionId)
         {
@@ -214,6 +252,11 @@ namespace MapBul.Service
             }
         }
 
+        /// <summary>
+        /// Метод удаляет данные сессии
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
         [WebMethod]
         public string RemoveRequestSession(string sessionId)
         {
@@ -235,7 +278,11 @@ namespace MapBul.Service
             }
         }
 
-
+        /// <summary>
+        /// Метод возвращает подробное описание маркера
+        /// </summary>
+        /// <param name="markerId"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetMarkerDescription(int markerId)
         {
@@ -276,7 +323,10 @@ namespace MapBul.Service
             }, 0);
             return JsonConvert.SerializeObject(result);
         }
-
+        /// <summary>
+        /// Метод возвращает список корневых категорий маркеров
+        /// </summary>
+        /// <returns></returns>
         [WebMethod]
         public string GetRootCategories()
         {
@@ -312,6 +362,12 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
+        /// <summary>
+        /// Метод возращает Набор статей. Если в метод не передаются параметры, то возвращаются первые 15 статей, далее, статьи подгружаются при прокрутке по 15 штук.
+        /// </summary>
+        /// <param name="refresh">Если true, то подгружаются статьи, добавленные с последнего обновления</param>
+        /// <param name="existingDateTime"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetRecentArticles(bool refresh = false, DateTime? existingDateTime = null)
         {
@@ -384,6 +440,12 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
+        /// <summary>
+        /// Метод возращает набор событий. Если в метод не передаются параметры, то возвращаются первые 15 событий, далее, события подгружаются при прокрутке по 15 штук.
+        /// </summary>
+        /// <param name="refresh">Если true, то подгружаются события, добавленные с последнего обновления</param>
+        /// <param name="existingDateTime"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetRecentEvents(bool refresh = false, DateTime? existingDateTime = null)
         {
@@ -454,7 +516,31 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
-
+        /// <summary>
+        /// Метод добавления нового маркера
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <param name="name"></param>
+        /// <param name="introduction"></param>
+        /// <param name="description"></param>
+        /// <param name="cityId"></param>
+        /// <param name="baseCategoryId"></param>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
+        /// <param name="entryTicket"></param>
+        /// <param name="discount"></param>
+        /// <param name="street"></param>
+        /// <param name="house"></param>
+        /// <param name="building"></param>
+        /// <param name="floor"></param>
+        /// <param name="site"></param>
+        /// <param name="email"></param>
+        /// <param name="photoBase64"></param>
+        /// <param name="subCategoryIds"></param>
+        /// <param name="phones"></param>
+        /// <param name="openTimes"></param>
+        /// <param name="closeTimes"></param>
+        /// <returns></returns>
         [WebMethod]
         public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
@@ -536,6 +622,11 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
         }
 
+        /// <summary>
+        /// Метод возвращает список городов, на которые у указанного пользователя есть права
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <returns></returns>
         [WebMethod]
         public string GetPermittedCities(string userGuid)
         {
@@ -567,6 +658,18 @@ namespace MapBul.Service
 
         }
 
+        /// <summary>
+        /// Метод регистрации нового жителя
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="firstName"></param>
+        /// <param name="middleName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="birthDate"></param>
+        /// <param name="gender"></param>
+        /// <param name="phone"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
         [WebMethod]
         public string RegisterTenant(string email, string firstName, string middleName, string lastName,
             DateTime birthDate, string gender, string phone, string address)
@@ -587,6 +690,11 @@ namespace MapBul.Service
             }
         }
 
+        /// <summary>
+        /// Метод восстановления пароля. Новый пароль высылается на почту.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [WebMethod]
         public string RecoverPassword(string email)
         {

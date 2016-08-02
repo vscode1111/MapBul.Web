@@ -325,6 +325,36 @@ namespace MapBul.Web.Repository
             return _db.category.Where(c=>c.ForArticle).ToList();
         }
 
+        public void DeleteCategory(int categoryId)
+        {
+            _db.category.Remove(_db.category.First(c => c.Id == categoryId));
+            _db.SaveChanges();
+        }
+
+        public void DeleteCountry(int countryId)
+        {
+            _db.country.Remove(_db.country.First(c => c.Id == countryId));
+            _db.SaveChanges();
+        }
+
+        public void DeleteCity(int cityId)
+        {
+            _db.city.Remove(_db.city.First(c => c.Id == cityId));
+            _db.SaveChanges();
+        }
+
+        public void DeleteMarker(int markerId)
+        {
+            _db.marker.Remove(_db.marker.First(m => m.Id == markerId));
+            _db.SaveChanges();
+        }
+
+        public void DeleteArticle(int articleId)
+        {
+            _db.article.Remove(_db.article.First(a => a.Id == articleId));
+            _db.SaveChanges();
+        }
+
         private void UpdateCategoryParent(NestableElement structure, int? parrentId)
         {
             _db.category.First(c => c.Id == structure.id).ParentId = parrentId;
@@ -428,7 +458,8 @@ namespace MapBul.Web.Repository
             return _db.weekday.ToList();
         }
 
-        public void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid)
+        public void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes,
+            string userGuid)
         {
             var trans = _db.Database.BeginTransaction();
             try
@@ -456,19 +487,38 @@ namespace MapBul.Web.Repository
                 _db.marker.Add(newMarker);
                 _db.SaveChanges();
 
-                var subCategories = model.SubCategories!=null?
-                    model.SubCategories.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id}).ToList():new List<subcategory>();
+                var subCategories = model.SubCategories != null
+                    ? model.SubCategories.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id})
+                        .ToList()
+                    : new List<subcategory>();
 
-                var phones = model.Phones.Select(p => new phone {Number = p, MarkerId = newMarker.Id, Primary = false}).ToList();
-                phones.First().Primary = true;
+                var phones =
+                    model.Phones.Where(p=>p.Length!=0).Select(p => new phone {Number = p, MarkerId = newMarker.Id, Primary = false}).ToList();
+
+                var firstOrDefault = phones.FirstOrDefault();
+                if (firstOrDefault != null)
+                    firstOrDefault.Primary = true;
+
 
                 var workTimes =
                     openTimes.Join(closeTimes.Select(ct => new {ct.WeekDayId, CloseTime = ct.Time}),
-                        ot => ot.WeekDayId,ct=>ct.WeekDayId,(ot,ct)=>new {ot.WeekDayId,OpenTime=ot.Time,ct.CloseTime}).Where(t=>t.CloseTime!=null&&t.OpenTime!=null).ToList();  //собираем из двух частей полное время работы
+                        ot => ot.WeekDayId, ct => ct.WeekDayId,
+                        (ot, ct) => new {ot.WeekDayId, OpenTime = ot.Time, ct.CloseTime})
+                        .Where(t => t.CloseTime != null && t.OpenTime != null)
+                        .ToList(); //собираем из двух частей полное время работы
 
                 _db.subcategory.AddRange(subCategories);
                 _db.phone.AddRange(phones);
-                _db.worktime.AddRange(workTimes.Select(t=>new worktime{CloseTime = t.CloseTime.Value, OpenTime = t.OpenTime.Value, MarkerId = newMarker.Id, WeekDayId = t.WeekDayId}));
+                _db.worktime.AddRange(
+                    workTimes.Select(
+                        t =>
+                            new worktime
+                            {
+                                CloseTime = t.CloseTime.Value,
+                                OpenTime = t.OpenTime.Value,
+                                MarkerId = newMarker.Id,
+                                WeekDayId = t.WeekDayId
+                            }));
                 _db.SaveChanges();
                 trans.Commit();
             }
@@ -539,8 +589,12 @@ namespace MapBul.Web.Repository
                 var subCategories = model.SubCategories != null ?
                     model.SubCategories.Select(sc => new subcategory { CategoryId = sc, MarkerId = newMarker.Id }).ToList() : new List<subcategory>();
 
-                var phones = model.Phones.Select(p => new phone { Number = p, MarkerId = newMarker.Id, Primary = false }).ToList();
-                phones.First().Primary = true;
+                var phones =
+                    model.Phones.Where(p => p.Length != 0).Select(p => new phone { Number = p, MarkerId = newMarker.Id, Primary = false }).ToList();
+
+                var firstOrDefault = phones.FirstOrDefault();
+                if (firstOrDefault != null)
+                    firstOrDefault.Primary = true;
 
                 var workTimes =
                     openTimes.Join(closeTimes.Select(ct => new { ct.WeekDayId, CloseTime = ct.Time }),
