@@ -64,6 +64,8 @@ namespace MapBul.Service
                     return user.tenant.First();
                 case UserTypes.Guide:
                     return user.guide.First();
+                case UserTypes.Admin:
+                    return new { FirstName = "Администратор", MiddleName = "Администратор", LastName = "Администратор" };
                 default:
                     throw new MyException(Errors.NotFound);
             }
