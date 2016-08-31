@@ -1,6 +1,7 @@
 ﻿
 @using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
+@using MapBul.Web.Helpers
 @model MapBul.Web.Models.NewJournalistModel
 <div class="ibox">
     <div class="ibox-title">
@@ -21,7 +22,7 @@
                         @Html.TextBoxFor(m => m.MiddleName, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Отчество"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.DropDownListFor(m => m.Sex, UserParameters.Sex.Select(s => new SelectListItem {Text = s, Value = s}), new Dictionary<string, object> {{"class", "form-control"}, {"required", "Пол"}})
+                        @Html.DropDownListFor(m => m.Gender, UserParameters.Sex.Select(s => new SelectListItem {Text = s, Value = s}), new Dictionary<string, object> {{"class", "form-control"}, {"required", "Пол"}})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Телефон"}, {"required", ""}})
@@ -40,15 +41,22 @@
                     <div class="form-group">
                         @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>) ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите страны"}, {"multiple", ""}})
                     </div>
-                    <div class="form-group">
-                        @Html.ListBox("PermittedRegions", new MultiSelectList((List<region>) ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите регионы"}, {"multiple", ""}})
-                    </div>
+                    <!--<div class="form-group">
+                        Html.ListBox("PermittedRegions", new MultiSelectList((List<region>) ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите регионы"}, {"multiple", ""}})
+                    </div>-->
                     <div class="form-group">
                         @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.ListBoxFor(m => m.EditorId, ((List<editor>) ViewBag.Editors).Select(e => new SelectListItem {Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите редактора"}})
-                    </div>
+                        @if (Html.IsUserInRoles(UserTypes.Admin))
+                        {
+                            @Html.ListBoxFor(m => m.EditorId, ((List<editor>) ViewBag.Editors).Select(e => new SelectListItem {Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите редактора"}})
+                        }
+                        else
+                        {
+                            @Html.Hidden("EditorId",((user)ViewBag.User).editor.First().Id)
+                        }
+                            </div>
                     <div class="form-group">
                         <label class="control-label">Заблокирован</label>
                         @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})

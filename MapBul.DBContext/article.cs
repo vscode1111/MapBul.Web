@@ -28,6 +28,13 @@ namespace MapBul.DBContext
         public string Photo { get; set; }
 
         [Required]
+        [StringLength(200)]
+        public string SourceUrl { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string SourcePhoto { get; set; }
+        
+        [Required]
         [StringLength(150)]
         public string Description { get; set; }
 
@@ -47,6 +54,8 @@ namespace MapBul.DBContext
         public int? MarkerId { get; set; }
 
         public DateTime? StartDate { get; set; }
+
+        public TimeSpan? StartTime { get; set; }
 
         public int StatusId { get; set; }
 

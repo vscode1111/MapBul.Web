@@ -1,29 +1,51 @@
 ﻿@using System.Web.Optimization
 
-<div class="row" id="CitiesContainer">
-    @Html.Action("_CitiesPartial", "Dictionaries")
-</div>
-<div class="row" id="CategoriesContainer">
-    @Html.Action("_CategoriesPartial", "Dictionaries")
-</div>
 
+<div class="tabs-container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab-1">Категории маркеров</a></li>
+        <li class=""><a data-toggle="tab" href="#tab-2">Регионы и города</a></li>
+        <li class=""><a data-toggle="tab" href="#tab-3">Категории статей</a></li>
 
+    </ul>
+    <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+            <div class="panel-body" id="MarkerCategoriesContainer">
+                @Html.Action("_MarkerCategoriesPartial", "Dictionaries")
+            </div>
+        </div>
+        <div id="tab-2" class="tab-pane">
+            <div class="panel-body" id="CitiesContainer">
+                @Html.Action("_CitiesPartial", "Dictionaries")
+            </div>
+        </div>
+        <div id="tab-3" class="tab-pane">
+            <div class="panel-body" id="ArticleCategoriesContainer">
+                @Html.Action("_ArticleCategoriesPartial", "Dictionaries")
+            </div>
+        </div>
+    </div>
+
+</div>
 
 @section Styles{
     @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
     @Styles.Render("~/plugins/dataPickerStyles")
     @Styles.Render("~/Content/plugins/chosen/chosenStyles")
     @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/Content/plugins/colorpicker/colorpickerStyles")
 }
 
 @section Scripts{
+    @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/dataTables")
     @Scripts.Render("~/plugins/dataPicker")
     @Scripts.Render("~/plugins/chosen")
     @Scripts.Render("~/plugins/switchery")
-    @Scripts.Render("~/plugins/nestable")
+    @Scripts.Render("~/plugins/nestable") 
+    @Scripts.Render("~/plugins/colorpicker")
     @Scripts.Render("~/CustomScripts/Cities")
     @Scripts.Render("~/CustomScripts/Categories")
-
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
 }

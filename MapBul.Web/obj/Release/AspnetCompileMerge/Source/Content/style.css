@@ -8090,3 +8090,14 @@ body.md-skin {
     display: none;
   }
 }
+
+.clockpicker-popover {
+    z-index: 2060;
+}
+
+.EditMarkerLink {
+    cursor: pointer;
+}
+.EditArticleLink {
+    cursor: pointer;
+}

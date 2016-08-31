@@ -1,0 +1,27 @@
+﻿@using System.Web.Optimization
+
+
+<div class="row" id="ArticlesContainer">
+    @Html.Action("_ArticlesTablePartial")
+</div>
+
+@section Styles{
+    @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
+    @Styles.Render("~/plugins/dataPickerStyles")
+    @Styles.Render("~/Content/plugins/chosen/chosenStyles")
+    @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/plugins/clockpickerStyles")
+    @Styles.Render("~/plugins/jasnyBootstrapStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/plugins/jasnyBootstrap")
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/dataPicker")
+    @Scripts.Render("~/plugins/chosen")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/nestable")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/CustomScripts/Articles")
+}

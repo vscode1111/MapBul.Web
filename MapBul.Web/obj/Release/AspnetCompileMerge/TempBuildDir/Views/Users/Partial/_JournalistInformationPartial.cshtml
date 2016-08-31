@@ -1,6 +1,14 @@
 ﻿@using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
+@using MapBul.Web.Helpers
+@using Ninject.Infrastructure.Language
 @model MapBul.Web.Models.NewJournalistModel
+
+@{
+    bool isAdmin = Html.IsUserInRoles(UserTypes.Admin);
+    var isReadonly = isAdmin ? "notreadonly" : "readonly";
+    var isDisabled = isAdmin ? "notdisabled" : "disabled";
+}
 
 <div class="panel">
     <div class="panel-heading">
@@ -22,7 +30,7 @@
                         @Html.TextBoxFor(m => m.MiddleName, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Отчество" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.DropDownListFor(m => m.Sex, UserParameters.Sex.Select(s => new SelectListItem { Text = s, Value = s }), new Dictionary<string, object> { { "class", "form-control" }, { "required", "Пол" } })
+                        @Html.DropDownListFor(m => m.Gender, UserParameters.Sex.Select(s => new SelectListItem { Text = s, Value = s }), new Dictionary<string, object> { { "class", "form-control" }, { "required", "Пол" } })
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Телефон" }, { "required", "" } })
@@ -31,7 +39,7 @@
                         @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Адрес" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextBox("BirthDate", Model.BirthDate.ToString("dd.MM.yyyy"), new Dictionary<string, object> { { "class", "form-control datepicker" }, { "placeholder", "Дата рождения" }, { "required", "" } })
+                        @Html.TextBox("BirthDate", Model.BirthDate.ToString("dd.MM.yyyy"), new Dictionary<string, object> { { "class", "form-control datepicker" }, { "required", "" } })
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Email, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Email" }, { "required", "" } })
@@ -41,23 +49,34 @@
                     <div class="form-group">
                         @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>)ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите страны" }, { "multiple", "" } })
                     </div>
+                    <!--<div class="form-group">
+                        Html.ListBox("PermittedRegions", new MultiSelectList((List<region>)ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите регионы" }, { "multiple", "" }, { isDisabled, "" } })
+                    </div>-->
                     <div class="form-group">
-                        @Html.ListBox("PermittedRegions", new MultiSelectList((List<region>)ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите регионы" }, { "multiple", "" } })
+                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>)ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите города" }, { "multiple", "" }})
                     </div>
                     <div class="form-group">
-                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
-                    </div>
-                    <div class="form-group">
-                        @Html.DropDownList("EditorId", ((List<editor>)ViewBag.Editors).Select(e => new SelectListItem { Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString(), Selected = Model.EditorId == e.Id }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите редактора" } })
+                        @if (isAdmin)
+                        {
+                            @Html.DropDownListFor(m => m.EditorId, ((List<editor>) ViewBag.Editors).Select(e => new SelectListItem {Text = e.LastName + " " + e.FirstName + " " + e.MiddleName, Value = e.Id.ToString(), Selected = Model.EditorId == e.Id}).Union(new List<SelectListItem> {new SelectListItem {Selected = Model.EditorId == null, Value = "null", Text = "Нет"}}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите редактора"}})
+
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(m=>m.EditorId)
+                        }
                     </div>
                     <div class="form-group">
                         <label class="control-label">Заблокирован</label>
-                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> { { "class", "checkbox" } })
+                        @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})
+                    </div>
+                    <div class="form-group">
+                        @Ajax.ActionLink("Удалить", "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshJournalistsTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Сохранить" />
+                    <input type="submit" class="btn btn-primary" value="Сохранить"/>
             </div>
         }
     </div>

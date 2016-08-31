@@ -17,9 +17,9 @@
 
     toastr.options.hideDuration = 1000;
 
-    toastr.options.timeOut = 2000;
+    toastr.options.timeOut = 8000;
 
-    toastr.options.extendedTimeOut = 2000;
+    toastr.options.extendedTimeOut = 8000;
 
     toastr.options.showEasing = 'swing';
 
