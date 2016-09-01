@@ -27,11 +27,14 @@ namespace MapBul.DBContext
         [StringLength(200)]
         public string Photo { get; set; }
 
+        [Column(TypeName = "text")]
         [Required]
-        [StringLength(200)]
+        [StringLength(65535)]
         public string SourceUrl { get; set; }
+
+        [Column(TypeName = "text")]
         [Required]
-        [StringLength(200)]
+        [StringLength(65535)]
         public string SourcePhoto { get; set; }
         
         [Required]
