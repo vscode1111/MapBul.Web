@@ -430,11 +430,15 @@ namespace MapBul.Service
 
                 result.AddObjectToResult(article, i);
                 string markerAddress=null;
+                string markerAddressName = null;
                 if (article.marker != null)
+                {
                     markerAddress = article.marker.city.country.Name + ", " + article.marker.city.Name + ", " +
                                     article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
+                    markerAddressName = article.marker.Name;
+                }
 
-                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress}, i);
+                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
                 result.AddObjectToResult(new{Subcategories = article.articlesubcategory.Select(a=>a.category.Name).ToList()},i);
 
                 i++;
@@ -505,12 +509,17 @@ namespace MapBul.Service
                         break;
                 }
 
-                result.AddObjectToResult(article, i); string markerAddress = null;
+                result.AddObjectToResult(article, i);
+                string markerAddress = null;
+                string markerAddressName = null;
                 if (article.marker != null)
+                {
                     markerAddress = article.marker.city.country.Name + ", " + article.marker.city.Name + ", " +
                                     article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
+                    markerAddressName = article.marker.Name;
+                }
 
-                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress }, i);
+                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
                 result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList(), StopDate=article.EndDate }, i);
 
                 i++;
