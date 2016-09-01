@@ -11,40 +11,40 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>03/28/2016 10:37:13</publishTime>
+      <publishTime>09/01/2016 13:05:30</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>03/28/2016 10:37:13</publishTime>
+      <publishTime>09/01/2016 13:05:30</publishTime>
     </File>
     <File Include="bin/MapBul.DBContext.dll">
-      <publishTime>08/31/2016 15:49:12</publishTime>
+      <publishTime>09/01/2016 13:40:52</publishTime>
     </File>
     <File Include="bin/MapBul.Service.dll">
-      <publishTime>08/31/2016 15:49:13</publishTime>
+      <publishTime>09/01/2016 13:40:53</publishTime>
     </File>
     <File Include="bin/MapBul.SharedClasses.dll">
-      <publishTime>08/31/2016 15:49:13</publishTime>
+      <publishTime>09/01/2016 13:04:59</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
-      <publishTime>03/28/2016 10:37:31</publishTime>
+      <publishTime>09/01/2016 13:05:33</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF6.dll">
-      <publishTime>03/28/2016 10:37:39</publishTime>
+      <publishTime>09/01/2016 13:05:34</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>03/28/2016 10:36:29</publishTime>
+      <publishTime>09/01/2016 13:05:34</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>03/28/2016 11:25:45</publishTime>
+      <publishTime>09/01/2016 13:04:58</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>08/31/2016 15:49:20</publishTime>
+      <publishTime>09/01/2016 13:41:09</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/31/2016 15:49:20</publishTime>
+      <publishTime>09/01/2016 13:41:08</publishTime>
     </File>
     <File Include="WebService.asmx">
-      <publishTime>03/30/2016 11:56:07</publishTime>
+      <publishTime>09/01/2016 13:04:57</publishTime>
     </File>
   </ItemGroup>
 </Project>

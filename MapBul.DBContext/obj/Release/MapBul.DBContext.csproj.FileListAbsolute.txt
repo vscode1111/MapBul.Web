@@ -9,3 +9,14 @@ C:\AKryuchkov\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.xml
 C:\AKryuchkov\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.SqlServer.xml
 C:\AKryuchkov\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.dll
 C:\AKryuchkov\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.pdb
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\MapBul.DBContext.dll.config
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\MapBul.DBContext.dll
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\MapBul.DBContext.pdb
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.dll
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.SqlServer.dll
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\MySql.Data.dll
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\MySql.Data.Entity.EF6.dll
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.xml
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.SqlServer.xml
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.dll
+C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.pdb
