@@ -695,7 +695,7 @@ namespace MapBul.Web.Repository
                 article.MarkerId = model.MarkerId;
                 article.CityId = model.CityId;
 
-                if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
+                if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id&&article.status!=GetStatusByTag(MarkerStatuses.Published))
                 {
                     article.EditorId = adder.Id;
                     article.PublishedDate = DateTime.Now;
