@@ -22,6 +22,8 @@ namespace MapBul.DBContext
         public virtual DbSet<country_permission> country_permission { get; set; }
         public virtual DbSet<discount> discount { get; set; }
         public virtual DbSet<editor> editor { get; set; }
+        public virtual DbSet<favorites_article> favorites_article { get; set; }
+        public virtual DbSet<favorites_marker> favorites_marker { get; set; }
         public virtual DbSet<guide> guide { get; set; }
         public virtual DbSet<journalist> journalist { get; set; }
         public virtual DbSet<marker> marker { get; set; }

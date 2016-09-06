@@ -11,57 +11,51 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>09/01/2016 13:05:30</publishTime>
+      <publishTime>09/02/2016 10:17:27</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>09/01/2016 13:05:30</publishTime>
+      <publishTime>09/02/2016 10:17:27</publishTime>
     </File>
     <File Include="bin/MapBul.DBContext.dll">
-<<<<<<< HEAD
-      <publishTime>08/31/2016 16:16:32</publishTime>
+      <publishTime>09/06/2016 16:44:30</publishTime>
     </File>
     <File Include="bin/MapBul.Service.dll">
-      <publishTime>08/31/2016 16:16:34</publishTime>
+      <publishTime>09/06/2016 16:44:36</publishTime>
     </File>
     <File Include="bin/MapBul.SharedClasses.dll">
       <publishTime>08/31/2016 16:16:32</publishTime>
-=======
-      <publishTime>09/01/2016 13:40:52</publishTime>
+      <publishTime>09/06/2016 16:44:36</publishTime>
     </File>
     <File Include="bin/MapBul.Service.dll">
-      <publishTime>09/01/2016 13:40:53</publishTime>
+      <publishTime>09/06/2016 16:44:36</publishTime>
     </File>
     <File Include="bin/MapBul.SharedClasses.dll">
-      <publishTime>09/01/2016 13:04:59</publishTime>
->>>>>>> e603db2c87b4a9361a879426f561981295358a43
+      <publishTime>09/06/2016 16:44:36</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
-      <publishTime>09/01/2016 13:05:33</publishTime>
+      <publishTime>09/02/2016 10:17:30</publishTime>
     </File>
     <File Include="bin/MySql.Data.Entity.EF6.dll">
-      <publishTime>09/01/2016 13:05:34</publishTime>
+      <publishTime>09/02/2016 10:17:30</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>09/01/2016 13:05:34</publishTime>
+      <publishTime>09/02/2016 10:17:31</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>09/01/2016 13:04:58</publishTime>
+      <publishTime>09/02/2016 10:15:56</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-<<<<<<< HEAD
-      <publishTime>08/31/2016 16:16:51</publishTime>
+      <publishTime>09/06/2016 16:44:44</publishTime>
     </File>
     <File Include="Web.config">
       <publishTime>08/31/2016 16:16:51</publishTime>
-=======
-      <publishTime>09/01/2016 13:41:09</publishTime>
+      <publishTime>09/06/2016 16:44:42</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/01/2016 13:41:08</publishTime>
->>>>>>> e603db2c87b4a9361a879426f561981295358a43
+      <publishTime>09/06/2016 16:44:42</publishTime>
     </File>
     <File Include="WebService.asmx">
-      <publishTime>09/01/2016 13:04:57</publishTime>
+      <publishTime>09/02/2016 10:15:53</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -725,8 +725,127 @@ namespace MapBul.Service
             }
         }
 
-    #endregion
+        /// <summary>
+        /// Метод сохранения избранных статей и событий на сервере.
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <param name="articleEventId"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string SaveFavoriteArticleAndEvent(string userGuid, int articleEventId)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                repo.SaveFavoriteArticleEvent(userGuid,articleEventId);
+                return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
 
-        
+        /// <summary>
+        /// Метод удаления избранных статей и событий на сервере.
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <param name="articleEventId"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string RemoveFavoriteArticleAndEvent(string userGuid, int articleEventId)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                repo.RemoveFavoriteArticleEvent(userGuid, articleEventId);
+                return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Метод получения избранных статей и событий
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string GetFavoritsArticlAndEvent(string userGuid)
+        {
+            MySqlRepository repo = new MySqlRepository();
+            List<article> articles = repo.GetArticles();
+            var result = new JsonResult(new List<Dictionary<string, object>>());
+            var favoritsIdArticleAndEvent = repo.GetIdFavoritsArticleAndEvent(userGuid);
+            int i = 0;
+
+            var filteredArticles = articles.Where(a => favoritsIdArticleAndEvent.Any(fa => fa == a.Id)).ToList();
+
+            foreach (var article in filteredArticles)
+            {
+                article.Photo = MapUrl(article.Photo);
+                article.TitlePhoto = MapUrl(article.TitlePhoto);
+
+                object authorName;
+
+                switch (article.user.usertype.Tag)
+                {
+                    case UserTypes.Editor:
+                        authorName = new
+                        {
+                            article.user.editor.First().FirstName,
+                            article.user.editor.First().MiddleName,
+                            article.user.editor.First().LastName
+                        };
+                        break;
+                    case UserTypes.Journalist:
+                        authorName = new
+                        {
+                            article.user.journalist.First().FirstName,
+                            article.user.journalist.First().MiddleName,
+                            article.user.journalist.First().LastName
+                        };
+                        break;
+                    default:
+                        authorName = new
+                        {
+                            FirstName = "Администратор",
+                            MiddleName = "Администратор",
+                            LastName = "Администратор"
+                        };
+                        break;
+                }
+
+                result.AddObjectToResult(article, i);
+                string markerAddress = null;
+                string markerAddressName = null;
+                if (article.marker != null)
+                {
+                    markerAddress = article.marker.city.country.Name + ", " + article.marker.city.Name + ", " +
+                                    article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
+                    markerAddressName = article.marker.Name;
+                }
+
+                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
+                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList() }, i);
+
+                i++;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        #endregion
+
+
     }
 }

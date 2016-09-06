@@ -90,6 +90,14 @@ namespace MapBul.Service
             return _db.article.Where(a=>a.status.Tag==MarkerStatuses.Published).ToList();
         }
 
+        public List<int> GetIdFavoritsArticleAndEvent(string userGuid)
+        {
+            var tempUser = GetUser(userGuid);
+            if (tempUser == null)
+                return null;
+            return _db.favorites_article.Where(i => i.userId == tempUser.Id).Select(i=>i.articleId).ToList();
+        } 
+
         public List<article> GetEvents()
         {
             return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published).Where(a => a.StartDate != null).ToList();
@@ -236,5 +244,57 @@ namespace MapBul.Service
             _db.marker_request_session.RemoveRange(_db.marker_request_session.Where(s => s.SessionId == sessionId));
             _db.SaveChanges();
         }
+
+        public void SaveFavoriteArticleEvent(string userGuid, int articleEventId)
+        {
+            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            if (user == null)
+                throw new MyException(Errors.UserNotFound);
+            if (_db.favorites_article.Any(i => i.userId == user.Id && i.articleId == articleEventId))
+                return;
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                var newFavoriteArticleEvent = new favorites_article
+                {
+                    userId = user.Id,
+                    articleId = articleEventId
+                };
+                _db.favorites_article.Add(newFavoriteArticleEvent);
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
+        public void RemoveFavoriteArticleEvent(string userGuid, int articleEventId)
+        {
+            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            if (user == null)
+                throw new MyException(Errors.UserNotFound);
+            if (_db.favorites_article.All(i => i.userId != user.Id && i.articleId != articleEventId))
+                return;
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                var tempNote =
+                    _db.favorites_article.FirstOrDefault(i => i.userId == user.Id && i.articleId == articleEventId);
+                if (tempNote == null)
+                    return;
+                _db.favorites_article.Remove(tempNote);
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+        
     }
 }
