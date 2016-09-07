@@ -751,6 +751,31 @@ namespace MapBul.Service
         }
 
         /// <summary>
+        /// Метод сохранения избранной метки на сервере.
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <param name="markerId"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string SaveFavoriteMarker(string userGuid, int markerId)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                repo.SaveFavoriteMarker(userGuid, markerId);
+                return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
+
+        /// <summary>
         /// Метод удаления избранных статей и событий на сервере.
         /// </summary>
         /// <param name="userGuid"></param>
@@ -763,6 +788,31 @@ namespace MapBul.Service
             {
                 var repo = new MySqlRepository();
                 repo.RemoveFavoriteArticleEvent(userGuid, articleEventId);
+                return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Метод удаления избранной метки на сервере.
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <param name="markerId"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string RemoveFavoriteMarker(string userGuid, int markerId)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                repo.RemoveFavoriteMarker(userGuid, markerId);
                 return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
             }
             catch (MyException e)
@@ -844,6 +894,56 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
+        /// <summary>
+        /// Метод получения избранных меток
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string GetFavoritsMarker(string userGuid)
+        {
+            var repo = new MySqlRepository();
+            var markers = repo.GetFavoriteMarkers(userGuid).ToList();
+            JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+            int i = 0;
+
+            foreach (var marker in markers)
+            {
+                var categories = repo.GetMarkerCategories();
+
+                marker.Photo = MapUrl(marker.Photo);
+                marker.Logo = MapUrl(marker.Logo);
+                result.AddObjectToResult(marker, i);
+                result.AddObjectToResult(new
+                {
+                    Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
+                    Discount = marker.discount.Value,
+                    Subcategories = marker.subcategory.Select(s => new {s.category.Id, s.category.Name}).ToList(),
+                    CityName = marker.city.Name,
+                    Pin = MapUrl(marker.category.Pin),
+                    Icon = MapUrl(marker.category.Icon),
+                    WorkTime = marker.worktime.Select(wt => new
+                    {
+                        wt.OpenTime,
+                        wt.CloseTime,
+                        wt.weekday.Id
+                    }).ToList(),
+                    repo.GetMarkerCategories().First(c => c.Id == GetCategoriesBranch(marker.category).Last()).Color,
+                    CategoriesBranch =
+                        GetCategoriesBranch(marker.category)
+                            .Select(
+                                number =>
+                                    new
+                                    {
+                                        categories.First(c => c.Id == number).Id,
+                                        categories.First(c => c.Id == number).Name
+                                    })
+                            .ToList()
+                }, i);
+                i++;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
         #endregion
 
 

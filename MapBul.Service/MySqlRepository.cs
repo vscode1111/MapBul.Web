@@ -62,6 +62,16 @@ namespace MapBul.Service
         {
             return _db.marker.First(m => m.Id == markerId);
         }
+        
+        public IEnumerable<marker> GetFavoriteMarkers(string userGuid)
+        {
+            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            if (user == null)
+                throw new MyException(Errors.UserNotFound);
+            var tempListOfFavoritsMarkerId =
+                _db.favorites_marker.Where(m => m.userId == user.Id).Select(m => m.markerId).ToList();
+            return _db.marker.Where(m => tempListOfFavoritsMarkerId.Any(tm => tm == m.Id));
+        }
 
         public List<category> GetRootMarkerCategories()
         {
@@ -271,6 +281,32 @@ namespace MapBul.Service
             }
         }
 
+        public void SaveFavoriteMarker(string userGuid, int markerId)
+        {
+            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            if (user == null)
+                throw new MyException(Errors.UserNotFound);
+            if (_db.favorites_marker.Any(i => i.userId == user.Id && i.markerId == markerId))
+                return;
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                var newFavoriteMarker = new favorites_marker
+                {
+                    userId = user.Id,
+                    markerId = markerId
+                };
+                _db.favorites_marker.Add(newFavoriteMarker);
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
         public void RemoveFavoriteArticleEvent(string userGuid, int articleEventId)
         {
             user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
@@ -295,6 +331,31 @@ namespace MapBul.Service
                 throw;
             }
         }
-        
+
+        public void RemoveFavoriteMarker(string userGuid, int markerId)
+        {
+            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            if (user == null)
+                throw new MyException(Errors.UserNotFound);
+            if (_db.favorites_marker.All(i => i.userId != user.Id && i.markerId != markerId))
+                return;
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                var tempNote =
+                    _db.favorites_marker.FirstOrDefault(i => i.userId == user.Id && i.markerId == markerId);
+                if (tempNote == null)
+                    return;
+                _db.favorites_marker.Remove(tempNote);
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
     }
 }
