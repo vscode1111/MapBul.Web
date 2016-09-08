@@ -944,6 +944,75 @@ namespace MapBul.Service
             }
             return JsonConvert.SerializeObject(result);
         }
+
+        [WebMethod]
+        public string GetRelatedEventsFromMarker(int markerId)
+        {
+            MySqlRepository repo = new MySqlRepository();
+            List<article> articles = repo.GetEvents();
+            var selectedMarker = repo.GetMarker(markerId);
+            if (selectedMarker == null)
+            {
+                throw new MyException(Errors.NotFound);
+            }
+            var result = new JsonResult(new List<Dictionary<string, object>>());
+            int i = 0;
+
+            var filteredArticles = articles.Where(a => a.MarkerId == selectedMarker.Id).Where(a=>a.StartDate>=DateTime.Now).OrderBy(a=>a.StartDate).Take(3).ToList();
+
+            foreach (var article in filteredArticles)
+            {
+                article.Photo = MapUrl(article.Photo);
+                article.TitlePhoto = MapUrl(article.TitlePhoto);
+
+                object authorName;
+
+                switch (article.user.usertype.Tag)
+                {
+                    case UserTypes.Editor:
+                        authorName = new
+                        {
+                            article.user.editor.First().FirstName,
+                            article.user.editor.First().MiddleName,
+                            article.user.editor.First().LastName
+                        };
+                        break;
+                    case UserTypes.Journalist:
+                        authorName = new
+                        {
+                            article.user.journalist.First().FirstName,
+                            article.user.journalist.First().MiddleName,
+                            article.user.journalist.First().LastName
+                        };
+                        break;
+                    default:
+                        authorName = new
+                        {
+                            FirstName = "Администратор",
+                            MiddleName = "Администратор",
+                            LastName = "Администратор"
+                        };
+                        break;
+                }
+
+                result.AddObjectToResult(article, i);
+                string markerAddress = null;
+                string markerAddressName = null;
+                if (article.marker != null)
+                {
+                    markerAddress = article.marker.city.country.Name + ", " + article.marker.city.Name + ", " +
+                                    article.marker.Street + " " + article.marker.House + " " + article.marker.Buliding;
+                    markerAddressName = article.marker.Name;
+                }
+
+                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
+                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList() }, i);
+
+                i++;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
         #endregion
 
 
