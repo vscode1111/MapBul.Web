@@ -292,11 +292,14 @@ namespace MapBul.Service
             marker marker = repo.GetMarker(markerId);
             JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
 
+            bool haveRelatedEvents = repo.GetEvents().Any(e => e.MarkerId == markerId);
+
             var categories = repo.GetMarkerCategories();
 
             marker.Photo = MapUrl(marker.Photo);
             marker.Logo = MapUrl(marker.Logo);
             result.AddObjectToResult(marker, 0);
+            result.AddObjectToResult(new {HaveRelatedEvents = haveRelatedEvents}, 0);
             result.AddObjectToResult(new
             {
                 Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
@@ -945,8 +948,14 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
+        /// <summary>
+        /// Метод получения событий по маркеру
+        /// </summary>
+        /// <param name="markerId">id маркера</param>
+        /// <param name="nearest">ближайшие</param>
+        /// <returns></returns>
         [WebMethod]
-        public string GetRelatedEventsFromMarker(int markerId)
+        public string GetRelatedEventsFromMarker(int markerId, bool nearest)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetEvents();
@@ -958,8 +967,11 @@ namespace MapBul.Service
             var result = new JsonResult(new List<Dictionary<string, object>>());
             int i = 0;
 
-            var filteredArticles = articles.Where(a => a.MarkerId == selectedMarker.Id).Where(a=>a.StartDate>=DateTime.Now).OrderBy(a=>a.StartDate).Take(3).ToList();
-
+            var filteredArticles = articles.Where(a => a.MarkerId == selectedMarker.Id).OrderBy(a=>a.StartDate).ToList();
+            if (nearest)
+            {
+                filteredArticles = filteredArticles.Where(a => a.StartDate >= DateTime.Now).OrderBy(a => a.StartDate).Take(3).ToList();
+            }
             foreach (var article in filteredArticles)
             {
                 article.Photo = MapUrl(article.Photo);
@@ -1012,7 +1024,6 @@ namespace MapBul.Service
             }
             return JsonConvert.SerializeObject(result);
         }
-
         #endregion
 
 
