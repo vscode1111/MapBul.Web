@@ -163,20 +163,32 @@ namespace MapBul.Service
             }
         }
 
-        public List<city> GetPermittedCities(string userGuid)
+        public List<city> GetPermittedCities(string userGuid, bool isPersonalMarker)
         {
-            var user = _db.user.First(u => u.Guid == userGuid);
-            var permittedCities = user.city_permission.Select(cp => cp).Select(city => city.city).ToList();
-            foreach (var city in from country in user.country_permission.Select(countryPermission => countryPermission.country) from city in country.city where !permittedCities.Contains(city) select city)
+            if (!isPersonalMarker)
             {
-                permittedCities.Add(city);
+                var user = _db.user.First(u => u.Guid == userGuid);
+                var permittedCities = user.city_permission.Select(cp => cp).Select(city => city.city).ToList();
+                foreach (
+                    var city in
+                        from country in user.country_permission.Select(countryPermission => countryPermission.country)
+                        from city in country.city
+                        where !permittedCities.Contains(city)
+                        select city)
+                {
+                    permittedCities.Add(city);
+                }
+                return permittedCities;
             }
-            return permittedCities;
+            else
+            {
+                return _db.city.ToList();
+            }
         }
 
         public bool HavePermissions(string guid, int cityId)
         {
-            var permittedCities = GetPermittedCities(guid);
+            var permittedCities = GetPermittedCities(guid, false);
             return permittedCities.Any(p => p.Id == cityId);
         }
 

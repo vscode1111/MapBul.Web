@@ -148,9 +148,10 @@ namespace MapBul.Service
         /// <param name="p1Lng"></param>
         /// <param name="p2Lat"></param>
         /// <param name="p2Lng"></param>
+        /// <param name="userGuid"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng)
+        public string GetMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string userGuid)
         {
             try
             {
@@ -160,29 +161,36 @@ namespace MapBul.Service
                 JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
 
                 int i = 0;
+                int userId = 0;
+                if (userGuid != "")
+                    userId = repo.GetUser(userGuid).Id;
 
                 foreach (var marker in markers)
                 {
-                    result.AddObjectToResult(
-                        new
-                        {
-                            marker.Id,
-                            marker.Name,
-                            marker.Lat,
-                            marker.Lng,
-                            Icon = MapUrl(marker.category.Pin),
-                            Logo = MapUrl(marker.Logo),
-                            WorkTime = marker.worktime.Select(wt => new
+                    if (!marker.Personal || marker.UserId == userId)
+                    {
+                        result.AddObjectToResult(
+                            new
                             {
-                                wt.OpenTime,
-                                wt.CloseTime,
-                                wt.weekday.Id
-                            }).ToList(),
-                            CategoriesBranch = GetCategoriesBranch(marker.category),
-                            SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
-                            marker.Wifi
-                        }, i);
-                    i++;
+                                marker.Id,
+                                marker.Name,
+                                marker.Lat,
+                                marker.Lng,
+                                Icon = MapUrl(marker.category.Pin),
+                                Logo = MapUrl(marker.Logo),
+                                WorkTime = marker.worktime.Select(wt => new
+                                {
+                                    wt.OpenTime,
+                                    wt.CloseTime,
+                                    wt.weekday.Id
+                                }).ToList(),
+                                CategoriesBranch = GetCategoriesBranch(marker.category),
+                                SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
+                                marker.Wifi,
+                                marker.Personal
+                            }, i);
+                        i++;
+                    }
                 }
 
                 return JsonConvert.SerializeObject(result);
@@ -205,9 +213,10 @@ namespace MapBul.Service
         /// <param name="p2Lat"></param>
         /// <param name="p2Lng"></param>
         /// <param name="sessionId"></param>
+        /// <param name="userGuid"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng,string sessionId)
+        public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId, string userGuid)
         {
             try
             {
@@ -215,31 +224,38 @@ namespace MapBul.Service
                 var markers = repo.GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng, sessionId);
 
                 JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+                int userId = 0;
+                if (userGuid != "")
+                    userId = repo.GetUser(userGuid).Id;
 
                 int i = 0;
 
                 foreach (var marker in markers)
                 {
-                    result.AddObjectToResult(
-                        new
-                        {
-                            marker.Id,
-                            marker.Name,
-                            marker.Lat,
-                            marker.Lng,
-                            Icon = MapUrl(marker.category.Pin),
-                            Logo = MapUrl(marker.Logo),
-                            WorkTime = marker.worktime.Select(wt => new
+                    if (!marker.Personal || marker.UserId == userId)
+                    {
+                        result.AddObjectToResult(
+                            new
                             {
-                                wt.OpenTime,
-                                wt.CloseTime,
-                                wt.weekday.Id
-                            }).ToList(),
-                            CategoriesBranch = GetCategoriesBranch(marker.category),
-                            SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
-                            marker.Wifi
-                        }, i);
-                    i++;
+                                marker.Id,
+                                marker.Name,
+                                marker.Lat,
+                                marker.Lng,
+                                Icon = MapUrl(marker.category.Pin),
+                                Logo = MapUrl(marker.Logo),
+                                WorkTime = marker.worktime.Select(wt => new
+                                {
+                                    wt.OpenTime,
+                                    wt.CloseTime,
+                                    wt.weekday.Id
+                                }).ToList(),
+                                CategoriesBranch = GetCategoriesBranch(marker.category),
+                                SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
+                                marker.Wifi,
+                                marker.Personal
+                            }, i);
+                        i++;
+                    }
                 }
 
                 return JsonConvert.SerializeObject(result);
@@ -554,17 +570,16 @@ namespace MapBul.Service
         /// <param name="phones"></param>
         /// <param name="openTimes"></param>
         /// <param name="closeTimes"></param>
+        /// <param name="isPersonal">Указывает, является ли метка персональной</param>
         /// <returns></returns>
         [WebMethod]
         public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
             string building, string floor, string site, string email, string photoBase64, int[] subCategoryIds,
-            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes)
+            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal)
         {
             try
             {
-
-
                 if (string.IsNullOrEmpty(entryTicket))
                     entryTicket = "Нет";
 
@@ -574,12 +589,13 @@ namespace MapBul.Service
                 var userType = repo.GetMobileUserTypeById(user.UserTypeId);
                 var permittedUserTypes = new[] {UserTypes.Guide};
 
-
-                if (!permittedUserTypes.Contains(userType.Tag))
-                    throw new MyException(Errors.NotPermitted);
-                if (!repo.HavePermissions(user.Guid, cityId))
-                    throw new MyException(Errors.NotPermitted);
-
+                if (!isPersonal)
+                {
+                    if (!permittedUserTypes.Contains(userType.Tag))
+                        throw new MyException(Errors.NotPermitted);
+                    if (!repo.HavePermissions(user.Guid, cityId))
+                        throw new MyException(Errors.NotPermitted);
+                }
 
 
                 var bytes = Convert.FromBase64String(photoBase64);
@@ -608,7 +624,11 @@ namespace MapBul.Service
                     StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id,
                     Photo = photoPath,
                     Logo = logoPath,
+                    Personal = isPersonal
                 };
+
+                if (isPersonal)
+                    newMarker.StatusId = 1;
 
                 repo.AddMarker(newMarker,
                     openTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
@@ -640,9 +660,10 @@ namespace MapBul.Service
         /// Метод возвращает список городов, на которые у указанного пользователя есть права
         /// </summary>
         /// <param name="userGuid"></param>
+        /// <param name="isPersonal">Если пользователь собирается поставить персональную метку - ему доступны все города</param>
         /// <returns></returns>
         [WebMethod]
-        public string GetPermittedCities(string userGuid)
+        public string GetPermittedCities(string userGuid, bool isPersonal)
         {
             try
             {
@@ -650,7 +671,7 @@ namespace MapBul.Service
                 var result = new JsonResult(new List<Dictionary<string, object>>());
 
 
-                var permittedCities = repo.GetPermittedCities(userGuid);
+                var permittedCities = repo.GetPermittedCities(userGuid, isPersonal);
 
                 var i = 0;
                 foreach (var permittedCity in permittedCities)

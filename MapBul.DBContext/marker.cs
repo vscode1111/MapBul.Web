@@ -87,6 +87,9 @@ namespace MapBul.DBContext
         [Column(TypeName = "bit")]
         public bool Wifi { get; set; }
 
+        [Column(TypeName = "bit")]
+        public bool Personal { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<article> article { get; set; }
 
