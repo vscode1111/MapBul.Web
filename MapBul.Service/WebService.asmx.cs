@@ -656,6 +656,100 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
         }
 
+        [WebMethod]
+        public string EditMarker(string userGuid, string name, string introduction, string description, int cityId,
+            int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
+            string building, string floor, string site, string email, string photoPath, string photoBase64, int[] subCategoryIds,
+            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal, int markerId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(entryTicket))
+                    entryTicket = "Нет";
+
+                var repo = new MySqlRepository();
+                repo.CheckUser(userGuid);
+                var user = repo.GetUser(userGuid);
+                var userType = repo.GetMobileUserTypeById(user.UserTypeId);
+                var permittedUserTypes = new[] { UserTypes.Guide };
+
+                if (!isPersonal)
+                {
+                    if (!permittedUserTypes.Contains(userType.Tag))
+                        throw new MyException(Errors.NotPermitted);
+                    if (!repo.HavePermissions(user.Guid, cityId))
+                        throw new MyException(Errors.NotPermitted);
+                }
+
+
+                var newMarker = repo.GetMarker(markerId);
+
+                string photoPathServer = "";
+                string logoPath = "";
+                if (string.IsNullOrEmpty(photoBase64) && !string.IsNullOrEmpty(photoPath))
+                {
+                    photoPathServer = newMarker.Photo;
+                }
+                else
+                {
+                    var bytes = Convert.FromBase64String(photoBase64);
+                    photoPathServer = FileProvider.SaveMarkerPhoto(bytes);
+                    logoPath = FileProvider.SaveMarkerLogo(bytes);
+                }
+
+
+                newMarker.Name = name;
+                newMarker.Introduction = introduction;
+                newMarker.Description = description;
+                newMarker.CityId = cityId;
+                newMarker.BaseCategoryId = baseCategoryId;
+                newMarker.EntryTicket = entryTicket;
+                newMarker.Buliding = building;
+                newMarker.DiscountId = repo.GetDiscountId(discount);
+                newMarker.Email = email;
+                newMarker.Floor = floor;
+                newMarker.House = house;
+                newMarker.Lat = (float) lat;
+                newMarker.Lng = (float) lng;
+                newMarker.Site = site;
+                newMarker.Street = street;
+                newMarker.UserId = user.Id;
+                newMarker.StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id;
+                newMarker.Photo = photoPathServer;
+                newMarker.Logo = logoPath;
+                newMarker.Personal = isPersonal;
+
+                if (isPersonal)
+                    newMarker.StatusId = 1;
+
+                
+
+                repo.UpdateMarker(newMarker,
+                    openTimes.Select(o => new WorkTimeDay { WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value) })
+                        .ToList(),
+                    closeTimes.Select(o => new WorkTimeDay { WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value) })
+                        .ToList(), user.Id, subCategoryIds, phones);
+
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (DbEntityValidationException e)
+            {
+                return
+                    JsonConvert.SerializeObject(
+                        new JsonResult(e.EntityValidationErrors.First().ValidationErrors.First().PropertyName + " " +
+                                       e.EntityValidationErrors.First().ValidationErrors.First().ErrorMessage));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+
+            return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
+        }
+
         /// <summary>
         /// Метод возвращает список городов, на которые у указанного пользователя есть права
         /// </summary>
@@ -859,6 +953,7 @@ namespace MapBul.Service
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetArticles();
+            articles.AddRange(repo.GetEvents());
             var result = new JsonResult(new List<Dictionary<string, object>>());
             var favoritsIdArticleAndEvent = repo.GetIdFavoritsArticleAndEvent(userGuid);
             int i = 0;

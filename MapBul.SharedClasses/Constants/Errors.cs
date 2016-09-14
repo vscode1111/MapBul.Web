@@ -31,5 +31,7 @@
         public static Error UserNotAuthorized =new Error(6,"Пользователь не авторизован");
 
         public static Error NotPermitted = new Error(7, "Недостаточно прав");
+
+        public static Error NotPersonalMarker = new Error(8, "Маркер не является персональным");
     }
 }

@@ -2,6 +2,6 @@
 {
     public static class ServiceSettings
     {
-        public const int ArticleOrderingCount = 15;
+        public const int ArticleOrderingCount = 30;
     }
 }

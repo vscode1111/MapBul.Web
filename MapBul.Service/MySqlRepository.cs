@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
@@ -97,7 +98,12 @@ namespace MapBul.Service
 
         public List<article> GetArticles()
         {
-            return _db.article.Where(a=>a.status.Tag==MarkerStatuses.Published).ToList();
+            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published && a.StartDate == null).ToList();
+        }
+
+        public List<article> GetEvents()
+        {
+            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published && a.StartDate != null).ToList();
         }
 
         public List<int> GetIdFavoritsArticleAndEvent(string userGuid)
@@ -106,12 +112,7 @@ namespace MapBul.Service
             if (tempUser == null)
                 return null;
             return _db.favorites_article.Where(i => i.userId == tempUser.Id).Select(i=>i.articleId).ToList();
-        } 
-
-        public List<article> GetEvents()
-        {
-            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published).Where(a => a.StartDate != null).ToList();
-        }
+        }         
 
         public user GetUser(string userGuid)
         {
@@ -152,6 +153,62 @@ namespace MapBul.Service
 
                 _db.subcategory.AddRange(subCategories);
                 _db.phone.AddRange(phones);
+                _db.worktime.AddRange(workTimes.Select(t => new worktime { CloseTime = t.CloseTime.Value, OpenTime = t.OpenTime.Value, MarkerId = marker.Id, WeekDayId = t.WeekDayId }));
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
+        public void UpdateMarker(marker marker, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, int userId, int[] subCategoryIds, string[] phonesStrings)
+        {
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                _db.marker.AddOrUpdate(marker);
+                _db.SaveChanges();
+
+                var subCategories =
+                    subCategoryIds.Select(sc => new subcategory { CategoryId = sc, MarkerId = marker.Id }).ToList();
+
+                var phones = phonesStrings.Select(p => new phone { Number = p, MarkerId = marker.Id, Primary = false }).ToList();
+                if (phones.Any())
+                    phones.First().Primary = true;
+
+                var workTimes =
+                    openTimes.Join(closeTimes.Select(ct => new { ct.WeekDayId, CloseTime = ct.Time }),
+                        ot => ot.WeekDayId, ct => ct.WeekDayId, (ot, ct) => new { ot.WeekDayId, OpenTime = ot.Time, ct.CloseTime }).Where(t => t.CloseTime != null && t.OpenTime != null).ToList();
+
+                var tempLastSubCategory = _db.subcategory.Where(sc => sc.MarkerId == marker.Id).ToList();
+                if (tempLastSubCategory.Count > 0)
+                {
+                    foreach (var subCategory in tempLastSubCategory)
+                    {
+                        _db.subcategory.Remove(subCategory);
+                    }
+                }
+                _db.subcategory.AddRange(subCategories);
+                var tempLastPhone = _db.phone.Where(sc => sc.MarkerId == marker.Id).ToList();
+                if (tempLastPhone.Count > 0)
+                {
+                    foreach (var phone in tempLastPhone)
+                    {
+                        _db.phone.Remove(phone);
+                    }
+                }
+                _db.phone.AddRange(phones);
+                var tempLastWorkTime = _db.worktime.Where(sc => sc.MarkerId == marker.Id).ToList();
+                if (tempLastWorkTime.Count > 0)
+                {
+                    foreach (var workTime in tempLastWorkTime)
+                    {
+                        _db.worktime.Remove(workTime);
+                    }
+                }
                 _db.worktime.AddRange(workTimes.Select(t => new worktime { CloseTime = t.CloseTime.Value, OpenTime = t.OpenTime.Value, MarkerId = marker.Id, WeekDayId = t.WeekDayId }));
                 _db.SaveChanges();
                 trans.Commit();
@@ -251,10 +308,12 @@ namespace MapBul.Service
 
         public IEnumerable<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId)
         {
-            var allMarkers = GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng);
+            var allMarkers = GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng).ToList();
             var requestSession = _db.marker_request_session.Where(s=>s.SessionId==sessionId);
-            var filteredMarkers = allMarkers.Where(m => requestSession.All(s => m.Id != s.MarkerId)).ToList();
-            var sessionRecords=filteredMarkers.Select(f => new marker_request_session {MarkerId = f.Id, SessionId = sessionId});
+            var filteredMarkers = allMarkers.Where(m => requestSession.All(s => m.Id != s.MarkerId) && !m.Personal).ToList();
+            filteredMarkers.AddRange(allMarkers.Where(m => m.Personal).ToList());
+            var sessionRecords =
+                filteredMarkers.Select(f => new marker_request_session {MarkerId = f.Id, SessionId = sessionId});
             _db.marker_request_session.AddRange(sessionRecords);
             _db.SaveChanges();
             return filteredMarkers;
