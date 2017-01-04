@@ -633,8 +633,8 @@ namespace MapBul.Web.Repository
                 if (model.StatusId == GetStatusByTag(MarkerStatuses.Published).Id)
                 {
                     article.EditorId = adder.Id;
-                    article.PublishedDate = DateTime.Now;
                 }
+                article.PublishedDate = DateTime.Now;
                 article.StatusId = model.StatusId;
                 _db.article.Add(article);
                 _db.SaveChanges();
