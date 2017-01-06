@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
@@ -90,7 +89,6 @@ namespace MapBul.Web.Controllers
 
 #region actions
 
-
         /// <summary>
         /// метод добавления нового маркера
         /// </summary>
@@ -99,21 +97,29 @@ namespace MapBul.Web.Controllers
         /// <param name="closeTimesString"></param>
         /// <param name="markerPhoto"></param>
         /// <param name="markerLogo"></param>
+        /// <param name="markerPhotos"></param>
         /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo)
+        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, List<HttpPostedFileBase> markerPhotos)
         {
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
+
             string photoPath = markerPhoto == null ? null : FileProvider.SaveMarkerPhoto(markerPhoto);
             string logoPath = markerPhoto == null ? null : FileProvider.SaveMarkerLogo(markerLogo);
             model.Photo = photoPath;
             model.Logo = logoPath;
-            repo.AddMarker(model, openTimes, closeTimes, userGuid);
+
+            var tempNewMarkerId = repo.AddMarker(model, openTimes, closeTimes, userGuid);
+            if (markerPhotos != null && markerPhotos.Count > 0)
+            {
+                var tempPhotosPaths = FileProvider.SaveMarkerPhotos(markerPhotos);
+                repo.AddMarkerPhotos(tempNewMarkerId, tempPhotosPaths);
+            }
 
             return true;
         }

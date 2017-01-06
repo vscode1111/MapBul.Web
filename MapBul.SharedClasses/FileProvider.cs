@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -67,6 +68,27 @@ namespace MapBul.SharedClasses
             else
                 throw new MyException(Errors.UnknownError);
             return virtualPath;
+        }
+
+        public static string[] SaveMarkerPhotos(List<HttpPostedFileBase> markerPhotos)
+        {
+            var tempStrings = new List<string>();
+            foreach (var photo in markerPhotos)
+            {
+                string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal));
+                var siteRoot = HostingEnvironment.MapPath("~/");
+                if (siteRoot != null)
+                {
+                    var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                    photo.SaveAs(savePath);
+                    tempStrings.Add(savePath);
+                }
+                else
+                {
+                    throw new MyException(Errors.UnknownError);
+                }
+            }
+            return tempStrings.ToArray();
         }
 
         public static string SaveMarkerPhoto(byte[] markerPhoto)

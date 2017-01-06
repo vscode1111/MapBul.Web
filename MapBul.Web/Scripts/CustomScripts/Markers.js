@@ -135,8 +135,19 @@ function OnNewMarkerFormSubmit() {
     }
 
     var formData = new FormData(form);
-    var photo = document.getElementById("NewMarkerPhotoInput").files[0];
-    formData.append("markerPhoto", photo);
+    
+    var photos = document.getElementById("NewMarkerPhotoInput").files;
+    var x;
+    if (photos.length < 10) {
+        for (x = 0; x < photos.length; x++) {
+            formData.append("markerPhotos", photos[x]);
+        }
+    } else {
+        for (x = 0; x < 10; x++) {
+            formData.append("markerPhotos", photos[x]);
+        }
+        
+    }
     var logo = document.getElementById("NewMarkerLogoInput").files[0];
     formData.append("markerLogo", logo);
 
@@ -155,8 +166,8 @@ function OnNewMarkerFormSubmit() {
 
     formData.append("openTimesString", JSON.stringify(openTimes));
     formData.append("closeTimesString", JSON.stringify(closeTimes));
-    formData.append("Lat", ("" + marker.position.lat()).replace(".",","));
-    formData.append("Lng", ("" + marker.position.lng()).replace(".", ","));
+    //formData.append("Lat", ("" + marker.position.lat()).replace(".",","));
+    //formData.append("Lng", ("" + marker.position.lng()).replace(".", ","));
 
     $.ajax({
         url: "Markers/AddNewMarker",

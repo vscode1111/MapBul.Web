@@ -63,7 +63,12 @@ namespace MapBul.Service
         {
             return _db.marker.First(m => m.Id == markerId);
         }
-        
+
+        public string[] GetArrayOfPathsMarkerPhotos(int markerId)
+        {
+            return _db.marker_photos.Where(mp => mp.MarkerId == markerId).Select(mp => mp.Photo).ToArray();
+        }
+
         public IEnumerable<marker> GetFavoriteMarkers(string userGuid)
         {
             user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);

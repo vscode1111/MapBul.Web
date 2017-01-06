@@ -27,6 +27,7 @@ namespace MapBul.DBContext
         public virtual DbSet<guide> guide { get; set; }
         public virtual DbSet<journalist> journalist { get; set; }
         public virtual DbSet<marker> marker { get; set; }
+        public virtual DbSet<marker_photos> marker_photos { get; set; }
         public virtual DbSet<phone> phone { get; set; }
         public virtual DbSet<region> region { get; set; }
         public virtual DbSet<region_permission> region_permission { get; set; }
@@ -247,6 +248,10 @@ namespace MapBul.DBContext
                 .HasMany(e => e.article)
                 .WithOptional(e => e.marker)
                 .WillCascadeOnDelete();
+
+            modelBuilder.Entity<marker_photos>()
+                .Property(e => e.Photo)
+                .IsUnicode(false);
 
             modelBuilder.Entity<phone>()
                 .Property(e => e.Number)

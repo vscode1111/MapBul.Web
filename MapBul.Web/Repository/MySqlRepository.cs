@@ -458,7 +458,7 @@ namespace MapBul.Web.Repository
             return _db.weekday.ToList();
         }
 
-        public void AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes,
+        public int AddMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes,
             string userGuid)
         {
             var trans = _db.Database.BeginTransaction();
@@ -521,11 +521,35 @@ namespace MapBul.Web.Repository
                             }));
                 _db.SaveChanges();
                 trans.Commit();
+                return newMarker.Id;
             }
             catch (Exception)
             {
                 trans.Rollback();
                 throw;
+            }
+        }
+
+        public void AddMarkerPhotos(int markerId, string[] photos)
+        {
+            if(photos!=null && photos.Length > 0)
+            {
+                var trans = _db.Database.BeginTransaction();
+                try
+                {
+                    _db.marker_photos.AddRange(photos.Select(i => new marker_photos
+                    {
+                        MarkerId = markerId,
+                        Photo = i
+                    }));
+                    _db.SaveChanges();
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    throw;
+                }
             }
         }
 

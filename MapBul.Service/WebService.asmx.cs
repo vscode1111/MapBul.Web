@@ -141,6 +141,7 @@ namespace MapBul.Service
             }
         }
 
+        //ToDo:устаревший 
         /// <summary>
         /// Метод возвращает список маркеров в указанном прямоугольнике
         /// </summary>
@@ -205,6 +206,7 @@ namespace MapBul.Service
             }
         }
 
+        //ToDo:устаревший 
         /// <summary>
         /// Метод возвращает список непереданных в данной сессии маркеров в указанном прямоугольнике
         /// </summary>
@@ -296,6 +298,7 @@ namespace MapBul.Service
             }
         }
 
+        //ToDo:устаревший 
         /// <summary>
         /// Метод возвращает подробное описание маркера
         /// </summary>
@@ -311,11 +314,20 @@ namespace MapBul.Service
             bool haveRelatedEvents = repo.GetEvents().Any(e => e.MarkerId == markerId);
 
             var categories = repo.GetMarkerCategories();
+            //var tempPhotosPaths = repo.GetArrayOfPathsMarkerPhotos(markerId);
+            //List<string> tempPhotosPathsUrl = tempPhotosPaths.Select(MapUrl).ToList();
 
             marker.Photo = MapUrl(marker.Photo);
             marker.Logo = MapUrl(marker.Logo);
             result.AddObjectToResult(marker, 0);
             result.AddObjectToResult(new {HaveRelatedEvents = haveRelatedEvents}, 0);
+
+            //Вставляем найденные фото принадлежащие этому маркеру
+            result.AddObjectToResult(new
+            {
+                Photos = repo.GetArrayOfPathsMarkerPhotos(markerId).Select(MapUrl)
+            }, 0);
+
             result.AddObjectToResult(new
             {
                 Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
@@ -344,6 +356,7 @@ namespace MapBul.Service
             }, 0);
             return JsonConvert.SerializeObject(result);
         }
+
         /// <summary>
         /// Метод возвращает список корневых категорий маркеров
         /// </summary>
@@ -546,6 +559,7 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(result);
         }
 
+        //ToDo:устаревший 
         /// <summary>
         /// Метод добавления нового маркера
         /// </summary>
@@ -656,6 +670,7 @@ namespace MapBul.Service
             return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
         }
 
+        //ToDo:устаревший 
         [WebMethod]
         public string EditMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,

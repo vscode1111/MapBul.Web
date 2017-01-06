@@ -74,6 +74,7 @@
     <Compile Include="guide.cs" />
     <Compile Include="journalist.cs" />
     <Compile Include="marker.cs" />
+    <Compile Include="marker_photos.cs" />
     <Compile Include="marker_request_session.cs" />
     <Compile Include="phone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
