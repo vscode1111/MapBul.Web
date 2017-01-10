@@ -140,8 +140,7 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-
-        //ToDo:устаревший 
+        
         /// <summary>
         /// Метод возвращает список маркеров в указанном прямоугольнике
         /// </summary>
@@ -205,8 +204,7 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-
-        //ToDo:устаревший 
+        
         /// <summary>
         /// Метод возвращает список непереданных в данной сессии маркеров в указанном прямоугольнике
         /// </summary>
@@ -217,6 +215,7 @@ namespace MapBul.Service
         /// <param name="sessionId"></param>
         /// <param name="userGuid"></param>
         /// <returns></returns>
+        /// 
         [WebMethod]
         public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId, string userGuid)
         {
@@ -297,8 +296,7 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-
-        //ToDo:устаревший 
+        
         /// <summary>
         /// Метод возвращает подробное описание маркера
         /// </summary>
@@ -322,14 +320,16 @@ namespace MapBul.Service
             result.AddObjectToResult(marker, 0);
             result.AddObjectToResult(new {HaveRelatedEvents = haveRelatedEvents}, 0);
 
-            //Вставляем найденные фото принадлежащие этому маркеру
-            result.AddObjectToResult(new
+            //Todo: Временная заглушка пока все маркеры не перейдут на новый формат хранения фотографий
+            var tempPhotos = repo.GetArrayOfPathsMarkerPhotos(markerId).Select(MapUrl).ToList();
+            if (tempPhotos.Count < 10 && !string.IsNullOrEmpty(marker.Photo))
             {
-                Photos = repo.GetArrayOfPathsMarkerPhotos(markerId).Select(MapUrl)
-            }, 0);
+                tempPhotos.Add(marker.Photo);
+            }
 
             result.AddObjectToResult(new
             {
+                Photos = tempPhotos,
                 Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
                 Discount = marker.discount.Value,
                 Subcategories = marker.subcategory.Select(s => new {s.category.Id, s.category.Name}).ToList(),
@@ -589,7 +589,7 @@ namespace MapBul.Service
         [WebMethod]
         public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
-            string building, string floor, string site, string email, string photoBase64, int[] subCategoryIds,
+            string building, string floor, string site, string email, string[] photoBase64, int[] subCategoryIds,
             string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal)
         {
             try
@@ -612,10 +612,14 @@ namespace MapBul.Service
                 }
 
 
-                var bytes = Convert.FromBase64String(photoBase64);
+                //var bytes = Convert.FromBase64String(photoBase64);
 
-                var photoPath = FileProvider.SaveMarkerPhoto(bytes);
-                var logoPath = FileProvider.SaveMarkerLogo(bytes);
+                //var photoPath = FileProvider.SaveMarkerPhoto(bytes);
+                string logoPath = string.Empty;
+                if (photoBase64.Length > 0)
+                {
+                    logoPath = FileProvider.SaveMarkerLogo(Convert.FromBase64String(photoBase64.LastOrDefault()));
+                }
 
                 marker newMarker = new marker
                 {
@@ -636,7 +640,7 @@ namespace MapBul.Service
                     Street = street,
                     UserId = user.Id,
                     StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id,
-                    Photo = photoPath,
+                    //Photo = photoPath,
                     Logo = logoPath,
                     Personal = isPersonal
                 };
@@ -649,6 +653,8 @@ namespace MapBul.Service
                         .ToList(),
                     closeTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
                         .ToList(), user.Id, subCategoryIds, phones);
+                //Сохранение фотографий на сервере
+                repo.AddMarkerPhotos(newMarker.Id, photoBase64.Select(Convert.FromBase64String).Select(FileProvider.SaveMarkerPhoto).ToArray());
 
             }
             catch (MyException e)
@@ -669,12 +675,11 @@ namespace MapBul.Service
 
             return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
         }
-
-        //ToDo:устаревший 
+        
         [WebMethod]
         public string EditMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
-            string building, string floor, string site, string email, string photoPath, string photoBase64, int[] subCategoryIds,
+            string building, string floor, string site, string email/*, string photoPath*/, string[] photoBase64, int[] subCategoryIds,
             string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal, int markerId)
         {
             try
@@ -699,17 +704,35 @@ namespace MapBul.Service
 
                 var newMarker = repo.GetMarker(markerId);
 
-                string photoPathServer = "";
-                string logoPath = "";
-                if (string.IsNullOrEmpty(photoBase64) && !string.IsNullOrEmpty(photoPath))
+                //string photoPathServer = "";
+                //string logoPath = "";
+                //if (string.IsNullOrEmpty(photoBase64) && !string.IsNullOrEmpty(photoPath))
+                //{
+                //    photoPathServer = newMarker.Photo;
+                //}
+                //else
+                //{
+                //    var bytes = Convert.FromBase64String(photoBase64);
+                //    photoPathServer = FileProvider.SaveMarkerPhoto(bytes);
+                //    logoPath = FileProvider.SaveMarkerLogo(bytes);
+                //}
+
+                if (photoBase64?.Length > 0)//новые фото
                 {
-                    photoPathServer = newMarker.Photo;
+                    repo.RemoveMarkerPhoto(newMarker.Id);
+                    repo.AddMarkerPhotos(newMarker.Id, photoBase64.Where(photo=>!photo.Contains("http://185.76.145.214/")).Select(Convert.FromBase64String).Select(FileProvider.SaveMarkerPhoto).ToArray());
+                    repo.AddMarkerPhotos(newMarker.Id,
+                        photoBase64.Where(photo => photo.Contains("http://185.76.145.214/"))
+                            .Select(photo => photo.Replace("http://185.76.145.214/", ""))
+                            .ToArray());
+                    newMarker.Logo =
+                        FileProvider.SaveMarkerLogo(
+                            Convert.FromBase64String(
+                                photoBase64.LastOrDefault(i => !i.Contains("http://185.76.145.214/"))));
                 }
-                else
+                else//нет новых фото
                 {
-                    var bytes = Convert.FromBase64String(photoBase64);
-                    photoPathServer = FileProvider.SaveMarkerPhoto(bytes);
-                    logoPath = FileProvider.SaveMarkerLogo(bytes);
+                    
                 }
 
 
@@ -730,21 +753,18 @@ namespace MapBul.Service
                 newMarker.Street = street;
                 newMarker.UserId = user.Id;
                 newMarker.StatusId = repo.GetStatuses().First(s => s.Tag == MarkerStatuses.Checking).Id;
-                newMarker.Photo = photoPathServer;
-                newMarker.Logo = logoPath;
+                //newMarker.Photo = photoPathServer;
+                //newMarker.Logo = logoPath;
                 newMarker.Personal = isPersonal;
 
                 if (isPersonal)
                     newMarker.StatusId = 1;
-
-                
 
                 repo.UpdateMarker(newMarker,
                     openTimes.Select(o => new WorkTimeDay { WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value) })
                         .ToList(),
                     closeTimes.Select(o => new WorkTimeDay { WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value) })
                         .ToList(), user.Id, subCategoryIds, phones);
-
             }
             catch (MyException e)
             {

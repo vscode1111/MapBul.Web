@@ -69,6 +69,46 @@ namespace MapBul.Service
             return _db.marker_photos.Where(mp => mp.MarkerId == markerId).Select(mp => mp.Photo).ToArray();
         }
 
+        public void AddMarkerPhotos(int markerId, string[] photos)
+        {
+            if (photos != null && photos.Length > 0)
+            {
+                var trans = _db.Database.BeginTransaction();
+                try
+                {
+                    _db.marker_photos.AddRange(photos.Select(i => new marker_photos
+                    {
+                        MarkerId = markerId,
+                        Photo = i
+                    }));
+                    _db.SaveChanges();
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void RemoveMarkerPhoto(int markerId)
+        {
+            var trans = _db.Database.BeginTransaction();
+            try
+            {
+                var photoToDelete = _db.marker_photos.Where(i => i.MarkerId == markerId);
+                _db.marker_photos.RemoveRange(photoToDelete);
+                _db.SaveChanges();
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
         public IEnumerable<marker> GetFavoriteMarkers(string userGuid)
         {
             user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
