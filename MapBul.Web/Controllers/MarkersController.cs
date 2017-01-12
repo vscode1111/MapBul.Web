@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
@@ -54,7 +55,7 @@ namespace MapBul.Web.Controllers
             var userGuid = auth.UserGuid;
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var model = new NewMarkerModel();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Cities = repo.GetCities().Where(c => c.Id != 0).ToList();
             ViewBag.Categories = repo.GetMarkerCategories();
             ViewBag.Discounts = repo.GetDiscounts();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
@@ -76,7 +77,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             marker marker = repo.GetMarker(markerId);
             NewMarkerModel model = new NewMarkerModel(marker);
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Cities = repo.GetCities().Where(c => c.Id != 0).ToList();
             ViewBag.Categories = repo.GetMarkerCategories();
             ViewBag.Discounts = repo.GetDiscounts();
             ViewBag.Statuses = repo.GetStatuses(userGuid);

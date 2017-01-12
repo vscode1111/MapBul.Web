@@ -695,7 +695,7 @@ namespace MapBul.Web.Repository
             }
             else 
             {
-                article.PublishedDate = null;
+                article.PublishedDate = DateTime.Now;
                 article.EditorId = null;
             }
             article.StatusId = statusId;
@@ -727,7 +727,7 @@ namespace MapBul.Web.Repository
                 else
                 {
                     article.EditorId = null;
-                    article.PublishedDate = null;
+                    article.PublishedDate = DateTime.Now;
                 }
                 article.StatusId = model.StatusId;
 

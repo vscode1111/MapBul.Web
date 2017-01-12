@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
@@ -68,9 +69,9 @@ namespace MapBul.Web.Controllers
         {
             var model = new NewEditorModel();
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            ViewBag.Countries = repo.GetCountries();
+            ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
 //            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Cities = repo.GetCities().Where(i=>i.Id!=0).ToList();
             return PartialView("Partial/_NewEditorPartial", model);
         }
 
@@ -85,9 +86,9 @@ namespace MapBul.Web.Controllers
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             NewEditorModel model = new NewEditorModel(repo.GetEditor(editorId));
-            ViewBag.Countries = repo.GetCountries();
-//            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
+            //            ViewBag.Regions = repo.GetRegions();
+            ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
 
             return PartialView("Partial/_EditorInformationPartial", model);
         }
@@ -102,9 +103,9 @@ namespace MapBul.Web.Controllers
         {
             var model = new NewJournalistModel();
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            ViewBag.Countries = repo.GetCountries();
-//            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
+            //            ViewBag.Regions = repo.GetRegions();
+            ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
             ViewBag.Editors = repo.GetEditors();
             ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
             return PartialView("Partial/_NewJournalistPartial", model);
@@ -121,9 +122,9 @@ namespace MapBul.Web.Controllers
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             NewJournalistModel model = new NewJournalistModel(repo.GetJournalist(journalistId));
-            ViewBag.Countries = repo.GetCountries();
-//            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
+            //            ViewBag.Regions = repo.GetRegions();
+            ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
             ViewBag.Editors = repo.GetEditors();
             return PartialView("Partial/_JournalistInformationPartial", model);
         }
@@ -189,9 +190,9 @@ namespace MapBul.Web.Controllers
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             NewGuideModel model = new NewGuideModel(repo.GetGuide(guideId));
-            ViewBag.Countries = repo.GetCountries();
+            ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
             //            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
             ViewBag.Editors = repo.GetEditors();
             ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
             return PartialView("Partial/_GuideInformationPartial", model);
@@ -207,9 +208,9 @@ namespace MapBul.Web.Controllers
         {
             var model = new NewGuideModel();
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            ViewBag.Countries = repo.GetCountries();
+            ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
             //            ViewBag.Regions = repo.GetRegions();
-            ViewBag.Cities = repo.GetCities();
+            ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
             ViewBag.Editors = repo.GetEditors();
             ViewBag.User = repo.GetUserByGuid(HttpContext.User.Identity.Name);
             return PartialView("Partial/_NewGuideModalPartial", model);

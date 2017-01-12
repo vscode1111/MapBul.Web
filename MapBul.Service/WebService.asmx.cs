@@ -609,6 +609,29 @@ namespace MapBul.Service
                         throw new MyException(Errors.NotPermitted);
                     if (!repo.HavePermissions(user.Guid, cityId))
                         throw new MyException(Errors.NotPermitted);
+                    if (string.IsNullOrEmpty(house))
+                    {
+                        house = "Без дома";
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(street))
+                    {
+                        street = "Без улицы";
+                    }
+                    if (string.IsNullOrEmpty(house))
+                    {
+                        house = "Без дома";
+                    }
+                    //if (string.IsNullOrEmpty(building))
+                    //{
+                    //    building = "test";
+                    //}
+                    //if (string.IsNullOrEmpty(floor))
+                    //{
+                    //    floor = "test";
+                    //}
                 }
 
 
@@ -693,14 +716,43 @@ namespace MapBul.Service
                 var userType = repo.GetMobileUserTypeById(user.UserTypeId);
                 var permittedUserTypes = new[] { UserTypes.Guide };
 
+                //if (!isPersonal)
+                //{
+                //    if (!permittedUserTypes.Contains(userType.Tag))
+                //        throw new MyException(Errors.NotPermitted);
+                //    if (!repo.HavePermissions(user.Guid, cityId))
+                //        throw new MyException(Errors.NotPermitted);
+                //}
                 if (!isPersonal)
                 {
                     if (!permittedUserTypes.Contains(userType.Tag))
                         throw new MyException(Errors.NotPermitted);
                     if (!repo.HavePermissions(user.Guid, cityId))
                         throw new MyException(Errors.NotPermitted);
+                    if (string.IsNullOrEmpty(house))
+                    {
+                        house = "Без дома";
+                    }
                 }
-
+                else
+                {
+                    if (string.IsNullOrEmpty(street))
+                    {
+                        street = "Без улицы";
+                    }
+                    if (string.IsNullOrEmpty(house))
+                    {
+                        house = "Без дома";
+                    }
+                    //if (string.IsNullOrEmpty(building))
+                    //{
+                    //    building = "test";
+                    //}
+                    //if (string.IsNullOrEmpty(floor))
+                    //{
+                    //    floor = "test";
+                    //}
+                }
 
                 var newMarker = repo.GetMarker(markerId);
 
@@ -725,10 +777,12 @@ namespace MapBul.Service
                         photoBase64.Where(photo => photo.Contains("http://185.76.145.214/"))
                             .Select(photo => photo.Replace("http://185.76.145.214/", ""))
                             .ToArray());
-                    newMarker.Logo =
-                        FileProvider.SaveMarkerLogo(
-                            Convert.FromBase64String(
-                                photoBase64.LastOrDefault(i => !i.Contains("http://185.76.145.214/"))));
+                    if (photoBase64.Any(photo => !photo.Contains("http://185.76.145.214/")))
+                    {
+                        newMarker.Logo =
+                            FileProvider.SaveMarkerLogo(
+                                Convert.FromBase64String(photoBase64.LastOrDefault(i => !i.Contains("http://185.76.145.214/"))));
+                    }
                 }
                 else//нет новых фото
                 {

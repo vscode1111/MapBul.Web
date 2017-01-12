@@ -36,7 +36,7 @@ namespace MapBul.Service
             if(userType==null)
                 throw new MyException(Errors.NotFound);
             usertype userTypeMobile;
-            if (userType.Tag == UserTypes.Admin || userType.Tag == UserTypes.Editor || userType.Tag == UserTypes.Guide)
+            if (userType.Tag == UserTypes.Admin || userType.Tag == UserTypes.Editor || userType.Tag == UserTypes.Guide || userType.Tag==UserTypes.Journalist)
                 userTypeMobile = _db.usertype.First(u=>u.Tag==UserTypes.Guide);
             else
             {
@@ -287,11 +287,22 @@ namespace MapBul.Service
                 return _db.city.ToList();
             }
         }
+        
 
         public bool HavePermissions(string guid, int cityId)
         {
-            var permittedCities = GetPermittedCities(guid, false);
-            return permittedCities.Any(p => p.Id == cityId);
+            var user = _db.user.First(u => u.Guid == guid);
+            if (user.city_permission?.Count > 0)//если у пользователя установлены права на города, то проверяем города
+            {
+                var permittedCities = GetPermittedCities(guid, false);
+                return permittedCities.Any(p => p.Id == cityId);
+            }
+            else//у пользователя не устоновлено прав на города - роверяем только страну
+            {
+                var country = _db.city.First(c => c.Id == cityId).country;
+                return country.country_permission.Any(p => p.user == user);
+            }
+
         }
 
         public List<category> GetMarkerCategories()

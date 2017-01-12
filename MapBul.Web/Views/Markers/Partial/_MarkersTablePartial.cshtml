@@ -77,6 +77,10 @@
         <div class="ibox">
             <div class="ibox-title">
                 <h3>Маркеры дочерних пользователей</h3>
+                <p>
+                    <point style="width: 40px; height: 15px; background-color: rgb(223, 124, 217); display: inline-block;"></point>
+                    Личная метка
+                </p>
             </div>
             <div class="ibox-content">
                 <div class="table-responsive">
@@ -108,37 +112,74 @@
                                     author = marker.user.editor.First();
                                     break;
                             }
-                            <tr data-markerid="@marker.Id">
-                                <td class="EditMarkerLink">
-                                    @marker.Id
-                                </td>
-                                <td class="EditMarkerLink">
-                                    @marker.Name
-                                </td>
-                                <td class="EditMarkerLink">
-                                    @marker.Introduction
-                                </td>
-                                <td class="EditMarkerLink">
-                                    @marker.city.Name, @marker.city.country.Name
-                                </td>
-                                <td class="EditMarkerLink">
-                                    @marker.Street, д. @marker.House, стр. @marker.Buliding, эт. @marker.Floor
-                                </td>
-                                <td class="EditMarkerLink">
-                                    @marker.category.Name
-                                </td>
-                                <td class="EditMarkerLink">
-                                    @marker.Site
-                                </td>
-                                <td>@(author != null ? (author.LastName + " " + author.FirstName + " " + author.MiddleName) : "")</td>
-                                <td>
-                                    @{
-                                        var tmp = marker;
-                                    }
-                                    @Html.DropDownList("MarkerSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "MarkerSatusSelect form-control chosenselect"}, {"data-markerid", marker.Id}})
-                                </td>
-                                <td><input type="button" value="Удалить" data-id="@marker.Id" class="DeleteMarkerButton btn btn-danger" /></td>
-                            </tr>
+                            if (marker.Personal)
+                            {
+                                <tr data-markerid="@marker.Id" style="background-color: rgb(223, 124, 217)">
+                                    <td class="EditMarkerLink">
+                                        @marker.Id
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Name
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Introduction
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.city.Name, @marker.city.country.Name
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Street, д. @marker.House, стр. @marker.Buliding, эт. @marker.Floor
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.category.Name
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Site
+                                    </td>
+                                    <td>@(author != null ? (author.LastName + " " + author.FirstName + " " + author.MiddleName) : "")</td>
+                                    <td>
+                                        @{
+                                            var tmp = marker;
+                                        }
+                                        @Html.DropDownList("MarkerSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "MarkerSatusSelect form-control chosenselect"}, {"data-markerid", marker.Id}})
+                                    </td>
+                                    <td><input type="button" value="Удалить" data-id="@marker.Id" class="DeleteMarkerButton btn btn-danger"/></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr data-markerid="@marker.Id">
+                                    <td class="EditMarkerLink">
+                                        @marker.Id
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Name
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Introduction
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.city.Name, @marker.city.country.Name
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Street, д. @marker.House, стр. @marker.Buliding, эт. @marker.Floor
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.category.Name
+                                    </td>
+                                    <td class="EditMarkerLink">
+                                        @marker.Site
+                                    </td>
+                                    <td>@(author != null ? (author.LastName + " " + author.FirstName + " " + author.MiddleName) : "")</td>
+                                    <td>
+                                        @{
+                                            var tmp = marker;
+                                        }
+                                        @Html.DropDownList("MarkerSatusSelect", ((List<status>) ViewBag.Statuses).Select(s => new SelectListItem {Text = s.Description, Value = s.Id.ToString(), Selected = s.Id == tmp.StatusId}), new Dictionary<string, object> {{"class", "MarkerSatusSelect form-control chosenselect"}, {"data-markerid", marker.Id}})
+                                    </td>
+                                    <td><input type="button" value="Удалить" data-id="@marker.Id" class="DeleteMarkerButton btn btn-danger"/></td>
+                                </tr>
+                            }
                         }
                         </tbody>
                     </table>
