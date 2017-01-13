@@ -1,47 +1,45 @@
 ﻿@model MapBul.Web.Models.LoginModel
+@using MapBul.Web.Resource
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
 <html>
-<head>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
-    <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <head>
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+        <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="~/Content/animate.css" rel="stylesheet">
+        <link href="~/Content/style.css" rel="stylesheet">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@Resource.Authorization</title>
+    </head>
 
-    <link href="~/Content/animate.css" rel="stylesheet">
-    <link href="~/Content/style.css" rel="stylesheet">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Авторизация</title>
-</head>
-
-<body class="gray-bg">
-    <div class="row text-center">
-        <h1 class="logo-name">MAP BUL</h1>
-    </div>
-<div class="middle-box text-center loginscreen  animated fadeInDown">
-    <div>
-        <p>
-        </p>
-        <form class="m-t" role="form" method="POST" action="@Url.Action("Login", "Login")">
-            <div class="form-group">
-                @Html.TextBoxFor(m => m.Login, new {@class = "form-control", placeholder = "Логин", required = ""})
+    <body class="gray-bg">
+        <div class="row text-center">
+            <h1 class="logo-name">MAP BUL</h1>
+        </div>
+        <div class="middle-box text-center loginscreen  animated fadeInDown">
+            <div>
+                <p>
+                </p>
+                <form class="m-t" role="form" method="POST" action="@Url.Action("Login", "Login")">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Login, new {@class = "form-control", placeholder = Resource.Login, required = ""})
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Password, new {type = "password", @class = "form-control", placeholder = Resource.Password, required = ""})
+                    </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b">@Resource.Enter</button>
+                </form>
             </div>
-            <div class="form-group">
-                @Html.TextBoxFor(m => m.Password, new {type = "password", @class = "form-control", placeholder = "Пароль", required = ""})
-            </div>
-            <button type="submit" class="btn btn-primary block full-width m-b">Войти</button>
-        </form>
-    </div>
-    @if (ViewBag.errorMessage != null)
-    {
-        <div class="alert alert-danger ">@ViewBag.errorMessage</div>
-    }
-</div>
-
-
-</body>
+            @if (ViewBag.errorMessage != null)
+            {
+                <div class="alert alert-danger ">@ViewBag.errorMessage</div>
+            }
+        </div>
+    </body>
 
 </html>
 

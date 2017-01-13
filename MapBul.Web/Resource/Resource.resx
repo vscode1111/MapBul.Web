@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+	
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+  <data name="Authorization" xml:space="preserve">
+    <value>Authorization</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+
+  <data name="Pins" xml:space="preserve">
+    <value>Pins</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Select сountry</value>
+  </data>
+  <data name="SelectCity" xml:space="preserve">
+    <value>Select city</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="SelectAFile" xml:space="preserve">
+    <value>Select a file</value>
+  </data>
+  <data name="FileNotChoosen" xml:space="preserve">
+    <value>File not choosen</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="NoRecords" xml:space="preserve">
+    <value>No records</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="BaseCategory" xml:space="preserve">
+    <value>Base category</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>WWW</value>
+  </data>
+  <data name="RequiredFields" xml:space="preserve">
+    <value>Required fields *</value>
+  </data>
+
+  <data name="NavDictionaries" xml:space="preserve">
+    <value>Dictionaries</value>
+  </data>
+  <data name="NavArticles" xml:space="preserve">
+    <value>Articles</value>
+  </data>
+  <data name="NavPins" xml:space="preserve">
+    <value>Pins</value>
+  </data>
+  <data name="NavUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  
+  <data name="DicPinsCategory" xml:space="preserve">
+    <value>Pins category</value>
+  </data>
+  <data name="DicCategoryOrder" xml:space="preserve">
+    <value>Category order</value>
+  </data>
+  <data name="DicDragCategoryText" xml:space="preserve">
+    <value>Drag category to change order</value>
+  </data>
+  <data name="DicNewCategory" xml:space="preserve">
+    <value>New category</value>
+  </data>
+  <data name="DicCategoryName" xml:space="preserve">
+    <value>Category name</value>
+  </data>
+  <data name="DicParentCategory" xml:space="preserve">
+    <value>Parent category</value>
+  </data>
+  <data name="DicCategoryIcon" xml:space="preserve">
+    <value>Category icon</value>
+  </data>
+  <data name="DicCategoryIconText" xml:space="preserve">
+    <value>(Optimal size of 120x120 icons, icons of other sizes are scaled to the specified)</value>
+  </data>
+  <data name="DicSelectACategory" xml:space="preserve">
+    <value>Select a category</value>
+  </data>
+  <data name="DicCategoryPinIcon" xml:space="preserve">
+    <value>Category pin icon</value>
+  </data>
+  <data name="DicColor" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="DicEditCategory" xml:space="preserve">
+    <value>Edit category</value>
+  </data>
+  <data name="DicEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DicRegionsAndCities" xml:space="preserve">
+    <value>Regions and cities</value>
+  </data>
+  <data name="DicCountries" xml:space="preserve">
+    <value>Countries</value>
+  </data>
+  <data name="DicNewCountry" xml:space="preserve">
+    <value>New country</value>
+  </data>
+  <data name="DicAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="DicCities" xml:space="preserve">
+    <value>Cities</value>
+  </data>
+  <data name="DicNewCity" xml:space="preserve">
+    <value>New city</value>
+  </data>
+  <data name="DicArticleCategoryes" xml:space="preserve">
+    <value>Article categoryes</value>
+  </data>
+
+  <data name="ArtMyArticles" xml:space="preserve">
+    <value>My articles</value>
+  </data>
+  <data name="ArtNewArticle" xml:space="preserve">
+    <value>New article</value>
+  </data>
+  <data name="ArtArticleAffiliatedMembers" xml:space="preserve">
+    <value>Article affiliated members</value>
+  </data>
+  <data name="ArtEventStartDate" xml:space="preserve">
+    <value>Event start date</value>
+  </data>
+  <data name="ArtEventEndDate" xml:space="preserve">
+    <value>Event end date</value>
+  </data>
+  <data name="ArtEventStartTime" xml:space="preserve">
+    <value>Event start time</value>
+  </data>
+  <data name="ArtHeaderPhoto" xml:space="preserve">
+    <value>Header photo</value>
+  </data>
+  <data name="ArtNewHeaderPhoto" xml:space="preserve">
+    <value>New header photo</value>
+  </data>
+  <data name="ArtArticlePhoto" xml:space="preserve">
+    <value>Article photo</value>
+  </data>
+  <data name="ArtNewArticlePhoto" xml:space="preserve">
+    <value>New article photo</value>
+  </data>
+  <data name="ArtSourceLink" xml:space="preserve">
+    <value>Source link</value>
+  </data>
+  <data name="ArtAddLinkToPin" xml:space="preserve">
+    <value>Add link to pin</value>
+  </data>
+  <data name="ArtAddLinkToCity" xml:space="preserve">
+    <value>Add link to city</value>
+  </data>
+  
+  <data name="PinSystemPins" xml:space="preserve">
+    <value>System pins</value>
+  </data>
+  <data name="PinNewPin" xml:space="preserve">
+    <value>New pin</value>
+  </data>
+  <data name="PinPreamble" xml:space="preserve">
+    <value>Preamble</value>
+  </data>
+  <data name="PinAffiliatedMembers" xml:space="preserve">
+    <value>Pin affiliated members</value>
+  </data>
+  <data name="PinEntranceFee" xml:space="preserve">
+    <value>Entrance fee</value>
+  </data>
+  <data name="PinSelectAtag" xml:space="preserve">
+    <value>Select a tag</value>
+  </data>
+  <data name="PinLogo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="PinLogoText" xml:space="preserve">
+    <value>(Image in the popup window, the optimal size of 300x300)</value>
+  </data>
+  <data name="PinWiFi" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="PinSelectCityFromList" xml:space="preserve">
+    <value>Select city from list</value>
+  </data>
+  <data name="PinStreet" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="PinHouse" xml:space="preserve">
+    <value>House</value>
+  </data>
+  <data name="PinBuilding" xml:space="preserve">
+    <value>Building</value>
+  </data>
+  <data name="PinFloor" xml:space="preserve">
+    <value>Floor</value>
+  </data>
+  <data name="PinEnterTheCoordinates" xml:space="preserve">
+    <value>Or, enter the coordinates</value>
+  </data>
+  <data name="PinLatitude" xml:space="preserve">
+    <value>Latitude </value>
+  </data>
+  <data name="PinLongitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="PinDiscount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="PinPhoto" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="PinPhotoText" xml:space="preserve">
+    <value>(Pictures are displayed in the description pin)</value>
+  </data>
+  <data name="PinOpenHours" xml:space="preserve">
+    <value>Open hours</value>
+  </data>
+  <data name="PinOpen" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="PinClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  
+</root>

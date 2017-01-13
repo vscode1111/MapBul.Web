@@ -1,6 +1,7 @@
 ﻿@using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
 @using MapBul.Web.Helpers
+@using MapBul.Web.Resource
 @using Ninject.Infrastructure.Language
 @model MapBul.Web.Models.NewJournalistModel
 
@@ -36,7 +37,7 @@
                         @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Телефон" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Адрес" }, { "required", "" } })
+                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", Resource.Address }, { "required", "" } })
                     </div>
                     <div class="form-group">
                         @Html.TextBox("BirthDate", Model.BirthDate.ToString("dd.MM.yyyy"), new Dictionary<string, object> { { "class", "form-control datepicker" }, { "required", "" } })
@@ -47,13 +48,13 @@
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
-                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>)ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите страны" }, { "multiple", "" } })
+                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>)ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", Resource.SelectCountry }, { "multiple", "" } })
                     </div>
                     <!--<div class="form-group">
                         Html.ListBox("PermittedRegions", new MultiSelectList((List<region>)ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите регионы" }, { "multiple", "" }, { isDisabled, "" } })
                     </div>-->
                     <div class="form-group">
-                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>)ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", "Выберите города" }, { "multiple", "" }})
+                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>)ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "data-placeholder", Resource.SelectCity }, { "multiple", "" }})
                     </div>
                     <div class="form-group">
                         @if (isAdmin)
@@ -71,12 +72,12 @@
                         @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})
                     </div>
                     <div class="form-group">
-                        @Ajax.ActionLink("Удалить", "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshJournalistsTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
+                        @Ajax.ActionLink(Resource.Delete, "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshJournalistsTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Сохранить"/>
+                    <input type="submit" class="btn btn-primary" value="@Resource.Save"/>
             </div>
         }
     </div>

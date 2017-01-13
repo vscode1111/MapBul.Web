@@ -1,4 +1,5 @@
-﻿@model MapBul.Web.Models.NewAdminModel
+﻿@using MapBul.Web.Resource
+@model MapBul.Web.Models.NewAdminModel
 <div class="ibox">
     <div class="ibox-title">
         <h3>Новый администратор</h3>
@@ -13,7 +14,7 @@
             </div>
             <div class="row">
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Добавить"/>
+                    <input type="submit" class="btn btn-primary" value="@Resource.DicAdd"/>
                 </div>
             </div>
         }

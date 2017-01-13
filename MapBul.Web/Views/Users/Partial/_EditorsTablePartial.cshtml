@@ -1,4 +1,5 @@
-﻿@model MapBul.Web.Models.EditorsListModel
+﻿@using MapBul.Web.Resource
+@model MapBul.Web.Models.EditorsListModel
 
 <div class="ibox">
     <div class="ibox-title">
@@ -21,8 +22,8 @@
                     <th>Дата рождения</th>
                     <th>Пол</th>
                     <th>Телефон</th>
-                    <th>Адрес</th>
-                    <th>Статус</th>
+                    <th>@Resource.Address</th>
+                    <th>@Resource.Status</th>
                 </tr>
                 </thead>
                 <tbody>

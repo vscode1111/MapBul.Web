@@ -1,32 +1,33 @@
 ﻿@using MapBul.DBContext
+@using MapBul.Web.Resource
 @model MapBul.Web.Models.NewArticleModel
 
 <div class="ibox">
     <div class="ibox-title">
-        <h3>Новая статья</h3>
+        <h3>@Resource.ArtNewArticle</h3>
     </div>
     <div class="ibox-content">
         <form action="#" method="POST" id="NewArticleForm">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Title, new Dictionary<string, object> { { "placeholder", "Название" }, { "class", "form-control" }, { "required", "" } })
+                        @Html.TextBoxFor(m => m.Title, new Dictionary<string, object> { { "placeholder", Resource.Name }, { "class", "form-control" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Description, new Dictionary<string, object> { { "placeholder", "Описание" }, { "class", "form-control" }, { "required", "" } })
+                        @Html.TextBoxFor(m => m.Description, new Dictionary<string, object> { { "placeholder", Resource.Description }, { "class", "form-control" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextAreaFor(m => m.Text, new Dictionary<string, object> { { "placeholder", "Текст" }, { "class", "form-control" }, { "required", "" } })
+                        @Html.TextAreaFor(m => m.Text, new Dictionary<string, object> { { "placeholder", Resource.Text }, { "class", "form-control" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.StartDate, new Dictionary<string, object> {{"placeholder", "Дата начала события"}, {"class", "form-control datepicker"}})
+                        @Html.TextBoxFor(m => m.StartDate, new Dictionary<string, object> {{"placeholder", Resource.ArtEventStartDate }, {"class", "form-control datepicker"}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.EndDate, new Dictionary<string, object> {{"placeholder", "Дата окончания события"}, {"class", "form-control datepicker"}})
+                        @Html.TextBoxFor(m => m.EndDate, new Dictionary<string, object> {{"placeholder", Resource.ArtEventEndDate }, {"class", "form-control datepicker"}})
                     </div>
                     @* Говнокод для пикера времени *@
                     <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
-                        @Html.TextBoxFor(m => m.StartTime, new Dictionary<string, object> { { "placeholder", "Время начала события" }, { "class", "form-control" } })
+                        @Html.TextBoxFor(m => m.StartTime, new Dictionary<string, object> { { "placeholder", Resource.ArtEventStartTime }, { "class", "form-control" } })
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
                         </span>
@@ -36,23 +37,23 @@
                     </script> 
                     @* Говнокод для пикера времени *@
                     <div class="form-group">
-                        <label class="control-label">Фотография заголовка</label>
+                        <label class="control-label">@Resource.ArtHeaderPhoto</label>
                         <input type="file" id="NewArticleTitlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Фотография статьи</label>
+                        <label class="control-label">@Resource.ArtArticlePhoto</label>
                         <input type="file" id="NewArticlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.SourceUrl, new Dictionary<string, object> { { "placeholder", "Источник" }, { "class", "form-control" } })
+                        @Html.TextBoxFor(m => m.SourceUrl, new Dictionary<string, object> { { "placeholder", Resource.ArtSourceLink }, { "class", "form-control" } })
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.SourcePhoto, new Dictionary<string, object> { { "placeholder", "Фото" }, { "class", "form-control" } })
+                        @Html.TextBoxFor(m => m.SourcePhoto, new Dictionary<string, object> { { "placeholder", Resource.Photo }, { "class", "form-control" } })
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">Базовая категория</label>
+                        <label class="control-label">@Resource.BaseCategory</label>
                         @Html.DropDownListFor(m => m.BaseCategoryId, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                     <div class="form-group">
@@ -60,21 +61,21 @@
                         @Html.ListBoxFor(m => m.SubCategories, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "multiple", "" }, { "data-placeholder", "Выберите тэги" } })
                     </div>
                     <div class="form-group" id="MarkerSelectContainer">
-                        <label class="control-label">Привязка к маркеру</label>
+                        <label class="control-label">@Resource.ArtAddLinkToPin</label>
                         @Html.DropDownListFor(m => m.MarkerId, ((List<marker>) ViewBag.Markers).Select(c => new SelectListItem {Text = c.Name + ", " + c.city.Name + ", " + c.city.country.Name, Value = c.Id.ToString()}).Union(new List<SelectListItem> {new SelectListItem {Text = "Нет", Selected = true, Value = null}}), new Dictionary<string, object> {{"id", "NewArticleMarkerSelect"}, {"class", "form-control chosenselect"}, {"required", ""}})
                     </div>
                     <div class="form-group" id="CitySelectContainer">
-                        <label class="control-label">Привязка к городу</label>
+                        <label class="control-label">@Resource.ArtAddLinkToCity</label>
                         @Html.DropDownListFor(m => m.CityId, ((List<city>)ViewBag.Cities).Select(c => new SelectListItem { Text = c.Name + ", " + c.country.Name, Value = c.Id.ToString() }).Union(new List<SelectListItem> { new SelectListItem { Text = "Нет", Selected = true, Value = null } }), new Dictionary<string, object> { { "id", "NewArticleCitySelect" }, { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Статус</label>
+                        <label class="control-label">@Resource.Status</label>
                         @Html.DropDownListFor(m => m.StatusId, ((List<status>)ViewBag.Statuses).Select(c => new SelectListItem { Text = c.Description, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="button" id="NewArticleFormSubmit" value="Сохранить" class="btn btn-primary" />
+                <input type="button" id="NewArticleFormSubmit" value="@Resource.Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

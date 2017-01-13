@@ -2,6 +2,7 @@
 @using MapBul.DBContext
 @using MapBul.SharedClasses.Constants
 @using MapBul.Web.Helpers
+@using MapBul.Web.Resource
 @model MapBul.Web.Models.NewJournalistModel
 <div class="ibox">
     <div class="ibox-title">
@@ -28,7 +29,7 @@
                         @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Телефон"}, {"required", ""}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", "Адрес"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> {{"class", "form-control"}, {"placeholder", Resource.Address }, {"required", ""}})
                     </div>
                     <div class="form-group">
                         @Html.TextBox("BirthDate", "", new Dictionary<string, object> {{"class", "form-control datepicker"}, {"placeholder", "Дата рождения"}, {"required", ""}})
@@ -39,13 +40,13 @@
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
-                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>) ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите страны"}, {"multiple", ""}})
+                        @Html.ListBox("PermittedCountries", new MultiSelectList((List<country>) ViewBag.Countries, "Id", "Name", Model.PermittedCountries), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", Resource.SelectCountry }, {"multiple", ""}})
                     </div>
                     <!--<div class="form-group">
                         Html.ListBox("PermittedRegions", new MultiSelectList((List<region>) ViewBag.Regions, "Id", "Name", Model.PermittedRegions), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите регионы"}, {"multiple", ""}})
                     </div>-->
                     <div class="form-group">
-                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", "Выберите города"}, {"multiple", ""}})
+                        @Html.ListBox("PermittedCities", new MultiSelectList((List<city>) ViewBag.Cities, "Id", "Name", Model.PermittedCities), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"data-placeholder", Resource.SelectCity }, {"multiple", ""}})
                     </div>
                     <div class="form-group">
                         @if (Html.IsUserInRoles(UserTypes.Admin))
@@ -65,7 +66,7 @@
             </div>
             <div class="row">
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Добавить"/>
+                    <input type="submit" class="btn btn-primary" value="@Resource.DicAdd"/>
                 </div>
             </div>
         }

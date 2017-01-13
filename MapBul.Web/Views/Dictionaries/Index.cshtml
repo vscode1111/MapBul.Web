@@ -1,11 +1,12 @@
 ﻿@using System.Web.Optimization
+@using MapBul.Web.Resource
 
 
 <div class="tabs-container">
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#tab-1">Категории маркеров</a></li>
-        <li class=""><a data-toggle="tab" href="#tab-2">Регионы и города</a></li>
-        <li class=""><a data-toggle="tab" href="#tab-3">Категории статей</a></li>
+        <li class="active"><a data-toggle="tab" href="#tab-1">@Resource.DicPinsCategory</a></li>
+        <li class=""><a data-toggle="tab" href="#tab-2">@Resource.DicRegionsAndCities</a></li>
+        <li class=""><a data-toggle="tab" href="#tab-3">@Resource.DicArticleCategoryes</a></li>
 
     </ul>
     <div class="tab-content">

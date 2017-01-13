@@ -1,5 +1,6 @@
 ﻿@using MapBul.SharedClasses.Constants
 @using MapBul.Web.Helpers
+@using MapBul.Web.Resource
 @model MapBul.Web.Models.JournalistsListModel
 
 
@@ -28,9 +29,9 @@
                     <th>Дата рождения</th>
                     <th>Пол</th>
                     <th>Телефон</th>
-                    <th>Адрес</th>
+                    <th>@Resource.Address</th>
                     <th>Редактор</th>
-                    <th>Статус</th>
+                    <th>@Resource.Status</th>
                 </tr>
                 </thead>
                 <tbody>

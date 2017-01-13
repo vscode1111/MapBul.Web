@@ -100,3 +100,8 @@ C:\Projects\GitProjects\MBWeb\MapBul.Web\bin\System.Web.WebPages.Razor.xml
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.csprojResolveAssemblyReference.cache
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.dll
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.pdb
+C:\Projects\GitProjects\MBWeb\MapBul.Web\bin\ru\MapBul.Web.resources.dll
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.Resource.Resource.resources
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.Resource.Resource.ru.resources
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.csproj.GenerateResource.Cache
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\ru\MapBul.Web.resources.dll

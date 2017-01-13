@@ -1,4 +1,5 @@
 ﻿@using MapBul.SharedClasses.Constants
+@using MapBul.Web.Resource
 @model MapBul.Web.Models.NewTenantModel
 
 <div class="panel">
@@ -27,7 +28,7 @@
                         @Html.TextBoxFor(m => m.Phone, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Телефон" }})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", "Адрес" } })
+                        @Html.TextBoxFor(m => m.Address, new Dictionary<string, object> { { "class", "form-control" }, { "placeholder", Resource.Address } })
                     </div>
                     <div class="form-group">
                         @Html.TextBox("BirthDate", Model.BirthDate!=null?Model.BirthDate.Value.ToString("dd.MM.yyyy"):"", new Dictionary<string, object> { { "class", "form-control datepicker" }, { "placeholder", "Дата рождения" } })
@@ -42,12 +43,12 @@
                         @Html.CheckBoxFor(m => m.Deleted, new Dictionary<string, object> {{"class", "checkbox"}})
                     </div>
                     <div class="form-group">
-                        @Ajax.ActionLink("Удалить", "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshTenantsTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
+                        @Ajax.ActionLink(Resource.Delete, "DeleteUser", new { userId = Model.UserId }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "DeleteSuccess(data,RefreshTenantsTable)", OnFailure = "ViewNotification('Ошибка', 'error')" }, new { @class = "btn btn-danger" })
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Сохранить" />
+                <input type="submit" class="btn btn-primary" value="@Resource.Save" />
             </div>
         }
     </div>

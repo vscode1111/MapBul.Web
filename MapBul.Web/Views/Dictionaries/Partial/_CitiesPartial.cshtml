@@ -1,8 +1,9 @@
-﻿@model MapBul.Web.Models.CitiesModel
+﻿@using MapBul.Web.Resource
+@model MapBul.Web.Models.CitiesModel
 <div class="col-md-6">
     <div class="ibox">
         <div class="ibox-title">
-            <h3>Страны</h3>
+            <h3>@Resource.DicCountries</h3>
         </div>
         <div class="ibox-content">
             <table class="table table-responsive CitiesTable">
@@ -18,7 +19,7 @@
                     <tr>
                         <td>@country.Name</td>
                         <td>
-                            <input data-id="@country.Id" type="button" class="DeleteCountryButton btn btn-danger" value="Удалить" />
+                            <input data-id="@country.Id" type="button" class="DeleteCountryButton btn btn-danger" value=@Resource.Delete />
                         </td>
                     </tr>
 
@@ -27,10 +28,10 @@
             </table>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <input class="form-control" id="NewCountryInput" type="text" placeholder="Новая страна" />
+                    <input class="form-control" id="NewCountryInput" type="text" placeholder="@Resource.DicNewCountry" />
                 </div>
                 <div class="col-md-10 form-group">
-                    <input type="button" class="btn-primary btn" data-actionurl="@Url.Action("AddCountry")" value="Добавить" id="NewCountryButton" />
+                    <input type="button" class="btn-primary btn" data-actionurl="@Url.Action("AddCountry")" value="@Resource.DicAdd" id="NewCountryButton" />
                 </div>
             </div>
         </div>
@@ -40,13 +41,13 @@
     <div class="ibox">
         <div class="ibox-title">
 
-            <h3>Города</h3>
+            <h3>@Resource.DicCities</h3>
         </div>
         <div class="ibox-content">
             <table class="table table-responsive CitiesTable">
                 <thead>
                 <tr>
-                    <th>Город</th>
+                    <th>@Resource.City</th>
                     <!--<th>Регион</th>-->
                     <th>Страна</th>
                     <th></th>
@@ -60,7 +61,7 @@
                         <!--<td>city.region.Name</td>-->
                         <td>@city.country.Name</td>
                         <td>
-                            <input data-id="@city.Id" type="button" class="DeleteCityButton btn btn-danger" value="Удалить" />
+                            <input data-id="@city.Id" type="button" class="DeleteCityButton btn btn-danger" value=@Resource.Delete />
                         </td>
                     </tr>
                 }
@@ -76,12 +77,12 @@
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
-                    <input class="form-control" id="NewCityInput" placeholder="Новый город" />
+                    <input class="form-control" id="NewCityInput" placeholder="@Resource.DicNewCity" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <input type="button" class="btn-primary btn" data-actionurl="@Url.Action("AddCity")" value="Добавить" id="NewCityButton"/>
+                    <input type="button" class="btn-primary btn" data-actionurl="@Url.Action("AddCity")" value="@Resource.DicAdd" id="NewCityButton"/>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
-﻿<div class="col-md-4">
+﻿@using MapBul.Web.Resource
+<div class="col-md-4">
     <div class="ibox">
         <div class="ibox-title">
             <h3>Регионы</h3>
@@ -36,7 +37,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <input type="button" class="btn-primary btn" data-actionurl="@Url.Action("AddRegion")" value="Добавить" id="NewRegionButton" />
+                    <input type="button" class="btn-primary btn" data-actionurl="@Url.Action("AddRegion")" value="@Resource.DicAdd" id="NewRegionButton" />
                 </div>
             </div>
         </div>

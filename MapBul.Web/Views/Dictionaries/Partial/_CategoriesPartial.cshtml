@@ -1,11 +1,12 @@
 ﻿@using MapBul.Web.Helpers
+@using MapBul.Web.Resource
 @model MapBul.Web.Models.CategoriesModel
 @{ string articleOrMarker = Model.ForArticle ? "Article" : "Marker";}
 
 <div class="col-md-6">
     <div class="ibox">
         <div class="ibox-title">
-            <h3>Структура категорий</h3>
+            <h3>@Resource.DicCategoryOrder</h3>
         </div>
         <div class="ibox-content">
             <div class="dd" id="nestable@(articleOrMarker)">
