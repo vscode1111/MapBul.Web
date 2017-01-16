@@ -17,6 +17,8 @@
 
         [StringLength(200)]
         public string Photo { get; set; }
+        [StringLength(200)]
+        public string PhotoMini { get; set; }
 
         public virtual marker marker { get; set; }
     }

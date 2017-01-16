@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Web.DynamicData;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
@@ -68,19 +69,38 @@ namespace MapBul.Service
         {
             return _db.marker_photos.Where(mp => mp.MarkerId == markerId).Select(mp => mp.Photo).ToArray();
         }
+        public string[] GetArrayOfPathsMarkerPhotosMini(int markerId)
+        {
+            return _db.marker_photos.Where(mp => mp.MarkerId == markerId).Select(mp => mp.PhotoMini).ToArray();
+        }
 
-        public void AddMarkerPhotos(int markerId, string[] photos)
+        public void AddMarkerPhotos(int markerId, string[] photos, string[] photosMini)
         {
             if (photos != null && photos.Length > 0)
             {
                 var trans = _db.Database.BeginTransaction();
                 try
                 {
-                    _db.marker_photos.AddRange(photos.Select(i => new marker_photos
+                    if (photos.Length == photosMini.Length)
                     {
-                        MarkerId = markerId,
-                        Photo = i
-                    }));
+                        for (int i = 0; i < photos.Length; i++)
+                        {
+                            _db.marker_photos.Add(new marker_photos
+                            {
+                                MarkerId = markerId,
+                                Photo = photos[i],
+                                PhotoMini = photosMini[i]
+                            });
+                        }
+                    }
+                    else
+                    {
+                        _db.marker_photos.AddRange(photos.Select(i => new marker_photos
+                        {
+                            MarkerId = markerId,
+                            Photo = i
+                        }));
+                    }
                     _db.SaveChanges();
                     trans.Commit();
                 }
@@ -92,15 +112,27 @@ namespace MapBul.Service
             }
         }
 
-        public void RemoveMarkerPhoto(int markerId)
+        public void RemoveMarkerPhoto(int markerId, string[] pathsNotToDelete)
         {
             var trans = _db.Database.BeginTransaction();
             try
             {
-                var photoToDelete = _db.marker_photos.Where(i => i.MarkerId == markerId);
-                _db.marker_photos.RemoveRange(photoToDelete);
-                _db.SaveChanges();
-                trans.Commit();
+                var listToDelete = new List<marker_photos>();
+                var markersPhoto = _db.marker_photos.Where(i => i.MarkerId == markerId);
+                if (markersPhoto.Any())
+                {
+                    foreach (var item in markersPhoto)
+                    {
+                        if (pathsNotToDelete.All(i => i != item.PhotoMini))
+                        {
+                            listToDelete.Add(item);
+                        }
+                    }
+                    _db.marker_photos.RemoveRange(listToDelete);
+                    _db.SaveChanges();
+                    trans.Commit();
+                }
+                //var photoToDelete = _db.marker_photos.Where(i => pathsNotToDalete.Any(i.PhotoMini == pathsNotToDalete));
             }
             catch (Exception)
             {
@@ -271,14 +303,32 @@ namespace MapBul.Service
             {
                 var user = _db.user.First(u => u.Guid == userGuid);
                 var permittedCities = user.city_permission.Select(cp => cp).Select(city => city.city).ToList();
-                foreach (
-                    var city in
-                        from country in user.country_permission.Select(countryPermission => countryPermission.country)
-                        from city in country.city
-                        where !permittedCities.Contains(city)
-                        select city)
+                if (permittedCities?.Count > 0)
                 {
-                    permittedCities.Add(city);
+                    foreach (
+                        var city in
+                            from country in
+                                user.country_permission.Select(countryPermission => countryPermission.country)
+                            from city in country.city
+                            where !permittedCities.Contains(city)
+                            select city)
+                    {
+                        permittedCities.Add(city);
+                    }
+                }
+                else
+                {
+                    foreach (
+                           var city in
+                               from country in
+                                   user.country_permission.Select(countryPermission => countryPermission.country)
+                               from city in country.city
+                               where !permittedCities.Contains(city)
+                               select city)
+                    {
+                        permittedCities.Add(city);
+                    }
+                    permittedCities.Add(_db.city.FirstOrDefault(i => i.Id == 0));
                 }
                 return permittedCities;
             }
@@ -287,7 +337,13 @@ namespace MapBul.Service
                 return _db.city.ToList();
             }
         }
-        
+
+        public List<country> GetPermittedCountries(string userGuid)
+        {
+            var user = _db.user.First(u => u.Guid == userGuid);
+            var permittedCountries = user.country_permission.Select(cp => cp).Select(country => country.country).ToList();
+            return permittedCountries;
+        }
 
         public bool HavePermissions(string guid, int cityId)
         {
@@ -299,6 +355,7 @@ namespace MapBul.Service
             }
             else//у пользователя не устоновлено прав на города - роверяем только страну
             {
+                return true;
                 var country = _db.city.First(c => c.Id == cityId).country;
                 return country.country_permission.Any(p => p.user == user);
             }

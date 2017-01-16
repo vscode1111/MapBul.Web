@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Hosting;
@@ -91,15 +92,21 @@ namespace MapBul.SharedClasses
             return tempStrings.ToArray();
         }
 
-        public static string SaveMarkerPhoto(byte[] markerPhoto)
+        public static string SaveMarkerPhoto(byte[] markerPhoto, bool mini)
         {
             string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
+            ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
                 using (var stream = new MemoryStream(markerPhoto))
                 {
+                    Encoder myEncoder =
+                        Encoder.Quality;
+                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                    EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+                    myEncoderParameters.Param[0] = myEncoderParameter;
                     Bitmap firstBitmap = new Bitmap(stream);
 
 
@@ -146,7 +153,14 @@ namespace MapBul.SharedClasses
                     newItem.Id = 274;
                     newItem.Value = new byte[] { 1 };
                     firstBitmap.SetPropertyItem(newItem);*/
-                    firstBitmap.Save(savePath);
+                    if (!mini)
+                    {
+                        firstBitmap.Save(savePath);
+                    }
+                    else
+                    {
+                        firstBitmap.Save(savePath, jpgEncoder, myEncoderParameters);
+                    }
                 }
 
                 /*using (var imageFile = new FileStream(savePath, FileMode.Create))
@@ -158,6 +172,14 @@ namespace MapBul.SharedClasses
             else
                 throw new MyException(Errors.UnknownError);
             return virtualPath;
+        }
+
+        private static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            return codecs.FirstOrDefault(codec => codec.FormatID == format.Guid);
         }
 
         public static string SaveArticlePhoto(HttpPostedFileBase articlePhoto)

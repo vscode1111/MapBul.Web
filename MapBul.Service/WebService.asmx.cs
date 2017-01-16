@@ -16,17 +16,24 @@ namespace MapBul.Service
     /// </summary>
     [WebService(Namespace = "http://MapBul.ru/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
+    [System.ComponentModel.ToolboxItem(true)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
     // [System.Web.Script.Services.ScriptService]
     public class WebService : System.Web.Services.WebService
     {
+        [WebMethod]
+        public string Test()
+        {
+            var tempPhoto = Convert.FromBase64String("/9j/4R9hRXhpZgAATU0AKgAAAAgACQEyAAIAAAAUAAAAeoglAAQAAAABAAACdgEQAAIAAAAOAAAAjgITAAMAAAABAAEAAAEoAAMAAAABAAIAAAEbAAUAAAABAAAAnIdpAAQAAAABAAAAswEaAAUAAAABAAAApAEPAAIAAAAHAAAArAAAAtcyMDE2OjEwOjA5IDEzOjUyOjQwAExlbm92byBa");
+            return FileProvider.SaveMarkerPhoto(tempPhoto, false);
+        }
+
         #region private
-        /// <summary>
-        /// Метод возвращает список ИД категорий от данной до корневой
-        /// </summary>
-        /// <param name="category"></param>
-        /// <returns></returns>
+            /// <summary>
+            /// Метод возвращает список ИД категорий от данной до корневой
+            /// </summary>
+            /// <param name="category"></param>
+            /// <returns></returns>
         private List<int> GetCategoriesBranch(category category)
         {
             var result = new List<int>();
@@ -327,9 +334,16 @@ namespace MapBul.Service
                 tempPhotos.Add(marker.Photo);
             }
 
+            var tempPhotosMini = repo.GetArrayOfPathsMarkerPhotosMini(markerId).Select(MapUrl).ToList();
+            if (tempPhotos.Count < 10 && !string.IsNullOrEmpty(marker.Photo))
+            {
+                tempPhotosMini.Add(marker.Photo);
+            }
+
             result.AddObjectToResult(new
             {
                 Photos = tempPhotos,
+                PhotosMini = tempPhotosMini,
                 Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
                 Discount = marker.discount.Value,
                 Subcategories = marker.subcategory.Select(s => new {s.category.Id, s.category.Name}).ToList(),
@@ -613,6 +627,10 @@ namespace MapBul.Service
                     {
                         house = "Без дома";
                     }
+                    if (string.IsNullOrEmpty(street))
+                    {
+                        street = "Без улицы";
+                    }
                 }
                 else
                 {
@@ -677,7 +695,22 @@ namespace MapBul.Service
                     closeTimes.Select(o => new WorkTimeDay {WeekDayId = o.Key, Time = TimeSpan.FromMinutes(o.Value)})
                         .ToList(), user.Id, subCategoryIds, phones);
                 //Сохранение фотографий на сервере
-                repo.AddMarkerPhotos(newMarker.Id, photoBase64.Select(Convert.FromBase64String).Select(FileProvider.SaveMarkerPhoto).ToArray());
+                var tempPhotoList = new List<string>();
+                var tempPhotoMiniList = new List<string>();
+                foreach (var base64 in photoBase64)
+                {
+                    var tempPhoto = Convert.FromBase64String(base64);
+                    tempPhotoList.Add(FileProvider.SaveMarkerPhoto(tempPhoto, false));
+                    tempPhotoMiniList.Add(FileProvider.SaveMarkerPhoto(tempPhoto, true));
+                }
+                repo.AddMarkerPhotos(newMarker.Id, tempPhotoList.ToArray(), tempPhotoMiniList.ToArray());
+                //repo.AddMarkerPhotos(newMarker.Id,
+                //    photoBase64.Select(Convert.FromBase64String)
+                //        .Select(b64 => FileProvider.SaveMarkerPhoto(b64, false))
+                //        .ToArray(),
+                //    photoBase64.Select(Convert.FromBase64String)
+                //        .Select(b64 => FileProvider.SaveMarkerPhoto(b64, true))
+                //        .ToArray());
 
             }
             catch (MyException e)
@@ -771,12 +804,21 @@ namespace MapBul.Service
 
                 if (photoBase64?.Length > 0)//новые фото
                 {
-                    repo.RemoveMarkerPhoto(newMarker.Id);
-                    repo.AddMarkerPhotos(newMarker.Id, photoBase64.Where(photo=>!photo.Contains("http://185.76.145.214/")).Select(Convert.FromBase64String).Select(FileProvider.SaveMarkerPhoto).ToArray());
-                    repo.AddMarkerPhotos(newMarker.Id,
-                        photoBase64.Where(photo => photo.Contains("http://185.76.145.214/"))
-                            .Select(photo => photo.Replace("http://185.76.145.214/", ""))
-                            .ToArray());
+                    repo.RemoveMarkerPhoto(newMarker.Id, photoBase64.Where(p64 => p64.Contains("http://185.76.145.214/")).Select(photo => photo.Replace("http://185.76.145.214/", "")).ToArray());
+                    var tempPhotoList = new List<string>();
+                    var tempPhotoMiniList = new List<string>();
+                    foreach (var base64 in photoBase64.Where(p64=>!p64.Contains("http://185.76.145.214/")))
+                    {
+                        var tempPhoto = Convert.FromBase64String(base64);
+                        tempPhotoList.Add(FileProvider.SaveMarkerPhoto(tempPhoto, false));
+                        tempPhotoMiniList.Add(FileProvider.SaveMarkerPhoto(tempPhoto, true));
+                    }
+                    repo.AddMarkerPhotos(newMarker.Id, tempPhotoList.ToArray(), tempPhotoMiniList.ToArray());
+                    //repo.AddMarkerPhotos(newMarker.Id, photoBase64.Where(photo=>!photo.Contains("http://185.76.145.214/")).Select(Convert.FromBase64String).Select(FileProvider.SaveMarkerPhoto).ToArray());
+                    //repo.AddMarkerPhotos(newMarker.Id,
+                    //    photoBase64.Where(photo => photo.Contains("http://185.76.145.214/"))
+                    //        .Select(photo => photo.Replace("http://185.76.145.214/", ""))
+                    //        .ToArray());
                     if (photoBase64.Any(photo => !photo.Contains("http://185.76.145.214/")))
                     {
                         newMarker.Logo =
@@ -875,6 +917,44 @@ namespace MapBul.Service
             }
 
         }
+
+
+        /// <summary>
+        /// Метод возвращает список стран, на которые у указанного пользователя есть права
+        /// </summary>
+        /// <param name="userGuid"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string GetPermittedCountry(string userGuid)
+        {
+            try
+            {
+                var repo = new MySqlRepository();
+                var result = new JsonResult(new List<Dictionary<string, object>>());
+
+
+                var permittedCountries = repo.GetPermittedCountries(userGuid);
+
+                var i = 0;
+                foreach (var permittedCountry in permittedCountries)
+                {
+                    result.AddObjectToResult(new { permittedCountry.PlaceId, permittedCountry.Id, permittedCountry.Name, permittedCountry.Code }, i);
+                    i++;
+                }
+
+                return JsonConvert.SerializeObject(result);
+            }
+            catch (MyException e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.Error.Message));
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new JsonResult(e.ToString()));
+            }
+        }
+
+
 
         /// <summary>
         /// Метод регистрации нового жителя
