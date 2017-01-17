@@ -13,17 +13,26 @@ namespace MapBul.Web
 
             bundles.Add(new ScriptBundle("~/CustomScripts/Articles").Include(
                       "~/Scripts/CustomScripts/Articles.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/ArticlesRu").Include(
+                      "~/Scripts/CustomScripts/ArticlesRu.js", new MyCssRewriteUrlTransform()));
 
             bundles.Add(new ScriptBundle("~/CustomScripts/Markers").Include(
                       "~/Scripts/CustomScripts/Markers.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/MarkersRu").Include(
+                      "~/Scripts/CustomScripts/MarkersRu.js", new MyCssRewriteUrlTransform()));
 
             bundles.Add(new ScriptBundle("~/CustomScripts/Dictionaries").Include(
                       "~/Scripts/CustomScripts/Dictionaries.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Cities").Include(
                       "~/Scripts/CustomScripts/Cities.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/CitiesRu").Include(
+                      "~/Scripts/CustomScripts/CitiesRu.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Categories").Include(
                       "~/Scripts/CustomScripts/ArticleCategories.js", 
                       "~/Scripts/CustomScripts/MarkerCategories.js"));
+            bundles.Add(new ScriptBundle("~/CustomScripts/CategoriesRu").Include(
+                      "~/Scripts/CustomScripts/ArticleCategoriesRu.js",
+                      "~/Scripts/CustomScripts/MarkerCategoriesRu.js"));
 
 
 
@@ -31,16 +40,28 @@ namespace MapBul.Web
                       "~/Scripts/CustomScripts/Shared.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Editors").Include(
                       "~/Scripts/CustomScripts/Editors.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/EditorsRu").Include(
+                      "~/Scripts/CustomScripts/EditorsRu.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Admins").Include(
                       "~/Scripts/CustomScripts/Admins.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/AdminsRu").Include(
+                      "~/Scripts/CustomScripts/AdminsRu.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Journalists").Include(
                       "~/Scripts/CustomScripts/Journalists.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/JournalistsRu").Include(
+                      "~/Scripts/CustomScripts/JournalistsRu.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Tenants").Include(
                       "~/Scripts/CustomScripts/Tenants.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/TenantsRu").Include(
+                      "~/Scripts/CustomScripts/TenantsRu.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Guides").Include(
                       "~/Scripts/CustomScripts/Guides.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/GuidesRu").Include(
+                      "~/Scripts/CustomScripts/GuidesRu.js", new MyCssRewriteUrlTransform()));
             bundles.Add(new ScriptBundle("~/CustomScripts/Users").Include(
                       "~/Scripts/CustomScripts/Users.js", new MyCssRewriteUrlTransform()));
+            bundles.Add(new ScriptBundle("~/CustomScripts/UsersRu").Include(
+                      "~/Scripts/CustomScripts/UsersRu.js", new MyCssRewriteUrlTransform()));
 
             // CSS style (bootstrap/inspinia)
             bundles.Add(new StyleBundle("~/Content/css").Include(

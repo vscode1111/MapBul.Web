@@ -1,6 +1,7 @@
 ﻿@using System.Web.Optimization
 @using MapBul.SharedClasses.Constants
 @using MapBul.Web.Helpers
+@using MapBul.Web.Resource
 
 @if (Html.IsUserInRoles(UserTypes.Admin))
 {
@@ -47,13 +48,19 @@
 }
 
 @section Scripts{
+    @Scripts.Render(JavaScriptResource.Users)
+    @Scripts.Render(JavaScriptResource.Editors)
+    @Scripts.Render(JavaScriptResource.Journalists)
+    @Scripts.Render(JavaScriptResource.Admins)
+    @Scripts.Render(JavaScriptResource.Tenants)
+    @Scripts.Render(JavaScriptResource.Guides)
     @Scripts.Render("~/plugins/dataTables")
-    @Scripts.Render("~/CustomScripts/Users")
+    @*@Scripts.Render("~/CustomScripts/Users")
     @Scripts.Render("~/CustomScripts/Editors")
     @Scripts.Render("~/CustomScripts/Journalists")
     @Scripts.Render("~/CustomScripts/Admins")
     @Scripts.Render("~/CustomScripts/Tenants")
-    @Scripts.Render("~/CustomScripts/Guides")
+    @Scripts.Render("~/CustomScripts/Guides")*@
     @Scripts.Render("~/plugins/dataPicker")
     @Scripts.Render("~/plugins/chosen")
     @Scripts.Render("~/plugins/switchery")

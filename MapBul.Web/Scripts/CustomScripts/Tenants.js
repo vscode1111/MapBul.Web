@@ -4,17 +4,17 @@
         "pageLength": 30,
         "autoWidth": true,
         "language": {
-            "lengthMenu": "Показать _MENU_",
-            "zeroRecords": "Ничего не найдено",
-            "info": "Страница _PAGE_ из _PAGES_",
-            "infoEmpty": "Нет записей",
-            "infoFiltered": "(Найдено из _MAX_ строк)",
-            "search": "Поиск",
+            "lengthMenu": "Show _MENU_",
+            "zeroRecords": "Nothing found",
+            "info": "Page _PAGE_ from _PAGES_",
+            "infoEmpty": "No records",
+            "infoFiltered": "(Found from _MAX_)",
+            "search": "Search",
             "paginate": {
-                "first": "Первая",
-                "last": "Последняя",
-                "next": "Следующая",
-                "previous": "Предыдущая"
+                "first": "First",
+                "last": "Last",
+                "next": "Next",
+                "previous": "Previous"
             }
         }
     });
@@ -34,7 +34,7 @@ function OnTenantRowClick() {
             $("#Modal").modal("show");
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -43,7 +43,7 @@ function EditTenantSuccess(data) {
     if (data.success) {
         $("#Modal").modal("hide");
         RefreshTenantsTable();
-        ViewNotification("Изменения сохранены", "success");
+        ViewNotification("Changes saved", "success");
     } else {
         ViewNotification(data.errorReason, "error");
     }
@@ -59,7 +59,7 @@ function RefreshTenantsTable() {
             OnTenantsDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }

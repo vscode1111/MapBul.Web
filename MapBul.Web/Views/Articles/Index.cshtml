@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using MapBul.Web.Resource
 
 
 <div class="row" id="ArticlesContainer">
@@ -23,5 +24,7 @@
     @Scripts.Render("~/plugins/switchery")
     @Scripts.Render("~/plugins/nestable")
     @Scripts.Render("~/plugins/clockpicker")
-    @Scripts.Render("~/CustomScripts/Articles")
+    @Scripts.Render(JavaScriptResource.Articles)
+    @*@Scripts.Render("~/CustomScripts/ArticlesRu")*@
+    @*@Scripts.Render("~/CustomScripts/" + JavaScriptResource.Articles)*@
 }

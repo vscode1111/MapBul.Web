@@ -5,17 +5,17 @@
         "pageLength": 30,
         "autoWidth": true,
         "language": {
-            "lengthMenu": "Показать _MENU_",
-            "zeroRecords": "Ничего не найдено",
-            "info": "Страница _PAGE_ из _PAGES_",
-            "infoEmpty": "Нет записей",
-            "infoFiltered": "(Найдено из _MAX_ строк)",
-            "search": "Поиск",
+            "lengthMenu": "Show _MENU_",
+            "zeroRecords": "Nothing found",
+            "info": "Page _PAGE_ from _PAGES_",
+            "infoEmpty": "No records",
+            "infoFiltered": "(Found from _MAX_)",
+            "search": "Search",
             "paginate": {
-                "first": "Первая",
-                "last": "Последняя",
-                "next": "Следующая",
-                "previous": "Предыдущая"
+                "first": "First",
+                "last": "Last",
+                "next": "Next",
+                "previous": "Previous"
             }
         }
     });
@@ -31,7 +31,7 @@ function OnNewGuideClick() {
             $("#Modal").modal("show");
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -40,7 +40,7 @@ function AddNewGuideSuccess(data) {
     if (data.success) {
         $("#Modal").modal("hide");
         RefreshGuidesTable();
-        ViewNotification("Гид добавлен", "success");
+        ViewNotification("Guides added", "success");
     } else {
         ViewNotification(data.errorReason, "error");
     }
@@ -60,7 +60,7 @@ function OnGuideRowClick() {
             $("#Modal").modal("show");
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -71,7 +71,7 @@ function EditGuideSuccess(data) {
     if (data.success) {
         $("#Modal").modal("hide");
         RefreshGuidesTable();
-        ViewNotification("Изменения сохранены", "success");
+        ViewNotification("Changes saved", "success");
     } else {
         ViewNotification(data.errorReason, "error");
     }
@@ -87,7 +87,7 @@ function RefreshGuidesTable() {
             OnGuidesDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }

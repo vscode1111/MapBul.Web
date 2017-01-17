@@ -3,7 +3,7 @@
     $("#NewArticleCategoryFormSubmit").click(SendNewArticleCategoryForm);
     $("#EditArticleCategoryButton").click(OnEditArticleCategoryClick);
     jQuery.extend(jQuery.validator.messages, {
-        required: "Заполните поле"
+        required: "Fill out the field"
     });
     $('.colorInput').colorpicker();
 }
@@ -29,12 +29,12 @@ function SendEditArticleCategoryForm() {
         contentType: false,
         processData: false,
         type: "POST",
-        success: function() {
+        success: function () {
             AddNewArticleCategorySuccess();
             $("#Modal").modal("hide");
         },
-        error:function() {
-            ViewNotification("Ошибка","error");
+        error: function () {
+            ViewNotification("Error", "error");
         }
     });
     return false;
@@ -45,14 +45,14 @@ function OnEditArticleCategoryClick() {
     $.ajax({
         url: "Dictionaries/_EditCategoryModalPartial",
         type: "POST",
-        data:{categoryId:categoryId},
+        data: { categoryId: categoryId },
         success: function (data) {
             $("#ModalContent").html(data);
             $("#Modal").modal("show");
             OnEditArticleCategoryDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -70,7 +70,7 @@ function OnDeleteArticleCategoryClick() {
             }
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -78,7 +78,7 @@ function OnDeleteArticleCategoryClick() {
 
 function SendNewArticleCategoryForm() {
     if (!($("#NewArticleCategoryForm").valid())) {
-        ViewNotification("Заполните обязательные поля!", "error");
+        ViewNotification("Fill in required fields!", "error");
         return 0;
     }
     var form = document.getElementById("NewArticleCategoryForm");
@@ -94,8 +94,8 @@ function SendNewArticleCategoryForm() {
         processData: false,
         type: "POST",
         success: AddNewArticleCategorySuccess,
-        error: function() {
-            ViewNotification("Ошибка", "error");
+        error: function () {
+            ViewNotification("Error", "error");
         }
     });
     return false;
@@ -110,13 +110,13 @@ function RefreshArticleCategoriesPage() {
             OnArticleCategoriesDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
 
 function AddNewArticleCategorySuccess() {
-    ViewNotification("Категория сохранена", "success");
+    ViewNotification("Category saved", "success");
     RefreshArticleCategoriesPage();
 }
 
@@ -133,10 +133,10 @@ function SendNewStructure(string) {
         type: "POST",
         data: { structure: string },
         success: function () {
-            ViewNotification("Изменения сохранены", 'success');
+            ViewNotification("Changes saved", 'success');
         },
         error: function () {
-            ViewNotification("Не удалось сохранить", 'error');
+            ViewNotification("Could not save", 'error');
         }
     });
 }

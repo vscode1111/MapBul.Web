@@ -3,7 +3,7 @@
     $("#NewMarkerCategoryFormSubmit").click(SendNewMarkerCategoryForm);
     $("#EditMarkerCategoryButton").click(OnEditMarkerCategoryClick);
     jQuery.extend(jQuery.validator.messages, {
-        required: "Заполните поле"
+        required: "Fill out the field"
     });
     $('.colorInput').colorpicker();
 }
@@ -35,7 +35,7 @@ function SendEditMarkerCategoryForm() {
             $("#Modal").modal("hide");
         },
         error:function() {
-            ViewNotification("Ошибка","error");
+            ViewNotification("Error", "error");
         }
     });
     return false;
@@ -54,7 +54,7 @@ function OnDeleteMarkerCategoryClick() {
             }
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -71,14 +71,14 @@ function OnEditMarkerCategoryClick() {
             OnEditMarkerCategoryDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
 
 function SendNewMarkerCategoryForm() {
     if (!($("#NewMarkerCategoryForm").valid())) {
-        ViewNotification("Заполните обязательные поля!", "error");
+        ViewNotification("Fill in required fields!", "error");
         return 0;
     }
     var form = document.getElementById("NewMarkerCategoryForm");
@@ -95,7 +95,7 @@ function SendNewMarkerCategoryForm() {
         type: "POST",
         success: AddNewMarkerCategorySuccess,
         error: function() {
-            ViewNotification("Ошибка", "error");
+            ViewNotification("Error", "error");
         }
     });
     return false;
@@ -110,13 +110,13 @@ function RefreshMarkerCategoriesPage() {
             OnMarkerCategoriesDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
 
 function AddNewMarkerCategorySuccess() {
-    ViewNotification("Категория сохранена", "success");
+    ViewNotification("Category saved", "success");
     RefreshMarkerCategoriesPage();
 }
 
@@ -133,10 +133,10 @@ function SendNewStructure(string) {
         type: "POST",
         data: { structure: string },
         success: function () {
-            ViewNotification("Изменения сохранены", 'success');
+            ViewNotification("Changes saved", 'success');
         },
         error: function () {
-            ViewNotification("Не удалось сохранить", 'error');
+            ViewNotification("Could not save", 'error');
         }
     });
 }

@@ -15,7 +15,7 @@
     MapInit();
 
     jQuery.extend(jQuery.validator.messages, {
-        required: "Заполните поле"
+        required: "Fill out the field"
     });
 }
 
@@ -39,7 +39,7 @@ function OnEditMarkerDocumentReady() {
     MapInit();
 
     jQuery.extend(jQuery.validator.messages, {
-        required: "Заполните поле"
+        required: "Fill out the field"
     });
 }
 
@@ -65,7 +65,7 @@ function OnEditMarkerFormSubmit() {
     var form = document.getElementById("EditMarkerForm");
 
     if (!($("#EditMarkerForm").valid())) {
-        ViewNotification("Заполните обязательные поля!", "error");
+        ViewNotification("Fill in required fields!", "error");
         return 0;
     }
 
@@ -103,7 +103,7 @@ function OnEditMarkerFormSubmit() {
             AddNewMarkerSuccess();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
     return false;
@@ -120,7 +120,7 @@ function OnEditMarkerClick() {
             $("#ModalContent").html(data);
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -130,7 +130,7 @@ function OnNewMarkerFormSubmit() {
     var form = document.getElementById("NewMarkerForm");
 
     if (!($("#NewMarkerForm").valid())) {
-        ViewNotification("Заполните обязательные поля!","error");
+        ViewNotification("Fill in required fields!", "error");
         return 0;
     }
 
@@ -179,7 +179,7 @@ function OnNewMarkerFormSubmit() {
             AddNewMarkerSuccess();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
     return false;
@@ -188,7 +188,7 @@ function OnNewMarkerFormSubmit() {
 
 function AddNewMarkerSuccess() {
     RefreshMarkersPage();
-    ViewNotification("Маркер сохранен", "success");
+    ViewNotification("Marker saved", "success");
     $("#Modal").modal("hide");
 }
 
@@ -201,7 +201,7 @@ function RefreshMarkersPage() {
             OnMarkersDocumentReady();
         },
         error: function() {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -264,7 +264,7 @@ function ChangeCitySelect(result) {
                             found = true;
                         }
                         if ((index2 === ($("#MarkerCitySelect option").length - 1)) && !found) {
-                            ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
+                            ViewNotification("This city is not found in the directory, first add the city", "error");
                             $("#MarkerCitySelect").val("").trigger("chosen:updated");
                         }
                     });
@@ -273,7 +273,7 @@ function ChangeCitySelect(result) {
         }
         fullAddress += ", ";
         if ((index1 === ($(result.address_components).length - 1)) && localities === 0) {
-            ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
+            ViewNotification("This city is not found in the directory, first add the city", "error");
             $("#MarkerCitySelect").val("").trigger("chosen:updated");
         }
     });
@@ -341,7 +341,7 @@ function OnNewMarkerAddressChanged() {
     var address = $("#NewMarkerHouseInput").val() + ", "+$("#NewMarkerStreetInput").val()+ ", " + $("#MarkerCitySelect option:selected").text();
     window.geocoder.geocode({ 'address': address }, function(results, status) {
         if (status !== "OK") {
-            ViewNotification("Проверьте корректность адреса", "error");
+            ViewNotification("Check the validity of the addresses", "error");
             return;
 
         }
@@ -373,10 +373,10 @@ function OnMarkersDocumentReady() {
                     statusId: statusId
                 },
                 success: function () {
-                    ViewNotification("Статус изменен", "success");
+                    ViewNotification("Status changed", "success");
                 },
                 error: function () {
-                    ViewNotification('Ошибка', 'error');
+                    ViewNotification('Error', 'error');
                 }
             });
         });
@@ -386,17 +386,17 @@ function OnMarkersDocumentReady() {
             "pageLength": 30,
             "autoWidth": true,
             "language": {
-                "lengthMenu": "Показать _MENU_",
-                "zeroRecords": "Ничего не найдено",
-                "info": "Страница _PAGE_ из _PAGES_",
-                "infoEmpty": "Нет записей",
-                "infoFiltered": "(Найдено из _MAX_ строк)",
-                "search": "Поиск",
+                "lengthMenu": "Show _MENU_",
+                "zeroRecords": "Nothing found",
+                "info": "Page _PAGE_ from _PAGES_",
+                "infoEmpty": "No records",
+                "infoFiltered": "(Found from _MAX_)",
+                "search": "Search",
                 "paginate": {
-                    "first": "Первая",
-                    "last": "Последняя",
-                    "next": "Следующая",
-                    "previous": "Предыдущая"
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
                 }
             }
         });
@@ -414,7 +414,7 @@ function OnNewMarkerClick() {
             $("#ModalContent").html(data);
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -430,14 +430,14 @@ function OnMarkerDeleteClick() {
         data: { markerId: id },
         success: function (data) {
             if (data) {
-                ViewNotification("Маркер удален", "success");
+                ViewNotification("The marker is removed", "success");
                 RefreshMarkersPage();
             } else {
-                ViewNotification('Ошибка', 'error');
+                ViewNotification('Error', 'error');
             }
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }

@@ -105,3 +105,5 @@ C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.Resource.Resourc
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.Resource.Resource.ru.resources
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.csproj.GenerateResource.Cache
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\ru\MapBul.Web.resources.dll
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.Resource.JavaScriptResource.resources
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Release\MapBul.Web.Resource.JavaScriptResource.ru.resources

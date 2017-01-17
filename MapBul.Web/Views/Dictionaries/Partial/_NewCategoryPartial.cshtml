@@ -13,11 +13,11 @@
             @Html.HiddenFor(m=>m.ForArticle)
             <div class="form-group">
                 <label class="control-label">@Resource.DicCategoryName</label>
-                @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", @Resource.DicName }, {"required", ""}, {"class", "form-control"}})
+                @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", Resource.Name }, {"required", ""}, {"class", "form-control"}})
             </div>
             <div class="form-group">
                 <label class="control-label">@Resource.DicParentCategory</label>
-                @Html.DropDownListFor(m => m.ParentId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Value = c.Id.ToString(), Text = c.Name}).Concat(new List<SelectListItem> {new SelectListItem {Text = "Нет", Value = "null"}}), new Dictionary<string, object> {{"data-placeholder", @Resource.DicSelectACategory }, {"class", "form-control chosenselect"}})
+                @Html.DropDownListFor(m => m.ParentId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Value = c.Id.ToString(), Text = c.Name}).Concat(new List<SelectListItem> {new SelectListItem {Text = "Нет", Value = "null"}}), new Dictionary<string, object> {{"data-placeholder", Resource.DicSelectACategory }, {"class", "form-control chosenselect"}})
             </div>
             <div class="form-group">
                 <label class="control-label">@Resource.DicCategoryIcon <br /> @Resource.DicCategoryIconText</label>
@@ -29,10 +29,10 @@
             </div>
             <div class="form-group">
                 <label class="control-label">@Resource.DicColor</label>
-                @Html.TextBoxFor(m => m.Color, new Dictionary<string, object> {{"value", "#5367ce"}, {"placeholder", Resource.DicName }, {"required", ""}, {"class", "form-control colorInput"}})
+                @Html.TextBoxFor(m => m.Color, new Dictionary<string, object> {{"value", "#5367ce"}, {"placeholder", Resource.Name }, {"required", ""}, {"class", "form-control colorInput"}})
             </div>
             <div class="form-group">
-                <input id="New@(articleOrMarker)CategoryFormSubmit" type="button" class="btn btn-primary" value=@Resource.DicSave />
+                <input id="New@(articleOrMarker)CategoryFormSubmit" type="button" class="btn btn-primary" value=@Resource.Save />
             </div>
         </form>
     </div>

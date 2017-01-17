@@ -45,8 +45,10 @@
     @Scripts.Render("~/plugins/switchery")
     @Scripts.Render("~/plugins/nestable") 
     @Scripts.Render("~/plugins/colorpicker")
-    @Scripts.Render("~/CustomScripts/Cities")
-    @Scripts.Render("~/CustomScripts/Categories")
+    @Scripts.Render(JavaScriptResource.Cities)
+    @*@Scripts.Render("~/CustomScripts/Cities")*@
+    @Scripts.Render(JavaScriptResource.Categories)
+    @*@Scripts.Render("~/CustomScripts/Categories")*@
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
 }

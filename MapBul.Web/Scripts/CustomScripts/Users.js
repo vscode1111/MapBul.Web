@@ -4,7 +4,7 @@
 
 function DeleteSuccess(data, refreshFunction) {
     if (data.success) {
-        ViewNotification("Пользователь удален", "success");
+        ViewNotification("User deleted", "success");
         $("#Modal").modal("hide");
         refreshFunction();
     }
@@ -23,7 +23,7 @@ function AjaxRequestWithoutParams(url) {
                 ViewNotification(data.message, 'error');
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
 
         }
     });
@@ -44,7 +44,7 @@ function AjaxRequest(selectedIds, url) {
                 ViewNotification(data.message, 'error');
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
 
         }
     });

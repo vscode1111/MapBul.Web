@@ -1,25 +1,25 @@
 ﻿function OnNewArticleDocumentReady() {
     $("#NewArticleFormSubmit").click(OnNewArticleFormSubmit);
     $('.chosenselect').chosen();
-    $('.datepicker').datepicker({ language: "ru" });
+    $('.datepicker').datepicker({ language: "en" });
 
     $("#NewArticleMarkerSelect_chosen").click(OnNewArticleMarkerSelectClick);
     $("#NewArticleCitySelect_chosen").click(OnNewArticleCitySelectClick);
     jQuery.extend(jQuery.validator.messages, {
-        required: "Заполните поле"
+        required: "Fill in the"
     });
 }
 
 function OnEditArticleDocumentReady() {
     $("#EditArticleFormSubmit").click(OnEditArticleFormSubmit);
     $('.chosenselect').chosen();
-    $('.datepicker').datepicker({ language: "ru" });
+    $('.datepicker').datepicker({ language: "en" });
 
     $("#EditArticleMarkerSelect_chosen").click(OnEditArticleMarkerSelectClick);
     $("#EditArticleCitySelect_chosen").click(OnEditArticleCitySelectClick);
 
     jQuery.extend(jQuery.validator.messages, {
-        required: "Заполните поле"
+        required: "Fill in the"
     });
 }
 
@@ -36,17 +36,17 @@ function OnArticlesDocumentReady() {
             "pageLength": 30,
             "autoWidth": true,
             "language": {
-                "lengthMenu": "Показать _MENU_",
-                "zeroRecords": "Ничего не найдено",
-                "info": "Страница _PAGE_ из _PAGES_",
-                "infoEmpty": "Нет записей",
-                "infoFiltered": "(Найдено из _MAX_ строк)",
-                "search": "Поиск",
+                "lengthMenu": "Show _MENU_",
+                "zeroRecords": "Nothing found",
+                "info": "Page _PAGE_ from _PAGES_",
+                "infoEmpty": "No records",
+                "infoFiltered": "(Found from _MAX_)",
+                "search": "Search",
                 "paginate": {
-                    "first": "Первая",
-                    "last": "Последняя",
-                    "next": "Следующая",
-                    "previous": "Предыдущая"
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
                 }
             }
         });
@@ -67,10 +67,10 @@ function OnArticlesDocumentReady() {
                     statusId: statusId
                 },
                 success: function () {
-                    ViewNotification("Статус изменен", "success");
+                    ViewNotification("Status changed", "success");
                 },
                 error: function () {
-                    ViewNotification('Ошибка', 'error');
+                    ViewNotification('Error', 'error');
                 }
             });
         });
@@ -83,16 +83,16 @@ function OnArticleDeleteClick() {
         url: "Articles/DeleteArticle",
         type: "POST",
         data: { articleId: id },
-        success:function(data) {
+        success: function (data) {
             if (data) {
-                ViewNotification("Статья удалена", "success");
+                ViewNotification("Article deleted", "success");
                 RefreshArticlesPage();
             } else {
-                ViewNotification('Ошибка', 'error');
+                ViewNotification('Error', 'error');
             }
         },
-        error:function() {
-            ViewNotification('Ошибка', 'error');
+        error: function () {
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -101,7 +101,7 @@ function OnEditArticleMarkerSelectClick() {
     $("#EditArticleMarkerSelect").removeAttr("disabled");
     $("#EditArticleMarkerSelect").trigger("chosen:updated");
 
-    $("#EditArticleCitySelect").val("Нет");
+    $("#EditArticleCitySelect").val("Not");
     $("#EditArticleCitySelect").attr("disabled", "disabled");
     $("#EditArticleCitySelect").trigger("chosen:updated");
 }
@@ -110,7 +110,7 @@ function OnEditArticleCitySelectClick() {
     $("#EditArticleCitySelect").removeAttr("disabled");
     $("#EditArticleCitySelect").trigger("chosen:updated");
 
-    $("#EditArticleMarkerSelect").val("Нет");
+    $("#EditArticleMarkerSelect").val("Not");
     $("#EditArticleMarkerSelect").attr("disabled", "disabled");
     $("#EditArticleMarkerSelect").trigger("chosen:updated");
 }
@@ -120,7 +120,7 @@ function OnNewArticleMarkerSelectClick() {
     $("#NewArticleMarkerSelect").removeAttr("disabled");
     $("#NewArticleMarkerSelect").trigger("chosen:updated");
 
-    $("#NewArticleCitySelect").val("Нет");
+    $("#NewArticleCitySelect").val("Not");
     $("#NewArticleCitySelect").attr("disabled", "disabled");
     $("#NewArticleCitySelect").trigger("chosen:updated");
 }
@@ -129,7 +129,7 @@ function OnNewArticleCitySelectClick() {
     $("#NewArticleCitySelect").removeAttr("disabled");
     $("#NewArticleCitySelect").trigger("chosen:updated");
 
-    $("#NewArticleMarkerSelect").val("Нет");
+    $("#NewArticleMarkerSelect").val("Not");
     $("#NewArticleMarkerSelect").attr("disabled", "disabled");
     $("#NewArticleMarkerSelect").trigger("chosen:updated");
 }
@@ -145,7 +145,7 @@ function OnEditArticleClick() {
             $("#ModalContent").html(data);
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -154,7 +154,7 @@ function OnEditArticleFormSubmit() {
     var form = document.getElementById("EditArticleForm");
 
     if (!($("#EditArticleForm").valid())) {
-        ViewNotification("Заполните обязательные поля!", "error");
+        ViewNotification("Fill in required fields!", "error");
         return 0;
     }
 
@@ -175,7 +175,7 @@ function OnEditArticleFormSubmit() {
             AddNewArticleSuccess();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
     return false;
@@ -185,7 +185,7 @@ function OnNewArticleFormSubmit() {
     var form = document.getElementById("NewArticleForm");
 
     if (!($("#NewArticleForm").valid())) {
-        ViewNotification("Заполните обязательные поля!", "error");
+        ViewNotification("Fill in required fields!", "error");
         return 0;
     }
 
@@ -206,7 +206,7 @@ function OnNewArticleFormSubmit() {
             AddNewArticleSuccess();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
     return false;
@@ -214,7 +214,7 @@ function OnNewArticleFormSubmit() {
 
 function AddNewArticleSuccess() {
     RefreshArticlesPage();
-    ViewNotification("Статья сохранена", "success");
+    ViewNotification("Article saved", "success");
     $("#Modal").modal("hide");
 }
 
@@ -227,7 +227,7 @@ function RefreshArticlesPage() {
             OnArticlesDocumentReady();
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }
@@ -242,7 +242,7 @@ function OnNewArticleClick() {
             $("#ModalContent").html(data);
         },
         error: function () {
-            ViewNotification('Ошибка', 'error');
+            ViewNotification('Error', 'error');
         }
     });
 }

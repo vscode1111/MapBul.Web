@@ -184,6 +184,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\MySqlRepository.cs" />
+    <Compile Include="Resource\JavaScriptResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JavaScriptResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resource\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -326,20 +331,31 @@
     <None Include="Properties\PublishProfiles\MapBul.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\CustomScripts\Admins.js" />
-    <Content Include="Scripts\CustomScripts\Articles.js" />
+    <Content Include="Scripts\CustomScripts\AdminsRu.js" />
     <Content Include="Scripts\CustomScripts\ArticleCategories.js" />
-    <Content Include="Scripts\CustomScripts\MarkerCategories.js" />
+    <Content Include="Scripts\CustomScripts\Articles.js" />
+    <Content Include="Scripts\CustomScripts\ArticlesRu.js" />
+    <Content Include="Scripts\CustomScripts\ArticleCategoriesRu.js" />
     <Content Include="Scripts\CustomScripts\Cities.js" />
-    <Content Include="Scripts\CustomScripts\Dictionaries.js" />
     <Content Include="Scripts\CustomScripts\Editors.js" />
+    <Content Include="Scripts\CustomScripts\GuidesRu.js" />
+    <Content Include="Scripts\CustomScripts\JournalistsRu.js" />
+    <Content Include="Scripts\CustomScripts\MarkerCategories.js" />
+    <Content Include="Scripts\CustomScripts\CitiesRu.js" />
+    <Content Include="Scripts\CustomScripts\Dictionaries.js" />
+    <Content Include="Scripts\CustomScripts\EditorsRu.js" />
     <Content Include="Scripts\CustomScripts\Guides.js" />
     <Content Include="Scripts\CustomScripts\Index.js" />
     <Content Include="Scripts\CustomScripts\Journalists.js" />
+    <Content Include="Scripts\CustomScripts\MarkerCategoriesRu.js" />
     <Content Include="Scripts\CustomScripts\Markers.js" />
+    <Content Include="Scripts\CustomScripts\MarkersRu.js" />
     <Content Include="Scripts\CustomScripts\Shared.js" />
     <Content Include="Scripts\CustomScripts\Tenants.js" />
+    <Content Include="Scripts\CustomScripts\TenantsRu.js" />
     <Content Include="Scripts\CustomScripts\Users.js" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
+    <Content Include="Scripts\CustomScripts\UsersRu.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -886,6 +902,14 @@
     <Content Include="Scripts\plugins\justified-gallery\README.md" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resource\JavaScriptResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>JavaScriptResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\JavaScriptResource.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resource\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>

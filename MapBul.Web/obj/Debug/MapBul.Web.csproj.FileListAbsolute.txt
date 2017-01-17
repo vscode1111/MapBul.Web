@@ -156,3 +156,5 @@ C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Debug\MapBul.Web.csproj.GenerateRes
 C:\Projects\GitProjects\MBWeb\MapBul.Web\bin\ru\MapBul.Web.resources.dll
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Debug\MapBul.Web.Resource.Resource.ru.resources
 C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Debug\ru\MapBul.Web.resources.dll
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Debug\MapBul.Web.Resource.JavaScriptResource.resources
+C:\Projects\GitProjects\MBWeb\MapBul.Web\obj\Debug\MapBul.Web.Resource.JavaScriptResource.ru.resources
