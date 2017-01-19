@@ -18,13 +18,37 @@
                     @Html.HiddenFor(m => m.Logo)
 
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", Resource.Name +"*"}, {"class", "form-control"}, {"required", ""}})
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> { { "placeholder", Resource.Name + "*" }, { "class", "form-control" }, { "required", "" } })
+                            @Html.TextBoxFor(m => m.NameEn, new Dictionary<string, object> { { "placeholder", "Name" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.NameEn, new Dictionary<string, object> { { "placeholder", Resource.Name + "*" }, { "class", "form-control" }, { "required", "" } })
+                        }
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Introduction, new Dictionary<string, object> {{"placeholder", "Вступление*"}, {"class", "form-control"}, {"required", ""}})
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextBoxFor(m => m.Introduction, new Dictionary<string, object> { { "placeholder", "Вступление*" }, { "class", "form-control" }, { "required", "" } })
+                            @Html.TextBoxFor(m => m.IntroductionEn, new Dictionary<string, object> { { "placeholder", "Introduction" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.IntroductionEn, new Dictionary<string, object> { { "placeholder", "Introduction*" }, { "class", "form-control" }, { "required", "" } })
+                        }
                     </div>
                     <div class="form-group">
-                        @Html.TextAreaFor(m => m.Description, new Dictionary<string, object> {{"placeholder", Resource.Description +"*"}, {"class", "form-control"}, {"required", ""}})
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextAreaFor(m => m.Description, new Dictionary<string, object> { { "placeholder", Resource.Description + "*" }, { "class", "form-control" }, { "required", "" } })
+                            @Html.TextAreaFor(m => m.DescriptionEn, new Dictionary<string, object> { { "placeholder", "Description" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(m => m.IntroductionEn, new Dictionary<string, object> { { "placeholder", "Description*" }, { "class", "form-control" }, { "required", "" } })
+                        }
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Site, new Dictionary<string, object> {{"placeholder", Resource.Site }, {"class", "form-control"}})
@@ -40,11 +64,11 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">@Resource.BaseCategory</label>
-                        @Html.DropDownListFor(m => m.BaseCategoryId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"required", ""}})
+                        @Html.DropDownListFor(m => m.BaseCategoryId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Text = Request.UserLanguages[0].ToUpper().Contains("RU")? c.Name +" "+c.EnName:c.EnName, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"required", ""}})
                     </div>
                     <div class="form-group">
                         <label class="control-label">Тэги</label>
-                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.SubCategories.Contains(c.Id), Text = c.Name, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}})
+                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.SubCategories.Contains(c.Id), Text = Request.UserLanguages[0].ToUpper().Contains("RU")? c.Name +" "+c.EnName:c.EnName, Value = c.Id.ToString()}), new Dictionary<string, object> {{"class", "form-control chosenselect"}, {"multiple", ""}, {"data-placeholder", "Выберите тэги"}})
                     </div>
                     <div class="form-group">
                         <label class="control-label">Новая фотография <br /> (Фотография, отображаемая в описании метки)</label>
@@ -148,9 +172,19 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    @foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                    @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
                                     {
-                                        <th>@weekDay.Description</th>
+                                        foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                        {
+                                            <th>@weekDay.Description</th>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var weekDay in ((List<weekday>)ViewBag.WeekDays))
+                                        {
+                                            <th>@weekDay.DescriptionEn</th>
+                                        }
                                     }
                                 </tr>
                             </thead>

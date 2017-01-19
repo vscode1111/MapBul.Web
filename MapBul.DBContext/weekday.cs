@@ -26,6 +26,9 @@ namespace MapBul.DBContext
         [StringLength(45)]
         public string Description { get; set; }
 
+        [StringLength(45)]
+        public string DescriptionEn { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<worktime> worktime { get; set; }
     }

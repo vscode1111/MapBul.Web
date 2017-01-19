@@ -1,9 +1,11 @@
 ﻿using System.Web.Mvc;
 using MapBul.Web.Auth;
+using MapBul.Web.Filters;
 using MapBul.Web.Models;
 
 namespace MapBul.Web.Controllers
 {
+    [Culture]
     public class LoginController : Controller
     {
         /// <summary>

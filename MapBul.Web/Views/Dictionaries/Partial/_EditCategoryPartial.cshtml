@@ -8,7 +8,7 @@
     </div>
     <div class="ibox-content">
         <div class="form-group">
-            @Html.DropDownList("EditCategorySelect", (Model.Categories).Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }), new Dictionary<string, object> { { "id", "Edit"+articleOrMarker+"CategorySelect" }, { "data-placeholder", @Resource.DicSelectACategory }, { "class", "form-control chosenselect" } })
+            @Html.DropDownList("EditCategorySelect", (Model.Categories).Select(c => new SelectListItem { Value = c.Id.ToString(), Text = Request.UserLanguages[0].ToUpper().Contains("RU")? c.Name +" "+c.EnName:c.EnName }), new Dictionary<string, object> { { "id", "Edit"+articleOrMarker+"CategorySelect" }, { "data-placeholder", @Resource.DicSelectACategory }, { "class", "form-control chosenselect" } })
         </div>
         <div class="form-group">
             <input id="Edit@(articleOrMarker)CategoryButton" type="button" class="btn btn-primary" value=@Resource.DicEdit />

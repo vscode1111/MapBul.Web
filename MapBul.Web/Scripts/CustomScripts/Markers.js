@@ -188,7 +188,7 @@ function OnNewMarkerFormSubmit() {
 
 function AddNewMarkerSuccess() {
     RefreshMarkersPage();
-    ViewNotification("Marker saved", "success");
+    ViewNotification("Pin saved", "success");
     $("#Modal").modal("hide");
 }
 
@@ -430,7 +430,7 @@ function OnMarkerDeleteClick() {
         data: { markerId: id },
         success: function (data) {
             if (data) {
-                ViewNotification("The marker is removed", "success");
+                ViewNotification("The pin is removed", "success");
                 RefreshMarkersPage();
             } else {
                 ViewNotification('Error', 'error');

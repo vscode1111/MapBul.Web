@@ -14,12 +14,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var country in Model.Countries)
+                @foreach (var country in Model.Countries.Where(c=>c.Country.Id!=0))
                 {
                     <tr>
-                        <td>@country.Name</td>
+                        <td>@country.CountryName</td>
                         <td>
-                            <input data-id="@country.Id" type="button" class="DeleteCountryButton btn btn-danger" value=@Resource.Delete />
+                            <input data-id="@country.Country.Id" type="button" class="DeleteCountryButton btn btn-danger" value=@Resource.Delete />
                         </td>
                     </tr>
 
@@ -54,14 +54,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var city in Model.Cities)
+                @foreach (var city in Model.Cities.Where(c => c.City.Id != 0))
                 {
                     <tr>
-                        <td>@city.Name</td>
+                        <td>@city.CityName</td>
                         <!--<td>city.region.Name</td>-->
-                        <td>@city.country.Name</td>
+                        <td>@city.CountryName</td>
                         <td>
-                            <input data-id="@city.Id" type="button" class="DeleteCityButton btn btn-danger" value=@Resource.Delete />
+                            <input data-id="@city.City.Id" type="button" class="DeleteCityButton btn btn-danger" value=@Resource.Delete />
                         </td>
                     </tr>
                 }
@@ -70,9 +70,9 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <select class="form-control" id="CountrySelectForCity">
-                        @foreach (var country in Model.Countries)
+                        @foreach (var country in Model.Countries.Where(c => c.Country.Id != 0))
                         {
-                            <option data-countryname="@country.Name" data-countrycode="@country.Code" data-placeid="@country.PlaceId" value="@country.Id">@country.Name</option>
+                            <option data-countryname="@country.CountryName" data-countrycode="@country.Country.Code" data-placeid="@country.Country.PlaceId" value="@country.Country.Id">@country.CountryName</option>
                         }
                     </select>
                 </div>

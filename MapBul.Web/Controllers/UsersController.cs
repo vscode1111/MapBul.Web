@@ -4,11 +4,13 @@ using System.Web.Mvc;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
+using MapBul.Web.Filters;
 using MapBul.Web.Models;
 using MapBul.Web.Repository;
 
 namespace MapBul.Web.Controllers
 {
+    [Culture]
     public class UsersController : Controller
     {
         /// <summary>

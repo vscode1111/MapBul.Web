@@ -391,6 +391,10 @@ namespace MapBul.Web.Repository
             var existingCategory=_db.category.First(c => c.Id == model.Id);
             existingCategory.Icon = model.Icon;
             existingCategory.Name = model.Name;
+            if (!string.IsNullOrEmpty(model.EnName))
+            {
+                existingCategory.EnName = model.EnName;
+            }
             existingCategory.ParentId = model.ParentId;
             existingCategory.Color = model.Color;
             existingCategory.Pin = model.Pin;
@@ -675,7 +679,7 @@ namespace MapBul.Web.Repository
             catch (Exception)
             {
                 trans.Rollback();
-                throw;
+                return;
             }
 
         }

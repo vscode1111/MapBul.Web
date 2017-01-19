@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using MapBul.DBContext;
 using MapBul.Web.Repository;
@@ -10,13 +13,97 @@ namespace MapBul.Web.Models
         public CitiesModel()
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            Countries = repo.GetCountries();
+            Countries = repo.GetCountries().Select(c => new CountrieTranslate(c)).ToList();
 //            Regions = repo.GetRegions();
-            Cities = repo.GetCities();
+            Cities = repo.GetCities().Select(c => new CityTranslate(c)).ToList();
+
         }
-        public List<country> Countries { get; set; }
+        public List<CountrieTranslate> Countries { get; set; }
         public List<region> Regions { get; set; }
-        public List<city> Cities { get; set; }
+        public List<CityTranslate> Cities { get; set; }
+    }
+
+    public class CountrieTranslate
+    {
+        public CountrieTranslate(country country)
+        {
+            Country = country;
+            CountryName = Translate(country.Name);
+        }
+
+        public country Country;
+        public string CountryName;
+
+        private string Translate(string name)
+        {
+            HttpRequest request = HttpContext.Current.Request;
+            string lang;
+            if (request.UserLanguages?.Length > 0)
+            {
+                lang = request.UserLanguages[0].Substring(0, 2);
+            }
+            else
+            {
+                lang = "en";
+            }
+            //https://translate.google.com/translate_t/?client=j&ie=UTF8&text=apple&langpair=auto|ru
+            try
+            {
+                string url =
+                    $"https://translate.google.com/translate_a/t?client=j&ie=UTF8&text={name}&langpair=auto|{lang}";
+                WebClient webClient = new WebClient {Encoding = System.Text.Encoding.UTF8};
+                string result = webClient.DownloadString(url);
+                var temp = result.Split('\"')[1];
+                return temp;
+            }
+            catch
+            {
+                return name;
+            }
+        }
+    }
+
+    public class CityTranslate
+    {
+        public CityTranslate(city city)
+        {
+            City = city;
+            CityName = Translate(city.Name);
+            CountryName = Translate(city.country.Name);
+        }
+
+        public city City;
+        public string CityName;
+        public string CountryName;
+
+        private string Translate(string name)
+        {
+            HttpRequest request = HttpContext.Current.Request;
+            string lang;
+            if (request.UserLanguages?.Length > 0)
+            {
+                lang = request.UserLanguages[0].Substring(0, 2);
+            }
+            else
+            {
+                lang = "en";
+            }
+            try
+            {
+                string url =
+                    $"https://translate.google.com/translate_a/t?client=j&ie=UTF8&text={name}&langpair=auto|{lang}";
+                WebClient webClient = new WebClient();
+                webClient.Encoding = System.Text.Encoding.UTF8;
+                string result = webClient.DownloadString(url);
+                var temp = result.Split('\"')[1];
+                return temp;
+            }
+            catch
+            {
+                return name;
+            }
+        }
+
     }
 
     public class CategoriesModel

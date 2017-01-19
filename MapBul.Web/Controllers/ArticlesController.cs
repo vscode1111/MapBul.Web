@@ -4,11 +4,13 @@ using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
+using MapBul.Web.Filters;
 using MapBul.Web.Models;
 using MapBul.Web.Repository;
 
 namespace MapBul.Web.Controllers
 {
+    [Culture]
     public class ArticlesController : Controller
     {
         /// <summary>
@@ -100,6 +102,27 @@ namespace MapBul.Web.Controllers
             if (articleTitlePhoto != null)
                 model.TitlePhoto = FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
 
+            if (string.IsNullOrEmpty(model.Title) && !string.IsNullOrEmpty(model.TitleEn))
+            {
+                model.Title = model.TitleEn;
+            }
+            if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
+            {
+                model.Description= model.DescriptionEn;
+            }
+            if (string.IsNullOrEmpty(model.Text) && !string.IsNullOrEmpty(model.TextEn))
+            {
+                model.Text = model.TextEn;
+            }
+            if (string.IsNullOrEmpty(model.SourcePhoto) && !string.IsNullOrEmpty(model.SourcePhotoEn))
+            {
+                model.SourcePhoto = model.SourcePhotoEn;
+            }
+            if (string.IsNullOrEmpty(model.SourceUrl) && !string.IsNullOrEmpty(model.SourceUrlEn))
+            {
+                model.SourceUrl = model.SourceUrlEn;
+            }
+
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
@@ -150,6 +173,28 @@ namespace MapBul.Web.Controllers
                 FileProvider.DeleteFile(model.TitlePhoto);
                 model.TitlePhoto = FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
             }
+
+            if (string.IsNullOrEmpty(model.Title) && !string.IsNullOrEmpty(model.TitleEn))
+            {
+                model.Title = model.TitleEn;
+            }
+            if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
+            {
+                model.Description = model.DescriptionEn;
+            }
+            if (string.IsNullOrEmpty(model.Text) && !string.IsNullOrEmpty(model.TextEn))
+            {
+                model.Text = model.TextEn;
+            }
+            if (string.IsNullOrEmpty(model.SourcePhoto) && !string.IsNullOrEmpty(model.SourcePhotoEn))
+            {
+                model.SourcePhoto = model.SourcePhotoEn;
+            }
+            if (string.IsNullOrEmpty(model.SourceUrl) && !string.IsNullOrEmpty(model.SourceUrlEn))
+            {
+                model.SourceUrl = model.SourceUrlEn;
+            }
+
             repo.EditArticle(model, userGuid);
 
             return true;

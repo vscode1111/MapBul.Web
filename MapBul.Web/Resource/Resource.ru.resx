@@ -210,6 +210,10 @@
     <value>Обязательные поля помечены *</value>
   </data>
 
+
+  <data name="DicCategoryDrag" xml:space="preserve">
+    <value>Категории можно перетаскивать</value>
+  </data>
   <data name="DicPinsCategory" xml:space="preserve">
     <value>Категории маркеров</value>
   </data>

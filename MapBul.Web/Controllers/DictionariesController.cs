@@ -8,6 +8,7 @@ using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
+using MapBul.Web.Filters;
 using MapBul.Web.Models;
 using MapBul.Web.Repository;
 using Newtonsoft.Json;
@@ -24,6 +25,8 @@ namespace MapBul.Web.Controllers
         public List<NestableElement> children { get; set; }
     }
 
+
+    [Culture]
     public class DictionariesController : Controller
     {
         /// <summary>
@@ -241,6 +244,12 @@ namespace MapBul.Web.Controllers
             model.Pin = filePath;
 
             model.Color = model.Color.Replace("#", "");
+
+            if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.EnName))
+            {
+                model.Name = model.EnName;
+            }
+
             repo.AddNewCategory(model);
             return true;
         }
@@ -282,6 +291,13 @@ namespace MapBul.Web.Controllers
                 model.Pin = previousPin;
 
             model.Color = model.Color.Replace("#", "");
+
+
+            if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.EnName))
+            {
+                model.Name = model.EnName;
+            }
+
             repo.EditCategory(model);
             return true;
         }

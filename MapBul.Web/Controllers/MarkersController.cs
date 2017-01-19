@@ -6,12 +6,14 @@ using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
+using MapBul.Web.Filters;
 using MapBul.Web.Models;
 using MapBul.Web.Repository;
 using Newtonsoft.Json;
 
 namespace MapBul.Web.Controllers
 {
+    [Culture]
     public class MarkersController : Controller
     {
         /// <summary>
@@ -122,6 +124,20 @@ namespace MapBul.Web.Controllers
                 repo.AddMarkerPhotos(tempNewMarkerId, tempPhotosPaths);
             }
 
+
+            if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.NameEn))
+            {
+                model.Name = model.NameEn;
+            }
+            if (string.IsNullOrEmpty(model.Introduction) && !string.IsNullOrEmpty(model.IntroductionEn))
+            {
+                model.Introduction = model.IntroductionEn;
+            }
+            if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
+            {
+                model.Description = model.DescriptionEn;
+            }
+
             return true;
         }
 
@@ -157,6 +173,20 @@ namespace MapBul.Web.Controllers
                 string filePath = FileProvider.SaveMarkerLogo(markerLogo);
                 model.Logo = filePath;
             }
+
+            if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.NameEn))
+            {
+                model.Name = model.NameEn;
+            }
+            if (string.IsNullOrEmpty(model.Introduction) && !string.IsNullOrEmpty(model.IntroductionEn))
+            {
+                model.Introduction = model.IntroductionEn;
+            }
+            if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
+            {
+                model.Description = model.DescriptionEn;
+            }
+
             repo.EditMarker(model, openTimes, closeTimes, userGuid);
 
             return true;

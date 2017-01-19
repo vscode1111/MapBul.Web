@@ -39,6 +39,7 @@ function OnDictionariesPageReady() {
         }
     });
     geocoder = new window.google.maps.Geocoder();
+
     countryAutocomplete = new window.google.maps.places.Autocomplete(
     (document.getElementById("NewCountryInput")),
     { types: ["(regions)"] });

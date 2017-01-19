@@ -11,11 +11,19 @@
             @Html.HiddenFor(m=>m.ForArticle)
             <div class="form-group">
                 <label class="control-label">@Resource.DicCategoryName</label>
-                @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> {{"placeholder", @Resource.Name }, {"required", ""}, {"class", "form-control"}})
+                @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                {
+                    @Html.TextBoxFor(m => m.Name, new Dictionary<string, object> { { "placeholder", Resource.Name }, { "class", "form-control" }, { "required", "" } })
+                    @Html.TextBoxFor(m => m.EnName, new Dictionary<string, object> { { "placeholder", "Name" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.EnName, new Dictionary<string, object> { { "placeholder", Resource.Name }, { "class", "form-control" }, { "required", "" } })
+                }
             </div>
             <div class="form-group">
                 <label class="control-label">@Resource.DicParentCategory</label>
-                @Html.DropDownListFor(m => m.ParentId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.ParentId==c.Id,Value = c.Id.ToString(), Text = c.Name}).Concat(new List<SelectListItem> {new SelectListItem {Selected = Model.ParentId==null,Text = "Нет", Value = "null"}}), new Dictionary<string, object> {{"data-placeholder", Resource.DicSelectACategory }, {"class", "form-control chosenselect"}})
+                @Html.DropDownListFor(m => m.ParentId, ((List<category>) ViewBag.Categories).Select(c => new SelectListItem {Selected = Model.ParentId==c.Id,Value = c.Id.ToString(), Text = Request.UserLanguages[0].ToUpper().Contains("RU")? c.Name +" "+c.EnName:c.EnName}).Concat(new List<SelectListItem> {new SelectListItem {Selected = Model.ParentId==null,Text = "Нет", Value = "null"}}), new Dictionary<string, object> {{"data-placeholder", Resource.DicSelectACategory }, {"class", "form-control chosenselect"}})
             </div>
             <div class="form-group">
                 <label class="control-label">@Resource.DicCategoryIcon</label>

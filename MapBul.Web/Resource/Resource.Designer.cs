@@ -268,6 +268,15 @@ namespace MapBul.Web.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drag category to change order.
+        /// </summary>
+        public static string DicCategoryDrag {
+            get {
+                return ResourceManager.GetString("DicCategoryDrag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category icon.
         /// </summary>
         public static string DicCategoryIcon {

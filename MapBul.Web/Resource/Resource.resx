@@ -209,7 +209,10 @@
   <data name="NavUsers" xml:space="preserve">
     <value>Users</value>
   </data>
-  
+
+  <data name="DicCategoryDrag" xml:space="preserve">
+    <value>Drag category to change order</value>
+  </data>
   <data name="DicPinsCategory" xml:space="preserve">
     <value>Pins category</value>
   </data>

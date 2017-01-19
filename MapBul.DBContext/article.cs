@@ -20,6 +20,9 @@ namespace MapBul.DBContext
         [Required]
         [StringLength(60)]
         public string Title { get; set; }
+        
+        [StringLength(60)]
+        public string TitleEn { get; set; }
 
         [StringLength(200)]
         public string TitlePhoto { get; set; }
@@ -33,16 +36,31 @@ namespace MapBul.DBContext
 
         [Column(TypeName = "text")]
         [StringLength(65535)]
+        public string SourceUrlEn { get; set; }
+
+        [Column(TypeName = "text")]
+        [StringLength(65535)]
         public string SourcePhoto { get; set; }
-        
+
+        [Column(TypeName = "text")]
+        [StringLength(65535)]
+        public string SourcePhotoEn { get; set; }
+
         [Required]
         [StringLength(150)]
         public string Description { get; set; }
+        
+        [StringLength(150)]
+        public string DescriptionEn { get; set; }
 
         [Column(TypeName = "text")]
         [Required]
         [StringLength(65535)]
         public string Text { get; set; }
+
+        [Column(TypeName = "text")]
+        [StringLength(65535)]
+        public string TextEn { get; set; }
 
         public int AuthorId { get; set; }
 

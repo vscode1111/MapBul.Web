@@ -1,10 +1,12 @@
 ﻿using System.Web.Mvc;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
+using MapBul.Web.Filters;
 using MapBul.Web.Models;
 
 namespace MapBul.Web.Controllers
 {
+    [Culture]
     public class HomeController : Controller
     {
         /// <summary>

@@ -1,4 +1,5 @@
-﻿@using MapBul.DBContext
+﻿@using System.Diagnostics
+@using MapBul.DBContext
 @using MapBul.Web.Resource
 @model MapBul.Web.Models.NewArticleModel
 
@@ -11,13 +12,37 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Title, new Dictionary<string, object> { { "placeholder", Resource.Name }, { "class", "form-control" }, { "required", "" } })
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextBoxFor(m => m.Title, new Dictionary<string, object> { { "placeholder", Resource.Name }, { "class", "form-control" }, { "required", "" } })
+                            @Html.TextBoxFor(m => m.TitleEn, new Dictionary<string, object> { { "placeholder", "Name" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.TitleEn, new Dictionary<string, object> { { "placeholder", Resource.Name }, { "class", "form-control" }, { "required", "" } })
+                        }
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Description, new Dictionary<string, object> { { "placeholder", Resource.Description }, { "class", "form-control" }, { "required", "" } })
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextBoxFor(m => m.Description, new Dictionary<string, object> { { "placeholder", Resource.Description }, { "class", "form-control" }, { "required", "" } })
+                            @Html.TextBoxFor(m => m.DescriptionEn, new Dictionary<string, object> { { "placeholder", "Description" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.DescriptionEn, new Dictionary<string, object> { { "placeholder", Resource.Description }, { "class", "form-control" }, { "required", "" } })
+                        }
                     </div>
                     <div class="form-group">
-                        @Html.TextAreaFor(m => m.Text, new Dictionary<string, object> { { "placeholder", Resource.Text }, { "class", "form-control" }, { "required", "" } })
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextAreaFor(m => m.Text, new Dictionary<string, object> { { "placeholder", Resource.Text }, { "class", "form-control" }, { "required", "" } })
+                            @Html.TextAreaFor(m => m.TextEn, new Dictionary<string, object> { { "placeholder", "Text" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(m => m.TextEn, new Dictionary<string, object> { { "placeholder", Resource.Text }, { "class", "form-control" }, { "required", "" } })
+                        }
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.StartDate, new Dictionary<string, object> {{"placeholder", Resource.ArtEventStartDate }, {"class", "form-control datepicker"}})
@@ -45,20 +70,36 @@
                         <input type="file" id="NewArticlePhotoInput" class="form-control fileinput" accept="image/jpeg, image/png" />
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.SourceUrl, new Dictionary<string, object> { { "placeholder", Resource.ArtSourceLink }, { "class", "form-control" } })
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextBoxFor(m => m.SourceUrl, new Dictionary<string, object> { { "placeholder", Resource.ArtSourceLink }, { "class", "form-control" } })
+                            @Html.TextBoxFor(m => m.SourceUrlEn, new Dictionary<string, object> { { "placeholder", "Source link" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.SourceUrlEn, new Dictionary<string, object> { { "placeholder", Resource.ArtSourceLink }, { "class", "form-control" } })
+                        }
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.SourcePhoto, new Dictionary<string, object> { { "placeholder", Resource.Photo }, { "class", "form-control" } })
+                        @if (Request.UserLanguages[0].ToUpper().Contains("RU"))
+                        {
+                            @Html.TextBoxFor(m => m.SourcePhoto, new Dictionary<string, object> { { "placeholder", Resource.Photo }, { "class", "form-control" } })
+                            @Html.TextBoxFor(m => m.SourcePhotoEn, new Dictionary<string, object> { { "placeholder", "Photo" }, { "class", "form-control" }, { "style", "margin-top: 5px" } })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.SourcePhotoEn, new Dictionary<string, object> { { "placeholder", Resource.Photo }, { "class", "form-control" } })
+                        }
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="control-label">@Resource.BaseCategory</label>
-                        @Html.DropDownListFor(m => m.BaseCategoryId, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
+                        @Html.DropDownListFor(m => m.BaseCategoryId, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = Request.UserLanguages[0].ToUpper().Contains("RU") ? c.Name + " " + c.EnName : c.EnName, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "required", "" } })
                     </div>
                     <div class="form-group">
                         <label class="control-label">Тэги</label>
-                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "multiple", "" }, { "data-placeholder", "Выберите тэги" } })
+                        @Html.ListBoxFor(m => m.SubCategories, ((List<category>)ViewBag.Categories).Select(c => new SelectListItem { Text = Request.UserLanguages[0].ToUpper().Contains("RU") ? c.Name + " " + c.EnName : c.EnName, Value = c.Id.ToString() }), new Dictionary<string, object> { { "class", "form-control chosenselect" }, { "multiple", "" }, { "data-placeholder", "Выберите тэги" } })
                     </div>
                     <div class="form-group" id="MarkerSelectContainer">
                         <label class="control-label">@Resource.ArtAddLinkToPin</label>

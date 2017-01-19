@@ -25,14 +25,24 @@ namespace MapBul.DBContext
         [StringLength(50)]
         public string Name { get; set; }
 
+        [StringLength(50)]
+        public string NameEn { get; set; }
+
         [Required]
         [StringLength(60)]
         public string Introduction { get; set; }
+
+        [StringLength(60)]
+        public string IntroductionEn { get; set; }
 
         [Column(TypeName = "text")]
         [Required]
         [StringLength(65535)]
         public string Description { get; set; }
+
+        [Column(TypeName = "text")]
+        [StringLength(65535)]
+        public string DescriptionEn { get; set; }
 
         public int CityId { get; set; }
 
