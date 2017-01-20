@@ -21,13 +21,6 @@ namespace MapBul.Service
     // [System.Web.Script.Services.ScriptService]
     public class WebService : System.Web.Services.WebService
     {
-        [WebMethod]
-        public string Test()
-        {
-            var tempPhoto = Convert.FromBase64String("/9j/4R9hRXhpZgAATU0AKgAAAAgACQEyAAIAAAAUAAAAeoglAAQAAAABAAACdgEQAAIAAAAOAAAAjgITAAMAAAABAAEAAAEoAAMAAAABAAIAAAEbAAUAAAABAAAAnIdpAAQAAAABAAAAswEaAAUAAAABAAAApAEPAAIAAAAHAAAArAAAAtcyMDE2OjEwOjA5IDEzOjUyOjQwAExlbm92byBa");
-            return FileProvider.SaveMarkerPhoto(tempPhoto, false);
-        }
-
         #region private
             /// <summary>
             /// Метод возвращает список ИД категорий от данной до корневой
@@ -147,7 +140,7 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-        
+
         /// <summary>
         /// Метод возвращает список маркеров в указанном прямоугольнике
         /// </summary>
@@ -156,9 +149,10 @@ namespace MapBul.Service
         /// <param name="p2Lat"></param>
         /// <param name="p2Lng"></param>
         /// <param name="userGuid"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string userGuid)
+        public string GetMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string userGuid, string appLang)
         {
             try
             {
@@ -176,11 +170,17 @@ namespace MapBul.Service
                 {
                     if (!marker.Personal || marker.UserId == userId)
                     {
+                        string Name = marker.Name;
+                        if (appLang != "ru" && !string.IsNullOrEmpty(marker.NameEn))
+                        {
+                            Name = marker.NameEn;
+                        }
+
                         result.AddObjectToResult(
                             new
                             {
                                 marker.Id,
-                                marker.Name,
+                                Name,
                                 marker.Lat,
                                 marker.Lng,
                                 Icon = MapUrl(marker.category.Pin),
@@ -192,7 +192,12 @@ namespace MapBul.Service
                                     wt.weekday.Id
                                 }).ToList(),
                                 CategoriesBranch = GetCategoriesBranch(marker.category),
-                                SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
+                                SubCategories =
+                                    marker.subcategory.Select(
+                                        s =>
+                                            (appLang != "ru" && !string.IsNullOrEmpty(marker.NameEn))
+                                                ? s.category.EnName
+                                                : s.category.Name).ToList(),
                                 marker.Wifi,
                                 marker.Personal
                             }, i);
@@ -211,7 +216,7 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-        
+
         /// <summary>
         /// Метод возвращает список непереданных в данной сессии маркеров в указанном прямоугольнике
         /// </summary>
@@ -221,10 +226,10 @@ namespace MapBul.Service
         /// <param name="p2Lng"></param>
         /// <param name="sessionId"></param>
         /// <param name="userGuid"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
-        /// 
         [WebMethod]
-        public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId, string userGuid)
+        public string GetSessionMarkers(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId, string userGuid, string appLang)
         {
             try
             {
@@ -242,11 +247,16 @@ namespace MapBul.Service
                 {
                     if (!marker.Personal || marker.UserId == userId)
                     {
+                        string Name = marker.Name;
+                        if (appLang != "ru" && !string.IsNullOrEmpty(marker.NameEn))
+                        {
+                            Name = marker.NameEn;
+                        }
                         result.AddObjectToResult(
                             new
                             {
                                 marker.Id,
-                                marker.Name,
+                                Name,
                                 marker.Lat,
                                 marker.Lng,
                                 Icon = MapUrl(marker.category.Pin),
@@ -258,7 +268,12 @@ namespace MapBul.Service
                                     wt.weekday.Id
                                 }).ToList(),
                                 CategoriesBranch = GetCategoriesBranch(marker.category),
-                                SubCategories = marker.subcategory.Select(s => s.category.Name).ToList(),
+                                SubCategories =
+                                    marker.subcategory.Select(
+                                        s =>
+                                            (appLang != "ru" && !string.IsNullOrEmpty(marker.NameEn))
+                                                ? s.category.EnName
+                                                : s.category.Name).ToList(),
                                 marker.Wifi,
                                 marker.Personal
                             }, i);
@@ -303,14 +318,15 @@ namespace MapBul.Service
                 return JsonConvert.SerializeObject(new JsonResult(e.Message));
             }
         }
-        
+
         /// <summary>
         /// Метод возвращает подробное описание маркера
         /// </summary>
         /// <param name="markerId"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetMarkerDescription(int markerId)
+        public string GetMarkerDescription(int markerId, string appLang)
         {
             var repo = new MySqlRepository();
             marker marker = repo.GetMarker(markerId);
@@ -321,7 +337,21 @@ namespace MapBul.Service
             var categories = repo.GetMarkerCategories();
             //var tempPhotosPaths = repo.GetArrayOfPathsMarkerPhotos(markerId);
             //List<string> tempPhotosPathsUrl = tempPhotosPaths.Select(MapUrl).ToList();
-
+            if (appLang != "ru")
+            {
+                if (!string.IsNullOrEmpty(marker.NameEn))
+                {
+                    marker.Name = marker.NameEn;
+                }
+                if (!string.IsNullOrEmpty(marker.DescriptionEn))
+                {
+                    marker.Description = marker.DescriptionEn;
+                }
+                if (!string.IsNullOrEmpty(marker.IntroductionEn))
+                {
+                    marker.Introduction = marker.IntroductionEn;
+                }
+            }
             marker.Photo = MapUrl(marker.Photo);
             marker.Logo = MapUrl(marker.Logo);
             result.AddObjectToResult(marker, 0);
@@ -364,7 +394,11 @@ namespace MapBul.Service
                                 new
                                 {
                                     categories.First(c => c.Id == number).Id,
-                                    categories.First(c => c.Id == number).Name
+                                    Name =
+                                            (appLang != "ru") &&
+                                            !string.IsNullOrEmpty(categories.First(c => c.Id == number).EnName)
+                                                ? categories.First(c => c.Id == number).EnName
+                                                : categories.First(c => c.Id == number).Name
                                 })
                         .ToList()
             }, 0);
@@ -376,7 +410,7 @@ namespace MapBul.Service
         /// </summary>
         /// <returns></returns>
         [WebMethod]
-        public string GetRootCategories()
+        public string GetRootCategories(string appLang)
         {
             MySqlRepository repo = new MySqlRepository();
             List<category> rootCategories = repo.GetRootMarkerCategories();
@@ -384,6 +418,11 @@ namespace MapBul.Service
             var result = new JsonResult(new List<Dictionary<string, object>>());
             foreach (var rootCategory in rootCategories)
             {
+                if (appLang != "ru" && !string.IsNullOrEmpty(rootCategory.EnName))
+                {
+                    rootCategory.Name = rootCategory.EnName;
+                }
+
                 rootCategory.Icon = MapUrl(rootCategory.Icon);
                 rootCategory.Pin = MapUrl(rootCategory.Pin);
                 List<category> childCategories = repo.GetChildCategories(rootCategory.Id);
@@ -394,6 +433,7 @@ namespace MapBul.Service
                         ChildCategories =
                             childCategories.Select(
                                 c =>
+                                (appLang != "ru" && !string.IsNullOrEmpty(c.EnName))?
                                     new
                                     {
                                         c.Id,
@@ -401,9 +441,20 @@ namespace MapBul.Service
                                         c.AddedDate,
                                         Pin = MapUrl(c.Pin),
                                         Icon = MapUrl(c.Icon),
-                                        c.Name,
+                                        Name = c.EnName,
                                         c.Color
-                                    }).ToList()
+                                    } :
+                                    new
+                                    {
+                                        c.Id,
+                                        c.ParentId,
+                                        c.AddedDate,
+                                        Pin = MapUrl(c.Pin),
+                                        Icon = MapUrl(c.Icon),
+                                        Name = c.Name,
+                                        c.Color
+                                    }
+                                    ).ToList()
                     }, index);
                 index++;
             }
@@ -415,9 +466,10 @@ namespace MapBul.Service
         /// </summary>
         /// <param name="refresh">Если true, то подгружаются статьи, добавленные с последнего обновления</param>
         /// <param name="existingDateTime"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetRecentArticles(bool refresh = false, DateTime? existingDateTime = null)
+        public string GetRecentArticles(string appLang, bool refresh = false, DateTime? existingDateTime = null)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetArticles();
@@ -474,6 +526,30 @@ namespace MapBul.Service
                         break;
                 }
 
+                if (appLang != "ru")
+                {
+                    if (!string.IsNullOrEmpty(article.TitleEn))
+                    {
+                        article.Title = article.TitleEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.DescriptionEn))
+                    {
+                        article.Description = article.DescriptionEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.TextEn))
+                    {
+                        article.Text= article.TextEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourcePhotoEn))
+                    {
+                        article.SourcePhoto= article.SourcePhotoEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourceUrlEn))
+                    {
+                        article.SourceUrl = article.SourceUrlEn;
+                    }
+                }
+
                 result.AddObjectToResult(article, i);
                 string markerAddress=null;
                 string markerAddressName = null;
@@ -485,7 +561,16 @@ namespace MapBul.Service
                 }
 
                 result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
-                result.AddObjectToResult(new{Subcategories = article.articlesubcategory.Select(a=>a.category.Name).ToList()},i);
+                result.AddObjectToResult(
+                    new
+                    {
+                        Subcategories =
+                            article.articlesubcategory.Select(
+                                a =>
+                                    (appLang != "ru" && !string.IsNullOrEmpty(a.category.EnName))
+                                        ? a.category.EnName
+                                        : a.category.Name).ToList()
+                    }, i);
 
                 i++;
             }
@@ -495,11 +580,12 @@ namespace MapBul.Service
         /// <summary>
         /// Метод возращает набор событий. Если в метод не передаются параметры, то возвращаются первые 15 событий, далее, события подгружаются при прокрутке по 15 штук.
         /// </summary>
+        /// <param name="appLang"></param>
         /// <param name="refresh">Если true, то подгружаются события, добавленные с последнего обновления</param>
         /// <param name="existingDateTime"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetRecentEvents(bool refresh = false, DateTime? existingDateTime = null)
+        public string GetRecentEvents(string appLang, bool refresh = false, DateTime? existingDateTime = null)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetEvents();
@@ -555,6 +641,29 @@ namespace MapBul.Service
                         break;
                 }
 
+                if (appLang != "ru")
+                {
+                    if (!string.IsNullOrEmpty(article.TitleEn))
+                    {
+                        article.Title = article.TitleEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.DescriptionEn))
+                    {
+                        article.Description = article.DescriptionEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.TextEn))
+                    {
+                        article.Text = article.TextEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourcePhotoEn))
+                    {
+                        article.SourcePhoto = article.SourcePhotoEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourceUrlEn))
+                    {
+                        article.SourceUrl = article.SourceUrlEn;
+                    }
+                }
                 result.AddObjectToResult(article, i);
                 string markerAddress = null;
                 string markerAddressName = null;
@@ -566,7 +675,15 @@ namespace MapBul.Service
                 }
 
                 result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
-                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList(), StopDate=article.EndDate }, i);
+                result.AddObjectToResult(new
+                {
+                    Subcategories =
+                        article.articlesubcategory.Select(
+                            a => (appLang != "ru" && !string.IsNullOrEmpty(a.category.EnName))
+                                ? a.category.EnName
+                                : a.category.Name).ToList(),
+                    StopDate = article.EndDate
+                }, i);
 
                 i++;
             }
@@ -599,12 +716,13 @@ namespace MapBul.Service
         /// <param name="openTimes"></param>
         /// <param name="closeTimes"></param>
         /// <param name="isPersonal">Указывает, является ли метка персональной</param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
         public string CreateMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
             string building, string floor, string site, string email, string[] photoBase64, int[] subCategoryIds,
-            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal)
+            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal, string appLang)
         {
             try
             {
@@ -686,6 +804,13 @@ namespace MapBul.Service
                     Personal = isPersonal
                 };
 
+                if (appLang != "ru")
+                {
+                    newMarker.NameEn = name;
+                    newMarker.IntroductionEn = introduction;
+                    newMarker.DescriptionEn = description;
+                }
+
                 if (isPersonal)
                     newMarker.StatusId = 1;
 
@@ -736,7 +861,7 @@ namespace MapBul.Service
         public string EditMarker(string userGuid, string name, string introduction, string description, int cityId,
             int baseCategoryId, double lat, double lng, string entryTicket, int discount, string street, string house,
             string building, string floor, string site, string email/*, string photoPath*/, string[] photoBase64, int[] subCategoryIds,
-            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal, int markerId)
+            string[] phones, List<KeyValue<int, int>> openTimes, List<KeyValue<int, int>> closeTimes, bool isPersonal, int markerId, string appLang)
         {
             try
             {
@@ -831,6 +956,15 @@ namespace MapBul.Service
                     
                 }
 
+                if (appLang != "ru")
+                {
+                    if (newMarker.NameEn != name)
+                        newMarker.NameEn = name;
+                    if (newMarker.IntroductionEn != introduction)
+                        newMarker.IntroductionEn = introduction;
+                    if (newMarker.DescriptionEn != description)
+                        newMarker.DescriptionEn = description;
+                }
 
                 newMarker.Name = name;
                 newMarker.Introduction = introduction;
@@ -852,6 +986,7 @@ namespace MapBul.Service
                 //newMarker.Photo = photoPathServer;
                 //newMarker.Logo = logoPath;
                 newMarker.Personal = isPersonal;
+
 
                 if (isPersonal)
                     newMarker.StatusId = 1;
@@ -1116,9 +1251,10 @@ namespace MapBul.Service
         /// Метод получения избранных статей и событий
         /// </summary>
         /// <param name="userGuid"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetFavoritsArticlAndEvent(string userGuid)
+        public string GetFavoritsArticlAndEvent(string userGuid, string appLang)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetArticles();
@@ -1164,6 +1300,29 @@ namespace MapBul.Service
                         break;
                 }
 
+                if (appLang != "ru")
+                {
+                    if (!string.IsNullOrEmpty(article.TitleEn))
+                    {
+                        article.Title = article.TitleEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.DescriptionEn))
+                    {
+                        article.Description = article.DescriptionEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.TextEn))
+                    {
+                        article.Text = article.TextEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourcePhotoEn))
+                    {
+                        article.SourcePhoto = article.SourcePhotoEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourceUrlEn))
+                    {
+                        article.SourceUrl = article.SourceUrlEn;
+                    }
+                }
                 result.AddObjectToResult(article, i);
                 string markerAddress = null;
                 string markerAddressName = null;
@@ -1175,7 +1334,16 @@ namespace MapBul.Service
                 }
 
                 result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
-                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList() }, i);
+                result.AddObjectToResult(
+                    new
+                    {
+                        Subcategories =
+                            article.articlesubcategory.Select(
+                                a =>
+                                    (appLang != "ru" && !string.IsNullOrEmpty(a.category.EnName))
+                                        ? a.category.EnName
+                                        : a.category.Name).ToList()
+                    }, i);
 
                 i++;
             }
@@ -1186,9 +1354,10 @@ namespace MapBul.Service
         /// Метод получения избранных меток
         /// </summary>
         /// <param name="userGuid"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetFavoritsMarker(string userGuid)
+        public string GetFavoritsMarker(string userGuid, string appLang)
         {
             var repo = new MySqlRepository();
             var markers = repo.GetFavoriteMarkers(userGuid).ToList();
@@ -1198,6 +1367,16 @@ namespace MapBul.Service
             foreach (var marker in markers)
             {
                 var categories = repo.GetMarkerCategories();
+                
+                if (appLang != "ru")
+                {
+                    if (!string.IsNullOrEmpty(marker.NameEn))
+                        marker.Name = marker.NameEn;
+                    if (!string.IsNullOrEmpty(marker.DescriptionEn))
+                        marker.Description = marker.DescriptionEn;
+                    if (!string.IsNullOrEmpty(marker.IntroductionEn))
+                        marker.Introduction = marker.IntroductionEn;
+                }
 
                 marker.Photo = MapUrl(marker.Photo);
                 marker.Logo = MapUrl(marker.Logo);
@@ -1206,7 +1385,14 @@ namespace MapBul.Service
                 {
                     Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
                     Discount = marker.discount.Value,
-                    Subcategories = marker.subcategory.Select(s => new {s.category.Id, s.category.Name}).ToList(),
+                    Subcategories = marker.subcategory.Select(s => new
+                    {
+                        s.category.Id,
+                        Name =
+                            (appLang != "ru" && !string.IsNullOrEmpty(s.category.EnName))
+                                ? s.category.EnName
+                                : s.category.Name
+                    }).ToList(),
                     CityName = marker.city.Name,
                     Pin = MapUrl(marker.category.Pin),
                     Icon = MapUrl(marker.category.Icon),
@@ -1224,7 +1410,11 @@ namespace MapBul.Service
                                     new
                                     {
                                         categories.First(c => c.Id == number).Id,
-                                        categories.First(c => c.Id == number).Name
+                                        Name =
+                                            (appLang != "ru") &&
+                                            !string.IsNullOrEmpty(categories.First(c => c.Id == number).EnName)
+                                                ? categories.First(c => c.Id == number).EnName
+                                                : categories.First(c => c.Id == number).Name
                                     })
                             .ToList()
                 }, i);
@@ -1238,9 +1428,10 @@ namespace MapBul.Service
         /// </summary>
         /// <param name="markerId">id маркера</param>
         /// <param name="nearest">ближайшие</param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetRelatedEventsFromMarker(int markerId, bool nearest)
+        public string GetRelatedEventsFromMarker(int markerId, bool nearest ,string appLang)
         {
             MySqlRepository repo = new MySqlRepository();
             List<article> articles = repo.GetEvents();
@@ -1292,6 +1483,29 @@ namespace MapBul.Service
                         break;
                 }
 
+                if (appLang != "ru")
+                {
+                    if (!string.IsNullOrEmpty(article.TitleEn))
+                    {
+                        article.Title = article.TitleEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.DescriptionEn))
+                    {
+                        article.Description = article.DescriptionEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.TextEn))
+                    {
+                        article.Text = article.TextEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourceUrlEn))
+                    {
+                        article.SourceUrl = article.SourceUrlEn;
+                    }
+                    if (!string.IsNullOrEmpty(article.SourcePhotoEn))
+                    {
+                        article.SourcePhoto = article.SourcePhotoEn;
+                    }
+                }
                 result.AddObjectToResult(article, i);
                 string markerAddress = null;
                 string markerAddressName = null;
@@ -1303,7 +1517,14 @@ namespace MapBul.Service
                 }
 
                 result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
-                result.AddObjectToResult(new { Subcategories = article.articlesubcategory.Select(a => a.category.Name).ToList() }, i);
+                result.AddObjectToResult(new
+                {
+                    Subcategories =
+                        article.articlesubcategory.Select(
+                            a => (appLang != "ru" && !string.IsNullOrEmpty(a.category.EnName))
+                                ? a.category.EnName
+                                : a.category.Name).ToList()
+                }, i);
 
                 i++;
             }

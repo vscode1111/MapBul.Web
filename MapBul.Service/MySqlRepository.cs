@@ -416,7 +416,7 @@ namespace MapBul.Service
             var password = StringTransformationProvider.GeneratePassword();
             tenant.user.Password = StringTransformationProvider.Md5(password);
             _db.SaveChanges();
-            MailProvider.SendMailWithCredintails(password,tenant.FirstName,tenant.MiddleName,tenant.user.Email);
+            MailProvider.SendMailRecoveryPassword(password,tenant.FirstName,tenant.MiddleName,tenant.user.Email);
         }
 
         public IEnumerable<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId)

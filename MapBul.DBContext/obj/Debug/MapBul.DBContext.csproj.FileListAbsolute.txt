@@ -45,4 +45,3 @@ C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.xml
 C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.SqlServer.xml
 C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.dll
 C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.pdb
-C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.csprojResolveAssemblyReference.cache
