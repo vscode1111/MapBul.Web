@@ -367,7 +367,7 @@ namespace MapBul.Service
             return _db.category.Where(c=>!c.ForArticle).ToList();
         }
 
-        public void AddNewTenant(string email, string firstName, string middleName, string lastName, DateTime birthDate, string gender, string phone, string address)
+        public void AddNewTenant(string email, string firstName, string middleName, string lastName, DateTime birthDate, string gender, string phone, string address, string appLang)
         {
             if(_db.user.Any(u=>u.Email==email))
                 throw new MyException(Errors.UserExists);
@@ -398,7 +398,7 @@ namespace MapBul.Service
                 });
                 _db.SaveChanges();
                 trans.Commit();
-                MailProvider.SendMailWithCredintails(password,firstName,middleName,email);
+                MailProvider.SendMailWithCredintails(password,firstName,middleName,email, appLang);
             }
             catch
             {
@@ -408,15 +408,57 @@ namespace MapBul.Service
 
         }
 
-        public void RecoverPassword(string email)
+        public void RecoverPassword(string email, string appLang)
         {
-            var tenant = _db.tenant.FirstOrDefault(t => t.user.Email == email);
-            if(tenant==null)
+            var user = _db.user.FirstOrDefault(t => t.Email == email);
+            if(user == null)
                 throw new MyException(Errors.UserNotFound);
             var password = StringTransformationProvider.GeneratePassword();
-            tenant.user.Password = StringTransformationProvider.Md5(password);
+            user.Password = StringTransformationProvider.Md5(password);
             _db.SaveChanges();
-            MailProvider.SendMailRecoveryPassword(password,tenant.FirstName,tenant.MiddleName,tenant.user.Email);
+            var tenant = user.tenant.FirstOrDefault();
+            if (tenant != null)
+            {
+                MailProvider.SendMailRecoveryPassword(password, tenant.FirstName,
+                    tenant.MiddleName, user.Email, appLang);
+                return;
+            }
+            else
+            {
+                var guide = user.guide.FirstOrDefault();
+                if (guide != null)
+                {
+                    MailProvider.SendMailRecoveryPassword(password, guide.FirstName,
+                        guide.MiddleName, user.Email, appLang);
+                    return;
+                }
+                else
+                {
+                    var journalist = user.journalist.FirstOrDefault();
+                    if (journalist != null)
+                    {
+                        MailProvider.SendMailRecoveryPassword(password, journalist.FirstName,
+                            journalist.MiddleName, user.Email, appLang);
+                        return;
+                    }
+                    else
+                    {
+                        var editor = user.editor.FirstOrDefault();
+                        if (editor != null)
+                        {
+                            MailProvider.SendMailRecoveryPassword(password, editor.FirstName,
+                                editor.MiddleName, user.Email, appLang);
+                            return;
+                        }
+                        else
+                        {
+                            MailProvider.SendMailRecoveryPassword(password, "",
+                                "", user.Email, appLang);
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         public IEnumerable<marker> GetMarkersInSquare(double p1Lat, double p1Lng, double p2Lat, double p2Lng, string sessionId)

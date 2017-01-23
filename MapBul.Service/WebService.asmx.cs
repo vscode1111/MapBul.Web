@@ -1090,7 +1090,6 @@ namespace MapBul.Service
         }
 
 
-
         /// <summary>
         /// Метод регистрации нового жителя
         /// </summary>
@@ -1102,15 +1101,16 @@ namespace MapBul.Service
         /// <param name="gender"></param>
         /// <param name="phone"></param>
         /// <param name="address"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
         public string RegisterTenant(string email, string firstName, string middleName, string lastName,
-            DateTime birthDate, string gender, string phone, string address)
+            DateTime birthDate, string gender, string phone, string address, string appLang)
         {
             try
             {
                 var repo = new MySqlRepository();
-                repo.AddNewTenant(email, firstName, middleName, lastName, birthDate, gender, phone, address);
+                repo.AddNewTenant(email, firstName, middleName, lastName, birthDate, gender, phone, address, appLang);
                 return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
             }
             catch (MyException e)
@@ -1127,14 +1127,15 @@ namespace MapBul.Service
         /// Метод восстановления пароля. Новый пароль высылается на почту.
         /// </summary>
         /// <param name="email"></param>
+        /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string RecoverPassword(string email)
+        public string RecoverPassword(string email, string appLang)
         {
             try
             {
                 var repo=new MySqlRepository();
-                repo.RecoverPassword(email);
+                repo.RecoverPassword(email, appLang);
                 return JsonConvert.SerializeObject(new JsonResult(new List<Dictionary<string, object>>()));
             }
             catch (MyException e)
