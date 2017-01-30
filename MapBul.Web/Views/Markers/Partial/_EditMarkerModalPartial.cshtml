@@ -90,15 +90,22 @@
                         <select name="CityId" id="MarkerCitySelect" class="form-control chosenselect" required="">
                             @foreach (var city in (List<city>) ViewBag.Cities)
                             {
-                                <option @(city.Id==Model.CityId?"selected":"") value="@city.Id" data-city-placeid="@city.PlaceId">@city.Name, @city.country.Name</option>
+                                if (city.Id == 0)
+                                {
+                                    <option value="@city.Id" data-city-placeid="@city.PlaceId">@city.Name</option>
+                                }
+                                else
+                                {
+                                    <option @(city.Id == Model.CityId ? "selected" : "") value="@city.Id" data-city-placeid="@city.PlaceId">@city.Name, @city.country.Name</option>
+                                }
                             }
                         </select>
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Street, new Dictionary<string, object> {{"id", "EditMarkerStreetInput"}, {"placeholder", Resource.PinStreet +"*"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.Street, new Dictionary<string, object> {{"id", "EditMarkerStreetInput"}, {"placeholder", Resource.PinStreet}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.House, new Dictionary<string, object> {{"id", "EditMarkerHouseInput"}, {"placeholder", Resource.PinHouse +"*"}, {"class", "form-control"}, {"required", ""}})
+                        @Html.TextBoxFor(m => m.House, new Dictionary<string, object> {{"id", "EditMarkerHouseInput"}, {"placeholder", Resource.PinHouse}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Buliding, new Dictionary<string, object> {{"id", "EditMarkerBuildingInput"}, {"placeholder", Resource.PinBuilding }, {"class", "form-control"}})

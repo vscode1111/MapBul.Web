@@ -264,7 +264,7 @@ function ChangeCitySelect(result) {
                             found = true;
                         }
                         if ((index2 === ($("#MarkerCitySelect option").length - 1)) && !found) {
-                            ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
+                            //ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
                             $("#MarkerCitySelect").val("").trigger("chosen:updated");
                         }
                     });
@@ -273,7 +273,7 @@ function ChangeCitySelect(result) {
         }
         fullAddress += ", ";
         if ((index1 === ($(result.address_components).length - 1)) && localities === 0) {
-            ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
+            //ViewNotification("Указанный город не найден в справочнике, сначала добавьте город", "error");
             $("#MarkerCitySelect").val("").trigger("chosen:updated");
         }
     });

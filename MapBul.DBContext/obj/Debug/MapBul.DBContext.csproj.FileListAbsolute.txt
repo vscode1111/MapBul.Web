@@ -46,3 +46,15 @@ C:\Projects\GitProjects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.SqlServ
 C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.dll
 C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.pdb
 C:\Projects\GitProjects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.csprojResolveAssemblyReference.cache
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\MapBul.DBContext.dll.config
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\MapBul.DBContext.dll
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\MapBul.DBContext.pdb
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.dll
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.SqlServer.dll
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\MySql.Data.dll
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\MySql.Data.Entity.EF6.dll
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.xml
+C:\Projects\MBWeb\MapBul.DBContext\bin\Debug\EntityFramework.SqlServer.xml
+C:\Projects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.csprojResolveAssemblyReference.cache
+C:\Projects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.dll
+C:\Projects\MBWeb\MapBul.DBContext\obj\Debug\MapBul.DBContext.pdb

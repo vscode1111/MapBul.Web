@@ -79,7 +79,7 @@ namespace MapBul.Web.Controllers
             var repo = DependencyResolver.Current.GetService<IRepository>();
             marker marker = repo.GetMarker(markerId);
             NewMarkerModel model = new NewMarkerModel(marker);
-            ViewBag.Cities = repo.GetCities().Where(c => c.Id != 0).ToList();
+            ViewBag.Cities = repo.GetCities().ToList();
             ViewBag.Categories = repo.GetMarkerCategories();
             ViewBag.Discounts = repo.GetDiscounts();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
@@ -155,11 +155,25 @@ namespace MapBul.Web.Controllers
         public bool EditMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
             HttpPostedFileBase markerPhoto,  HttpPostedFileBase markerLogo)
         {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
+
+            if (repo.GetCities().All(tc => tc.Id != model.CityId))
+            {
+                model.CityId = 0;
+            }
+            if (string.IsNullOrEmpty(model.Street) || model.Street== "Unnamed Road")
+            {
+                model.Street = "Улица не определена";
+            }
+            if (string.IsNullOrEmpty(model.House))
+            {
+                model.House = "Нет";
+            }
+
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
 
-            var repo = DependencyResolver.Current.GetService<IRepository>();
-            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
             if (markerPhoto != null)
             {

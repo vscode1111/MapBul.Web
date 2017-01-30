@@ -43,9 +43,18 @@
                                 <td class="EditMarkerLink">
                                     @marker.Introduction
                                 </td>
-                                <td class="EditMarkerLink">
-                                    @marker.city.Name, @marker.city.country.Name
-                                </td>
+                                @if (@marker.city.Id != 0)
+                                {
+                                    <td class="EditMarkerLink">
+                                        @marker.city.Name, @marker.city.country.Name
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="EditMarkerLink">
+                                        @marker.city.Name
+                                    </td>
+                                }
                                 <td class="EditMarkerLink">
                                     @marker.Street, д. @marker.House, стр. @marker.Buliding, эт. @marker.Floor
                                 </td>

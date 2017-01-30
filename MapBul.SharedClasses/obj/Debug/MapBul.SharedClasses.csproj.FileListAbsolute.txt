@@ -25,3 +25,12 @@ C:\Projects\GitProjects\MBWeb\MapBul.SharedClasses\bin\Debug\EntityFramework.xml
 C:\Projects\GitProjects\MBWeb\MapBul.SharedClasses\obj\Debug\MapBul.SharedClasses.csprojResolveAssemblyReference.cache
 C:\Projects\GitProjects\MBWeb\MapBul.SharedClasses\obj\Debug\MapBul.SharedClasses.dll
 C:\Projects\GitProjects\MBWeb\MapBul.SharedClasses\obj\Debug\MapBul.SharedClasses.pdb
+C:\Projects\MBWeb\MapBul.SharedClasses\bin\Debug\MapBul.SharedClasses.dll
+C:\Projects\MBWeb\MapBul.SharedClasses\bin\Debug\MapBul.SharedClasses.pdb
+C:\Projects\MBWeb\MapBul.SharedClasses\bin\Debug\MapBul.DBContext.dll
+C:\Projects\MBWeb\MapBul.SharedClasses\bin\Debug\EntityFramework.dll
+C:\Projects\MBWeb\MapBul.SharedClasses\bin\Debug\MapBul.DBContext.pdb
+C:\Projects\MBWeb\MapBul.SharedClasses\bin\Debug\EntityFramework.xml
+C:\Projects\MBWeb\MapBul.SharedClasses\obj\Debug\MapBul.SharedClasses.csprojResolveAssemblyReference.cache
+C:\Projects\MBWeb\MapBul.SharedClasses\obj\Debug\MapBul.SharedClasses.dll
+C:\Projects\MBWeb\MapBul.SharedClasses\obj\Debug\MapBul.SharedClasses.pdb
