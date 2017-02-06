@@ -166,8 +166,9 @@ function OnNewMarkerFormSubmit() {
 
     formData.append("openTimesString", JSON.stringify(openTimes));
     formData.append("closeTimesString", JSON.stringify(closeTimes));
-    //formData.append("Lat", ("" + marker.position.lat()).replace(".",","));
-    //formData.append("Lng", ("" + marker.position.lng()).replace(".", ","));
+
+    formData.append("Lat", ("" + marker.position.lat()).replace(".", ","));
+    formData.append("Lng", ("" + marker.position.lng()).replace(".", ","));
 
     $.ajax({
         url: "Markers/AddNewMarker",

@@ -32,3 +32,4 @@ C:\Projects\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.xml
 C:\Projects\MBWeb\MapBul.DBContext\bin\Release\EntityFramework.SqlServer.xml
 C:\Projects\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.dll
 C:\Projects\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.pdb
+C:\Projects\MBWeb\MapBul.DBContext\obj\Release\MapBul.DBContext.csprojResolveAssemblyReference.cache

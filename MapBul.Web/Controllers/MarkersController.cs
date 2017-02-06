@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -101,11 +102,22 @@ namespace MapBul.Web.Controllers
         /// <param name="markerPhoto"></param>
         /// <param name="markerLogo"></param>
         /// <param name="markerPhotos"></param>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
         /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, List<HttpPostedFileBase> markerPhotos)
+        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, List<HttpPostedFileBase> markerPhotos, float lat, float lng)
         {
+            if (Math.Abs(model.Lat) <= 0)
+            {
+                model.Lat = lat;
+            }
+            if (Math.Abs(model.Lng) <= 0)
+            {
+                model.Lng = lng;
+            }
+
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
             var repo = DependencyResolver.Current.GetService<IRepository>();
