@@ -353,7 +353,6 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult AddNewAdmin(NewAdminModel model)
         {
-
             var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
