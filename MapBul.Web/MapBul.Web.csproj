@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -329,7 +330,7 @@
     <Content Include="Scripts\app\skin.config.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Properties\PublishProfiles\MapBul.pubxml" />
+    <None Include="Properties\PublishProfiles\MapBulProfile.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\CustomScripts\Admins.js" />
     <Content Include="Scripts\CustomScripts\AdminsRu.js" />
@@ -788,7 +789,9 @@
     <Content Include="Scripts\plugins\video\responsible-video.js" />
     <Content Include="Scripts\plugins\datapicker\datepicker.ru.js" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -817,8 +820,8 @@
     <Content Include="Views\Articles\Partial\_NewArticleModalPartial.cshtml" />
     <Content Include="Views\Articles\Partial\_EditArticleModalPartial.cshtml" />
     <Content Include="Views\LegacyHtml.cshtml" />
-    <None Include="Views\Users\Index.cshtml" />
-    <None Include="Views\Markers\Index.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Markers\Index.cshtml" />
     <None Include="Views\Users\Partial\_AdminsTablePartial.cshtml" />
     <None Include="Views\Users\Partial\_EditorsTablePartial.cshtml" />
     <None Include="Views\Users\Partial\_JournalistsTablePartial.cshtml" />

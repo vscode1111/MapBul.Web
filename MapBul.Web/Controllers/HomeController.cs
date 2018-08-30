@@ -20,7 +20,5 @@ namespace MapBul.Web.Controllers
             var mapInfo = new MapInfoModel();
             return View(mapInfo);
         }
-
-        
     }
 }
