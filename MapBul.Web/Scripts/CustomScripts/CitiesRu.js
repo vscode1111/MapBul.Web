@@ -38,15 +38,16 @@ function OnDictionariesPageReady() {
             }
         }
     });
+    /*
     geocoder = new window.google.maps.Geocoder();
-
+    
     countryAutocomplete = new window.google.maps.places.Autocomplete(
     (document.getElementById("NewCountryInput")),
     { types: ["(regions)"] });
     /*regionAutocomplete=new window.google.maps.places.Autocomplete(
     (document.getElementById('NewRegionInput')), { types: ['(regions)'] });
     regionAutocomplete.addListener('place_changed', OnRegionsInputChanged);*/
-
+    /*
     cityAutocomplete = new window.google.maps.places.Autocomplete(
         document.getElementById("NewCityInput"),
         {
@@ -55,7 +56,7 @@ function OnDictionariesPageReady() {
         });
 
     cityAutocomplete.addListener("place_changed", OnCitiesInputChanged);
-
+    */
 }
 
 function OnCountryDeleteClick() {
@@ -121,13 +122,31 @@ function NewCountryButtonClick() {
         return;
     }
 
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+            name: value,
+            placeId: "-1",
+            code: "-1"
+        },
+        success: function () {
+            ViewNotification("Страна добавлена", "success");
+            RefreshCitiesPage();
+        },
+        error: function () {
+            ViewNotification("Не удалось добавить", "error");
+        }
+    });
 
+    /*
     window.geocoder.geocode({ 'address': value }, function(results, status) {
-
+        
         if (status !== "OK") {
             ViewNotification("Страна не найдена", "error");
             return;
         }
+
         var countryName = results[0].address_components[0].long_name;
         var placeId = results[0].place_id;
         var types = results[0].address_components[0].types;
@@ -138,6 +157,7 @@ function NewCountryButtonClick() {
             return;
         }
 
+
         $.ajax({
             url: url,
             type: "POST",
@@ -145,7 +165,7 @@ function NewCountryButtonClick() {
                 name: countryName,
                 placeId: placeId,
                 code: code
-    },
+            },
             success: function() {
                 ViewNotification("Страна добавлена", "success");
                 RefreshCitiesPage();
@@ -155,6 +175,7 @@ function NewCountryButtonClick() {
             }
         });
     });
+    */
 }
 
 
@@ -214,6 +235,26 @@ function NewCityButtonClick() {
         ViewNotification("Имя города не может быть пустым", "error");
         return;
     }
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+            name: value,
+            countryId: countryId,
+            placeId: "-1",
+            lat: "-1",
+            lng: "-1"
+        },
+        success: function () {
+            ViewNotification("Город добавлен", "success");
+            RefreshCitiesPage();
+        },
+        error: function () {
+            ViewNotification("Не удалось добавить", "error");
+        }
+    });
+    /*
     $.ajax({
         url: url,
         type: "POST",
@@ -232,6 +273,7 @@ function NewCityButtonClick() {
             ViewNotification("Не удалось добавить", "error");
         }
     });
+    */
 }
 
 

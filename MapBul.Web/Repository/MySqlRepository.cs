@@ -218,8 +218,10 @@ namespace MapBul.Web.Repository
 
         public void AddCountry(string name, string placeId, string code)
         {
+            /*
             if(_db.country.Any(c=>c.PlaceId==placeId))
-                return;
+                return
+            */
             _db.country.Add(new country {Name = name, PlaceId = placeId, Code = code});
             _db.SaveChanges();
         }
@@ -247,8 +249,10 @@ namespace MapBul.Web.Repository
 
         public void AddCity(string name, int countryId, string placeId, float lat, float lng)
         {
+            /*
             if (_db.city.Any(c => c.PlaceId == placeId))
                 return;
+            */
             country country = GetCountry(countryId);
             /*var coordinates =
                 ExternalRequest.ExternalRequestProvider.GetCoordinates(country.Name + ", " +
