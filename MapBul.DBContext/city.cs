@@ -21,6 +21,7 @@ namespace MapBul.DBContext
 
         [Required]
         [StringLength(200)]
+        [Index(IsUnique = true)]
         public string Name { get; set; }
 
         public float Lng { get; set; }

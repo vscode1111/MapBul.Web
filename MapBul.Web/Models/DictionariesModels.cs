@@ -28,7 +28,8 @@ namespace MapBul.Web.Models
         public CountrieTranslate(country country)
         {
             Country = country;
-            CountryName = Translate(country.Name);
+            //CountryName = Translate(country.Name);
+            CountryName = country.Name;
         }
 
         public country Country;
@@ -68,8 +69,10 @@ namespace MapBul.Web.Models
         public CityTranslate(city city)
         {
             City = city;
-            CityName = Translate(city.Name);
-            CountryName = Translate(city.country.Name);
+            //CityName = Translate(city.Name);
+            CityName = city.Name;
+            //CountryName = Translate(city.country.Name);
+            CountryName = city.country.Name;
         }
 
         public city City;

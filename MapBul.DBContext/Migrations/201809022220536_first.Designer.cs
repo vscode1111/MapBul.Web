@@ -13,7 +13,7 @@ namespace MapBul.DBContext.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201808071543067_first"; }
+            get { return "201809022220536_first"; }
         }
         
         string IMigrationMetadata.Source

@@ -76,9 +76,9 @@
     <Compile Include="marker.cs" />
     <Compile Include="marker_photos.cs" />
     <Compile Include="marker_request_session.cs" />
-    <Compile Include="Migrations\201808071543067_first.cs" />
-    <Compile Include="Migrations\201808071543067_first.Designer.cs">
-      <DependentUpon>201808071543067_first.cs</DependentUpon>
+    <Compile Include="Migrations\201809022220536_first.cs" />
+    <Compile Include="Migrations\201809022220536_first.Designer.cs">
+      <DependentUpon>201809022220536_first.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="phone.cs" />
@@ -98,8 +98,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201808071543067_first.resx">
-      <DependentUpon>201808071543067_first.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201809022220536_first.resx">
+      <DependentUpon>201809022220536_first.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
