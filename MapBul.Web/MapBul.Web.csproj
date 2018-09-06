@@ -331,6 +331,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\MapBulProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\scub111.com-FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\scub111.com-WebDeploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\CustomScripts\Admins.js" />
     <Content Include="Scripts\CustomScripts\AdminsRu.js" />
