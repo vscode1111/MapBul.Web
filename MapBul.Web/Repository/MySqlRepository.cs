@@ -219,8 +219,8 @@ namespace MapBul.Web.Repository
         public void AddCountry(string name, string placeId, string code)
         {
             /*
-            if(_db.country.Any(c=>c.PlaceId==placeId))
-                return
+            if (_db.country.Any(c => c.PlaceId == placeId))
+                return false;
             */
             _db.country.Add(new country {Name = name, PlaceId = placeId, Code = code});
             _db.SaveChanges();
@@ -251,14 +251,14 @@ namespace MapBul.Web.Repository
         {
             /*
             if (_db.city.Any(c => c.PlaceId == placeId))
-                return;
+                throw new Exception();
             */
             country country = GetCountry(countryId);
             /*var coordinates =
                 ExternalRequest.ExternalRequestProvider.GetCoordinates(country.Name + ", " +
                                                                name);
             _db.city.Add(new city { Name = name, CountryId = countryId, Lat = coordinates.Lat, Lng = coordinates.Lng, PlaceId = placeId });*/
-            _db.city.Add(new city { Name = name, CountryId = country.Id, Lat = lat, Lng = lng, PlaceId = placeId });
+            _db.city.Add(new city {Name = name, CountryId = country.Id, Lat = lat, Lng = lng, PlaceId = placeId});
             _db.SaveChanges();
         }
 
@@ -531,7 +531,7 @@ namespace MapBul.Web.Repository
                 trans.Commit();
                 return newMarker.Id;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 trans.Rollback();
                 throw;
@@ -680,12 +680,11 @@ namespace MapBul.Web.Repository
                 _db.SaveChanges();
                 trans.Commit();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 trans.Rollback();
-                return;
+                throw;
             }
-
         }
 
         public void ChangeArticleStatus(int articleId, int statusId, string userGuid)
