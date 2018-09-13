@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
@@ -236,22 +235,31 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public bool AddNewCategory(category model, HttpPostedFileBase categoryIcon, HttpPostedFileBase categoryPin)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
-
-            string filePath = FileProvider.SaveCategoryIcon(categoryIcon);
-            model.Icon = filePath;
-
-            filePath = FileProvider.SaveCategoryIcon(categoryPin);
-            model.Pin = filePath;
-
-            model.Color = model.Color.Replace("#", "");
-
-            if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.EnName))
+            try
             {
-                model.Name = model.EnName;
+                IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+
+                string filePath = FileProvider.SaveCategoryIcon(categoryIcon);
+                model.Icon = filePath;
+
+                filePath = FileProvider.SaveCategoryIcon(categoryPin);
+                model.Pin = filePath;
+
+                model.Color = model.Color.Replace("#", "");
+
+                if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.EnName))
+                {
+                    model.Name = model.EnName;
+                }
+
+                repo.AddNewCategory(model);
+            }
+            catch (Exception e)
+            {
+                System.IO.File.AppendAllText(@"C:\temp\mapbul.txt", e.StackTrace + Environment.NewLine);
+                throw;
             }
 
-            repo.AddNewCategory(model);
             return true;
         }
 

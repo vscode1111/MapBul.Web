@@ -20,11 +20,17 @@ namespace MapBul.SharedClasses
         }
         public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon)
         {
-            string virtualPath = "CategoryIcons/" + Guid.NewGuid() + categoryIcon.FileName.Substring(categoryIcon.FileName.IndexOf(".", StringComparison.Ordinal));
-            var siteRoot=HostingEnvironment.MapPath("~/");
+            string virtualPath = "CategoryIcons\\" + Guid.NewGuid() + categoryIcon.FileName.Substring(categoryIcon.FileName.IndexOf(".", StringComparison.Ordinal));
+            File.AppendAllText(@"C:\temp\mapbul.txt", virtualPath + Environment.NewLine);
+            var siteRoot =HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
+                File.AppendAllText(@"C:\temp\mapbul.txt", savePath + Environment.NewLine);
+                var dirPath = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dirPath) && !Directory.Exists(dirPath))
+                    Directory.CreateDirectory(dirPath);
                 categoryIcon.SaveAs(savePath);
                 Image resizedImage;
                 using (var image = Image.FromFile(savePath))
