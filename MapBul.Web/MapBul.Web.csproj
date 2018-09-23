@@ -824,9 +824,9 @@
     <Content Include="Views\LegacyHtml.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Markers\Index.cshtml" />
-    <None Include="Views\Users\Partial\_AdminsTablePartial.cshtml" />
-    <None Include="Views\Users\Partial\_EditorsTablePartial.cshtml" />
-    <None Include="Views\Users\Partial\_JournalistsTablePartial.cshtml" />
+    <Content Include="Views\Users\Partial\_AdminsTablePartial.cshtml" />
+    <Content Include="Views\Users\Partial\_EditorsTablePartial.cshtml" />
+    <Content Include="Views\Users\Partial\_JournalistsTablePartial.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Users\Partial\_NewEditorPartial.cshtml" />
     <Content Include="Views\Users\Partial\_EditorInformationPartial.cshtml" />

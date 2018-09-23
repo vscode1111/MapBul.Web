@@ -91,7 +91,7 @@ namespace MapBul.Web.Repository
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 trans.Rollback();
                 throw;

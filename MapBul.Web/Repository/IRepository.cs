@@ -9,7 +9,7 @@ namespace MapBul.Web.Repository
     public interface IRepository
     {
         user GetUserByLoginAndPassword(string login, string password);
-        user GetUserByGuid(string guid);
+        user GetUserByGuid(string guid);    
         List<journalist> GetJournalists();
         List<editor> GetEditors();
         List<admin> GetAdmins();

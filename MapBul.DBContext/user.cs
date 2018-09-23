@@ -23,6 +23,7 @@ namespace MapBul.DBContext
             marker = new HashSet<marker>();
             region_permission = new HashSet<region_permission>();
             tenant = new HashSet<tenant>();
+            RegistrationDate = DateTime.Now;
         }
 
         public int Id { get; set; }
