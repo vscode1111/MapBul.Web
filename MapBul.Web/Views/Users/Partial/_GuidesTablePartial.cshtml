@@ -12,20 +12,20 @@
         <div class="table-responsive" id="GuidesTable">
             <table class="table table-striped table-bordered table-hover dataTable">
                 <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Дата регистрации</th>
-                    <th>Email</th>
-                    <th>Имя</th>
-                    <th>Отчество</th>
-                    <th>Фамилия</th>
-                    <th>Дата рождения</th>
-                    <th>Пол</th>
-                    <th>Телефон</th>
-                    <th>@Resource.Address</th>
-                    <th>Редактор</th>
-                    <th>@Resource.Status</th>
-                </tr>
+                    <tr>
+                        <th>№</th>
+                        <th>Дата регистрации</th>
+                        <th>Email</th>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
+                        <th>Дата рождения</th>
+                        <th>Пол</th>
+                        <th>Телефон</th>
+                        <th>@Resource.Address</th>
+                        <th>Редактор</th>
+                        <th>@Resource.Status</th>
+                    </tr>
                 </thead>
                 <tbody>
                 @foreach (var guide in Model.Guides)
@@ -41,10 +41,10 @@
                             @guide.user.Email
                         </td>
                         <td>
-                            @guide.FirstName
+                            @guide.LastName
                         </td>
                         <td>
-                            @guide.LastName
+                            @guide.FirstName
                         </td>
                         <td>
                             @guide.MiddleName
