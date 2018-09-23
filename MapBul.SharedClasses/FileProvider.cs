@@ -67,7 +67,8 @@ namespace MapBul.SharedClasses
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
                 markerPhoto.SaveAs(savePath);
             }
             else
@@ -80,11 +81,12 @@ namespace MapBul.SharedClasses
             var tempStrings = new List<string>();
             foreach (var photo in markerPhotos)
             {
-                var virtualPath = "MarkerPhotos/" + Guid.NewGuid() + photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal));
+                var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal));
                 var siteRoot = HostingEnvironment.MapPath("~/");
                 if (siteRoot != null)
                 {
-                    var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                    //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                    var savePath = $"{siteRoot}{virtualPath}";
                     photo.SaveAs(savePath);
                     tempStrings.Add(savePath);
                 }
@@ -98,12 +100,13 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerPhoto(byte[] markerPhoto, bool mini)
         {
-            var virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
+            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + ".jpg";
             var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
                 using (var stream = new MemoryStream(markerPhoto))
                 {
                     var myEncoder =
@@ -149,10 +152,6 @@ namespace MapBul.SharedClasses
                         firstBitmap.RemovePropertyItem(274);
                     }
 
-
-
-
-
                     /*var newItem = (PropertyItem)FormatterServices.GetUninitializedObject(typeof(PropertyItem));
                     newItem.Id = 274;
                     newItem.Value = new byte[] { 1 };
@@ -192,7 +191,8 @@ namespace MapBul.SharedClasses
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
                 articlePhoto.SaveAs(savePath);
                 Image resizedImage;
                 using (var image = Image.FromFile(savePath))
@@ -212,7 +212,8 @@ namespace MapBul.SharedClasses
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
                 articleTitlePhoto.SaveAs(savePath);
                 Image resizedImage;
                 using (var image = Image.FromFile(savePath))
@@ -228,12 +229,12 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerLogo(HttpPostedFileBase markerLogo)
         {
-            var virtualPath = "MarkerPhotos/" + Guid.NewGuid() +
-                                 markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
+            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
                 markerLogo.SaveAs(savePath);
                 Bitmap cuttedImage;
                 using (var image = Image.FromFile(savePath))
@@ -265,16 +266,15 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerLogo(byte[] markerLogo)
         {
-            var virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
+            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + ".jpg";
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
-                var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
+                var savePath = $"{siteRoot}{virtualPath}";
                 using (var stream = new MemoryStream(markerLogo))
                 {
                     var firstBitmap = new Bitmap(stream);
-
-
 
                     if (Array.IndexOf(firstBitmap.PropertyIdList, 274) > -1)
                     {
@@ -309,10 +309,6 @@ namespace MapBul.SharedClasses
                         // This EXIF data is now invalid and should be removed.
                         firstBitmap.RemovePropertyItem(274);
                     }
-
-
-
-
 
                     /*var newItem = (PropertyItem)FormatterServices.GetUninitializedObject(typeof(PropertyItem));
                     newItem.Id = 274;
