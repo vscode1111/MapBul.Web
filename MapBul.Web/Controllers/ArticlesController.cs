@@ -52,7 +52,7 @@ namespace MapBul.Web.Controllers
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewArticleModel model = new NewArticleModel();
+            var model = new NewArticleModel();
             ViewBag.Categories = repo.GetArticleCategories();
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             ViewBag.Markers = repo.GetMarkers();
@@ -72,7 +72,7 @@ namespace MapBul.Web.Controllers
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            article article = repo.GetArticle(articleId);
+            var article = repo.GetArticle(articleId);
             var model = new NewArticleModel(article);
             ViewBag.Categories = repo.GetArticleCategories();
             ViewBag.Statuses = repo.GetStatuses(userGuid);

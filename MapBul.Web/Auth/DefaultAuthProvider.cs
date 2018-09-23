@@ -16,7 +16,7 @@ namespace MapBul.Web.Auth
         {
             try
             {
-                IRepository db = DependencyResolver.Current.GetService<IRepository>();
+                var db = DependencyResolver.Current.GetService<IRepository>();
                 var user = db.GetUserByLoginAndPassword(email, password);
                 IIdentity identity = new GenericIdentity(user.Guid);
                 HttpContext.Current.User = new GenericPrincipal(identity, new[] {user.usertype.Tag});
@@ -39,7 +39,7 @@ namespace MapBul.Web.Auth
 
         public void RefreshPrincipal()
         {
-            IRepository db = DependencyResolver.Current.GetService<IRepository>();
+            var db = DependencyResolver.Current.GetService<IRepository>();
             if (!IsAuthenticated) return;
             var guid = HttpContext.Current.User.Identity.Name;
             var user = db.GetUserByGuid(guid);
@@ -66,8 +66,8 @@ namespace MapBul.Web.Auth
         {
             get
             {
-                IRepository db = DependencyResolver.Current.GetService<IRepository>();
-                user user = db.GetUserByGuid(HttpContext.Current.User.Identity.Name);
+                var db = DependencyResolver.Current.GetService<IRepository>();
+                var user = db.GetUserByGuid(HttpContext.Current.User.Identity.Name);
                 return user.usertype.Tag;
             }
         }
@@ -87,8 +87,8 @@ namespace MapBul.Web.Auth
         {
             get
             {
-                IRepository db = DependencyResolver.Current.GetService<IRepository>();
-                user user = db.GetUserByGuid(HttpContext.Current.User.Identity.Name);
+                var db = DependencyResolver.Current.GetService<IRepository>();
+                var user = db.GetUserByGuid(HttpContext.Current.User.Identity.Name);
                 return user.Id;
             }
         }
@@ -97,7 +97,7 @@ namespace MapBul.Web.Auth
         {
             get
             {
-                IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+                var repo = DependencyResolver.Current.GetService<IRepository>();
                 return repo.GetAdmins().First(a => a.user.Guid == HttpContext.Current.User.Identity.Name).Superuser;
             }
         }

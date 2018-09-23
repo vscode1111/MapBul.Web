@@ -83,7 +83,7 @@ namespace MapBul.Service
                 {
                     if (photos.Length == photosMini.Length)
                     {
-                        for (int i = 0; i < photos.Length; i++)
+                        for (var i = 0; i < photos.Length; i++)
                         {
                             _db.marker_photos.Add(new marker_photos
                             {
@@ -143,7 +143,7 @@ namespace MapBul.Service
 
         public IEnumerable<marker> GetFavoriteMarkers(string userGuid)
         {
-            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             var tempListOfFavoritsMarkerId =
@@ -168,7 +168,7 @@ namespace MapBul.Service
 
         public List<category> GetChildCategories(int id)
         {
-            List<category> childCategories=new List<category>();
+            var childCategories=new List<category>();
             FindChildCategoriesIteration(ref childCategories, id);
             return childCategories;
         }
@@ -483,7 +483,7 @@ namespace MapBul.Service
 
         public void SaveFavoriteArticleEvent(string userGuid, int articleEventId)
         {
-            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             if (_db.favorites_article.Any(i => i.userId == user.Id && i.articleId == articleEventId))
@@ -509,7 +509,7 @@ namespace MapBul.Service
 
         public void SaveFavoriteMarker(string userGuid, int markerId)
         {
-            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             if (_db.favorites_marker.Any(i => i.userId == user.Id && i.markerId == markerId))
@@ -535,7 +535,7 @@ namespace MapBul.Service
 
         public void RemoveFavoriteArticleEvent(string userGuid, int articleEventId)
         {
-            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             if (_db.favorites_article.All(i => i.userId != user.Id && i.articleId != articleEventId))
@@ -560,7 +560,7 @@ namespace MapBul.Service
 
         public void RemoveFavoriteMarker(string userGuid, int markerId)
         {
-            user user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == userGuid);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             if (_db.favorites_marker.All(i => i.userId != user.Id && i.markerId != markerId))

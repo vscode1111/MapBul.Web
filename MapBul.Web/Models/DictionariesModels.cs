@@ -37,7 +37,7 @@ namespace MapBul.Web.Models
 
         private string Translate(string name)
         {
-            HttpRequest request = HttpContext.Current.Request;
+            var request = HttpContext.Current.Request;
             string lang;
             if (request.UserLanguages?.Length > 0)
             {
@@ -50,10 +50,10 @@ namespace MapBul.Web.Models
             //https://translate.google.com/translate_t/?client=j&ie=UTF8&text=apple&langpair=auto|ru
             try
             {
-                string url =
+                var url =
                     $"https://translate.google.com/translate_a/t?client=j&ie=UTF8&text={name}&langpair=auto|{lang}";
-                WebClient webClient = new WebClient {Encoding = System.Text.Encoding.UTF8};
-                string result = webClient.DownloadString(url);
+                var webClient = new WebClient {Encoding = System.Text.Encoding.UTF8};
+                var result = webClient.DownloadString(url);
                 var temp = result.Split('\"')[1];
                 return temp;
             }
@@ -81,7 +81,7 @@ namespace MapBul.Web.Models
 
         private string Translate(string name)
         {
-            HttpRequest request = HttpContext.Current.Request;
+            var request = HttpContext.Current.Request;
             string lang;
             if (request.UserLanguages?.Length > 0)
             {
@@ -93,11 +93,11 @@ namespace MapBul.Web.Models
             }
             try
             {
-                string url =
+                var url =
                     $"https://translate.google.com/translate_a/t?client=j&ie=UTF8&text={name}&langpair=auto|{lang}";
-                WebClient webClient = new WebClient();
+                var webClient = new WebClient();
                 webClient.Encoding = System.Text.Encoding.UTF8;
-                string result = webClient.DownloadString(url);
+                var result = webClient.DownloadString(url);
                 var temp = result.Split('\"')[1];
                 return temp;
             }

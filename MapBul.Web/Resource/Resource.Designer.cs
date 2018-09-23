@@ -39,7 +39,7 @@ namespace MapBul.Web.Resource {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MapBul.Web.Resource.Resource", typeof(Resource).Assembly);
+                    var temp = new global::System.Resources.ResourceManager("MapBul.Web.Resource.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

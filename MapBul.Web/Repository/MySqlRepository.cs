@@ -22,7 +22,7 @@ namespace MapBul.Web.Repository
         {
             var md5Pass = StringTransformationProvider.Md5(password);
             email = StringTransformationProvider.TransformEmail(email);
-            user user = _db.user.FirstOrDefault(u => u.Email == email && md5Pass == u.Password);
+            var user = _db.user.FirstOrDefault(u => u.Email == email && md5Pass == u.Password);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             return user;
@@ -30,7 +30,7 @@ namespace MapBul.Web.Repository
 
         public user GetUserByGuid(string guid)
         {
-            user user = _db.user.FirstOrDefault(u => u.Guid == guid);
+            var user = _db.user.FirstOrDefault(u => u.Guid == guid);
             if (user == null)
                 throw new MyException(Errors.UserNotFound);
             return user;
@@ -74,7 +74,7 @@ namespace MapBul.Web.Repository
                 };
                 _db.user.Add(newUser);
                 _db.SaveChanges();
-                editor newEditor = new editor();
+                var newEditor = new editor();
                 model.CopyTo(ref newEditor);
                 newEditor.UserId = newUser.Id;
                 _db.editor.Add(newEditor);
@@ -105,7 +105,7 @@ namespace MapBul.Web.Repository
 
         public void SaveEditorChanges(NewEditorModel model)
         {
-            editor editor = _db.editor.FirstOrDefault(e => e.Id == model.Id);
+            var editor = _db.editor.FirstOrDefault(e => e.Id == model.Id);
             if (editor == null)
                 throw new MyException(Errors.UserNotFound);
 
@@ -163,7 +163,7 @@ namespace MapBul.Web.Repository
                 };
                 _db.user.Add(newUser);
                 _db.SaveChanges();
-                journalist newEditor = new journalist();
+                var newEditor = new journalist();
                 model.CopyTo(ref newEditor);
                 newEditor.UserId = newUser.Id;
                 _db.journalist.Add(newEditor);
@@ -191,7 +191,7 @@ namespace MapBul.Web.Repository
 
         public void SaveJournalistChanges(NewJournalistModel model)
         {
-            journalist journalist = _db.journalist.FirstOrDefault(e => e.Id == model.Id);
+            var journalist = _db.journalist.FirstOrDefault(e => e.Id == model.Id);
             if (journalist == null)
                 throw new MyException(Errors.UserNotFound);
 
@@ -253,7 +253,7 @@ namespace MapBul.Web.Repository
             if (_db.city.Any(c => c.PlaceId == placeId))
                 throw new Exception();
             */
-            country country = GetCountry(countryId);
+            var country = GetCountry(countryId);
             /*var coordinates =
                 ExternalRequest.ExternalRequestProvider.GetCoordinates(country.Name + ", " +
                                                                name);
@@ -286,7 +286,7 @@ namespace MapBul.Web.Repository
                 };
                 _db.user.Add(newUser);
                 _db.SaveChanges();
-                guide newEditor = new guide();
+                var newEditor = new guide();
                 model.CopyTo(ref newEditor);
                 newEditor.UserId = newUser.Id;
                 _db.guide.Add(newEditor);
@@ -472,8 +472,8 @@ namespace MapBul.Web.Repository
             var trans = _db.Database.BeginTransaction();
             try
             {
-                user adder = GetUserByGuid(userGuid);
-                marker newMarker = new marker();
+                var adder = GetUserByGuid(userGuid);
+                var newMarker = new marker();
                 model.CopyTo(newMarker);
                 newMarker.BaseCategoryId = model.BaseCategoryId;
                 newMarker.CityId = model.CityId;
@@ -592,7 +592,7 @@ namespace MapBul.Web.Repository
             try
             {
                 GetUserByGuid(userGuid);
-                marker newMarker = _db.marker.First(m => m.Id == model.Id);
+                var newMarker = _db.marker.First(m => m.Id == model.Id);
                 model.CopyTo(newMarker);
                 newMarker.BaseCategoryId = model.BaseCategoryId;
                 newMarker.CityId = model.CityId;
@@ -655,7 +655,7 @@ namespace MapBul.Web.Repository
             var trans = _db.Database.BeginTransaction();
             try
             {
-                user adder = GetUserByGuid(userGuid);
+                var adder = GetUserByGuid(userGuid);
                 var article = new article();
                 model.CopyTo(article);
                 article.BaseCategoryId = model.BaseCategoryId;
@@ -719,8 +719,8 @@ namespace MapBul.Web.Repository
             var trans = _db.Database.BeginTransaction();
             try
             {
-                user adder = GetUserByGuid(userGuid);
-                article article = _db.article.First(m => m.Id == model.Id);
+                var adder = GetUserByGuid(userGuid);
+                var article = _db.article.First(m => m.Id == model.Id);
                 model.CopyTo(article);
                 article.BaseCategoryId = model.BaseCategoryId;
                 article.MarkerId = model.MarkerId;
@@ -823,7 +823,7 @@ namespace MapBul.Web.Repository
 
         public void SaveGuideChanges(NewGuideModel model)
         {
-            guide guide = _db.guide.FirstOrDefault(e => e.Id == model.Id);
+            var guide = _db.guide.FirstOrDefault(e => e.Id == model.Id);
             if (guide == null)
                 throw new MyException(Errors.UserNotFound);
 
@@ -850,7 +850,7 @@ namespace MapBul.Web.Repository
 
         public void SaveTenantChanges(NewTenantModel model)
         {
-            tenant tenant = _db.tenant.FirstOrDefault(e => e.Id == model.Id);
+            var tenant = _db.tenant.FirstOrDefault(e => e.Id == model.Id);
             if (tenant == null)
                 throw new MyException(Errors.UserNotFound);
 

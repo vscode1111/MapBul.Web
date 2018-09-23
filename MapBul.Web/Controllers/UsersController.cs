@@ -33,7 +33,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _AdminsTablePartial()
         {
-            AdminsListModel model = new AdminsListModel();
+            var model = new AdminsListModel();
             return PartialView("Partial/_AdminsTablePartial", model);
         }
 
@@ -44,7 +44,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _EditorsTablePartial()
         {
-            EditorsListModel model = new EditorsListModel();
+            var model = new EditorsListModel();
             return PartialView("Partial/_EditorsTablePartial", model);
         }
 
@@ -57,7 +57,7 @@ namespace MapBul.Web.Controllers
         {
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
-            JournalistsListModel model = new JournalistsListModel(userGuid);
+            var model = new JournalistsListModel(userGuid);
             return PartialView("Partial/_JournalistsTablePartial", model);
         }
 
@@ -87,7 +87,7 @@ namespace MapBul.Web.Controllers
         public ActionResult _EditorInformationPartial(int editorId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewEditorModel model = new NewEditorModel(repo.GetEditor(editorId));
+            var model = new NewEditorModel(repo.GetEditor(editorId));
             ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
             //            ViewBag.Regions = repo.GetRegions();
             ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
@@ -123,7 +123,7 @@ namespace MapBul.Web.Controllers
         public ActionResult _JournalistInformationPartial(int journalistId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewJournalistModel model = new NewJournalistModel(repo.GetJournalist(journalistId));
+            var model = new NewJournalistModel(repo.GetJournalist(journalistId));
             ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
             //            ViewBag.Regions = repo.GetRegions();
             ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();
@@ -139,7 +139,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _NewAdminModalPartial()
         {
-            NewAdminModel model = new NewAdminModel();
+            var model = new NewAdminModel();
             return PartialView("Partial/_NewAdminModalPartial", model);
         }
 
@@ -152,7 +152,7 @@ namespace MapBul.Web.Controllers
         {
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
-            GuidesListModel model = new GuidesListModel(userGuid);
+            var model = new GuidesListModel(userGuid);
             return PartialView("Partial/_GuidesTablePartial", model);
         }
 
@@ -163,7 +163,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult _TenantsTablePartial()
         {
-            TenantsListModel model = new TenantsListModel();
+            var model = new TenantsListModel();
             return PartialView("Partial/_TenantsTablePartial", model);
         }
 
@@ -177,7 +177,7 @@ namespace MapBul.Web.Controllers
         public ActionResult _TenantInformationPartial(int tenantId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewTenantModel model = new NewTenantModel(repo.GetTenant(tenantId));
+            var model = new NewTenantModel(repo.GetTenant(tenantId));
             return PartialView("Partial/_TenantInformationPartial", model);
         }
 
@@ -191,7 +191,7 @@ namespace MapBul.Web.Controllers
         public ActionResult _GuideInformationPartial(int guideId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            NewGuideModel model = new NewGuideModel(repo.GetGuide(guideId));
+            var model = new NewGuideModel(repo.GetGuide(guideId));
             ViewBag.Countries = repo.GetCountries().Where(i => i.Id != 0).ToList();
             //            ViewBag.Regions = repo.GetRegions();
             ViewBag.Cities = repo.GetCities().Where(i => i.Id != 0).ToList();

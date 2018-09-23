@@ -86,7 +86,7 @@ namespace MapBul.Service
         {
             try
             {
-                MySqlRepository repo = new MySqlRepository();
+                var repo = new MySqlRepository();
                 var user = repo.GetUserByEmailAndPassword(email, password); //вытащили пользователя
 
                 dynamic userDescriptor = GetUserDescriptor(user);
@@ -125,8 +125,8 @@ namespace MapBul.Service
         {
             try
             {
-                MySqlRepository repo = new MySqlRepository();
-                usertype userType = repo.GetMobileUserTypeById(id);
+                var repo = new MySqlRepository();
+                var userType = repo.GetMobileUserTypeById(id);
                 var result = new JsonResult(new List<Dictionary<string, object>>());
                 result.AddObjectToResult(userType, 0);
                 return JsonConvert.SerializeObject(result);
@@ -156,13 +156,13 @@ namespace MapBul.Service
         {
             try
             {
-                MySqlRepository repo = new MySqlRepository();
+                var repo = new MySqlRepository();
                 var markers = repo.GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng);
 
-                JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+                var result = new JsonResult(new List<Dictionary<string, object>>());
 
-                int i = 0;
-                int userId = 0;
+                var i = 0;
+                var userId = 0;
                 if (userGuid != "")
                     userId = repo.GetUser(userGuid).Id;
 
@@ -170,7 +170,7 @@ namespace MapBul.Service
                 {
                     if (!marker.Personal || marker.UserId == userId)
                     {
-                        string Name = marker.Name;
+                        var Name = marker.Name;
                         if (appLang != "ru" && !string.IsNullOrEmpty(marker.NameEn))
                         {
                             Name = marker.NameEn;
@@ -233,21 +233,21 @@ namespace MapBul.Service
         {
             try
             {
-                MySqlRepository repo = new MySqlRepository();
+                var repo = new MySqlRepository();
                 var markers = repo.GetMarkersInSquare(p1Lat, p1Lng, p2Lat, p2Lng, sessionId);
 
-                JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
-                int userId = 0;
+                var result = new JsonResult(new List<Dictionary<string, object>>());
+                var userId = 0;
                 if (userGuid != "")
                     userId = repo.GetUser(userGuid).Id;
 
-                int i = 0;
+                var i = 0;
 
                 foreach (var marker in markers)
                 {
                     if (!marker.Personal || marker.UserId == userId)
                     {
-                        string Name = marker.Name;
+                        var Name = marker.Name;
                         if (appLang != "ru" && !string.IsNullOrEmpty(marker.NameEn))
                         {
                             Name = marker.NameEn;
@@ -303,10 +303,10 @@ namespace MapBul.Service
         {
             try
             {
-                MySqlRepository repo = new MySqlRepository();
+                var repo = new MySqlRepository();
                 repo.RemoveRequestSession(sessionId);
 
-                JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+                var result = new JsonResult(new List<Dictionary<string, object>>());
                 return JsonConvert.SerializeObject(result);
             }
             catch (MyException e)
@@ -329,10 +329,10 @@ namespace MapBul.Service
         public string GetMarkerDescription(int markerId, string appLang)
         {
             var repo = new MySqlRepository();
-            marker marker = repo.GetMarker(markerId);
-            JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
+            var marker = repo.GetMarker(markerId);
+            var result = new JsonResult(new List<Dictionary<string, object>>());
 
-            bool haveRelatedEvents = repo.GetEvents().Any(e => e.MarkerId == markerId);
+            var haveRelatedEvents = repo.GetEvents().Any(e => e.MarkerId == markerId);
 
             var categories = repo.GetMarkerCategories();
             //var tempPhotosPaths = repo.GetArrayOfPathsMarkerPhotos(markerId);
@@ -412,9 +412,9 @@ namespace MapBul.Service
         [WebMethod]
         public string GetRootCategories(string appLang)
         {
-            MySqlRepository repo = new MySqlRepository();
-            List<category> rootCategories = repo.GetRootMarkerCategories();
-            int index = 0;
+            var repo = new MySqlRepository();
+            var rootCategories = repo.GetRootMarkerCategories();
+            var index = 0;
             var result = new JsonResult(new List<Dictionary<string, object>>());
             foreach (var rootCategory in rootCategories)
             {
@@ -425,7 +425,7 @@ namespace MapBul.Service
 
                 rootCategory.Icon = MapUrl(rootCategory.Icon);
                 rootCategory.Pin = MapUrl(rootCategory.Pin);
-                List<category> childCategories = repo.GetChildCategories(rootCategory.Id);
+                var childCategories = repo.GetChildCategories(rootCategory.Id);
                 result.AddObjectToResult(rootCategory, index);
                 result.AddObjectToResult(
                     new
@@ -471,10 +471,10 @@ namespace MapBul.Service
         [WebMethod]
         public string GetRecentArticles(string appLang, bool refresh = false, DateTime? existingDateTime = null)
         {
-            MySqlRepository repo = new MySqlRepository();
-            List<article> articles = repo.GetArticles();
+            var repo = new MySqlRepository();
+            var articles = repo.GetArticles();
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            int i = 0;
+            var i = 0;
             List<article> filteredArticles;
 
             if (existingDateTime != null && refresh)
@@ -587,10 +587,10 @@ namespace MapBul.Service
         [WebMethod]
         public string GetRecentEvents(string appLang, bool refresh = false, DateTime? existingDateTime = null)
         {
-            MySqlRepository repo = new MySqlRepository();
-            List<article> articles = repo.GetEvents();
+            var repo = new MySqlRepository();
+            var articles = repo.GetEvents();
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            int i = 0; List<article> filteredArticles;
+            var i = 0; List<article> filteredArticles;
 
             if (existingDateTime != null && refresh)
                 filteredArticles =
@@ -774,13 +774,13 @@ namespace MapBul.Service
                 //var bytes = Convert.FromBase64String(photoBase64);
 
                 //var photoPath = FileProvider.SaveMarkerPhoto(bytes);
-                string logoPath = string.Empty;
+                var logoPath = string.Empty;
                 if (photoBase64.Length > 0)
                 {
                     logoPath = FileProvider.SaveMarkerLogo(Convert.FromBase64String(photoBase64.LastOrDefault()));
                 }
 
-                marker newMarker = new marker
+                var newMarker = new marker
                 {
                     Name = name,
                     Introduction = introduction,
@@ -1257,12 +1257,12 @@ namespace MapBul.Service
         [WebMethod]
         public string GetFavoritsArticlAndEvent(string userGuid, string appLang)
         {
-            MySqlRepository repo = new MySqlRepository();
-            List<article> articles = repo.GetArticles();
+            var repo = new MySqlRepository();
+            var articles = repo.GetArticles();
             articles.AddRange(repo.GetEvents());
             var result = new JsonResult(new List<Dictionary<string, object>>());
             var favoritsIdArticleAndEvent = repo.GetIdFavoritsArticleAndEvent(userGuid);
-            int i = 0;
+            var i = 0;
 
             var filteredArticles = articles.Where(a => favoritsIdArticleAndEvent.Any(fa => fa == a.Id)).ToList();
 
@@ -1362,8 +1362,8 @@ namespace MapBul.Service
         {
             var repo = new MySqlRepository();
             var markers = repo.GetFavoriteMarkers(userGuid).ToList();
-            JsonResult result = new JsonResult(new List<Dictionary<string, object>>());
-            int i = 0;
+            var result = new JsonResult(new List<Dictionary<string, object>>());
+            var i = 0;
 
             foreach (var marker in markers)
             {
@@ -1434,15 +1434,15 @@ namespace MapBul.Service
         [WebMethod]
         public string GetRelatedEventsFromMarker(int markerId, bool nearest ,string appLang)
         {
-            MySqlRepository repo = new MySqlRepository();
-            List<article> articles = repo.GetEvents();
+            var repo = new MySqlRepository();
+            var articles = repo.GetEvents();
             var selectedMarker = repo.GetMarker(markerId);
             if (selectedMarker == null)
             {
                 throw new MyException(Errors.NotFound);
             }
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            int i = 0;
+            var i = 0;
 
             var filteredArticles = articles.Where(a => a.MarkerId == selectedMarker.Id).OrderBy(a=>a.StartDate).ToList();
             if (nearest)

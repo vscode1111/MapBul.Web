@@ -63,7 +63,7 @@ namespace MapBul.Web.Controllers
         public ActionResult _EditCategoryModalPartial(int categoryId)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            category model = repo.GetCategory(categoryId);
+            var model = repo.GetCategory(categoryId);
             var categories = model.ForArticle ? repo.GetArticleCategories() : repo.GetMarkerCategories();
             ViewBag.Categories = categories.Where(c => c.Id != model.Id).ToList();
             return PartialView("Partial/_EditCategoryModalPartial", model);
@@ -129,7 +129,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult DeleteCategory(int categoryId)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.DeleteCategory(categoryId);
             return new JsonResult {JsonRequestBehavior = JsonRequestBehavior.DenyGet, Data = new {success = true}};
         }
@@ -143,7 +143,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult DeleteCountry(int countryId)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.DeleteCountry(countryId);
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.DenyGet, Data = new { success = true } };
         }
@@ -157,7 +157,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public ActionResult DeleteCity(int cityId)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.DeleteCity(cityId);
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.DenyGet, Data = new { success = true } };
         }
@@ -173,7 +173,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public bool AddCountry(string name, string placeId, string code)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.AddCountry(name, placeId, code);
             return true;
         }
@@ -204,7 +204,7 @@ namespace MapBul.Web.Controllers
                 new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," });
             var lngConverted = Convert.ToSingle(lng,
                 new NumberFormatInfo { NumberDecimalSeparator = ".", NumberGroupSeparator = "," });
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.AddCity(name, countryId, placeId, latConverted, lngConverted);
             return true;
         }
@@ -219,7 +219,7 @@ namespace MapBul.Web.Controllers
         public bool SaveCategoriesStructure(string structure)
         {
             var serializedStructure = JsonConvert.DeserializeObject<List<NestableElement>>(structure);
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             repo.SaveCategoriesStructure(serializedStructure);
             return true;
         }
@@ -237,9 +237,9 @@ namespace MapBul.Web.Controllers
         {
             try
             {
-                IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+                var repo = DependencyResolver.Current.GetService<IRepository>();
 
-                string filePath = FileProvider.SaveCategoryIcon(categoryIcon);
+                var filePath = FileProvider.SaveCategoryIcon(categoryIcon);
                 model.Icon = filePath;
 
                 filePath = FileProvider.SaveCategoryIcon(categoryPin);
@@ -274,7 +274,7 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin)]
         public bool EditCategory(category model, HttpPostedFileBase categoryIcon, HttpPostedFileBase categoryPin)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             var prevCategory = repo.GetCategory(model.Id);
             var previousIcon = prevCategory.Icon;
             var previousPin = prevCategory.Pin;
@@ -282,7 +282,7 @@ namespace MapBul.Web.Controllers
             if (categoryIcon != null)
             {
                 FileProvider.DeleteFile(previousIcon);
-                string filePath = FileProvider.SaveCategoryIcon(categoryIcon);
+                var filePath = FileProvider.SaveCategoryIcon(categoryIcon);
                 model.Icon = filePath;
             }
             else
@@ -293,7 +293,7 @@ namespace MapBul.Web.Controllers
             if (categoryPin != null)
             {
                 FileProvider.DeleteFile(previousPin);
-                string filePath = FileProvider.SaveCategoryIcon(categoryPin);
+                var filePath = FileProvider.SaveCategoryIcon(categoryPin);
                 model.Pin = filePath;
             }
             else

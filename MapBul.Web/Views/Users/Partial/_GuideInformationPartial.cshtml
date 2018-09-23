@@ -5,7 +5,7 @@
 @model MapBul.Web.Models.NewGuideModel
 
 @{
-    bool isAdmin = Html.IsUserInRoles(UserTypes.Admin);
+    var isAdmin = Html.IsUserInRoles(UserTypes.Admin);
     var isReadonly = isAdmin ? "notreadonly" : "readonly";
     var isDisabled = isAdmin ? "notdisabled" : "disabled";
 }

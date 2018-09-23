@@ -19,12 +19,12 @@ namespace MapBul.Web.Models
     {
         public JournalistsListModel()
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             Journalists = repo.GetJournalists();
         }
         public JournalistsListModel(string userGuid)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             Journalists = repo.GetJournalists(userGuid);
         }
         public List<journalist> Journalists { get; set; }
@@ -51,7 +51,7 @@ namespace MapBul.Web.Models
     {
         public EditorsListModel()
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             Editors = repo.GetEditors();
         }
         public List<editor> Editors { get; set; }
@@ -61,7 +61,7 @@ namespace MapBul.Web.Models
     {
         public AdminsListModel()
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             Admins = repo.GetAdmins();
         }
         public List<admin> Admins { get; set; }

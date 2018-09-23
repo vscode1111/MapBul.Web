@@ -78,8 +78,8 @@ namespace MapBul.Web.Controllers
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
             var repo = DependencyResolver.Current.GetService<IRepository>();
-            marker marker = repo.GetMarker(markerId);
-            NewMarkerModel model = new NewMarkerModel(marker);
+            var marker = repo.GetMarker(markerId);
+            var model = new NewMarkerModel(marker);
             ViewBag.Cities = repo.GetCities().ToList();
             ViewBag.Categories = repo.GetMarkerCategories();
             ViewBag.Discounts = repo.GetDiscounts();
@@ -124,8 +124,8 @@ namespace MapBul.Web.Controllers
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
 
-            string photoPath = markerPhoto == null ? null : FileProvider.SaveMarkerPhoto(markerPhoto);
-            string logoPath = markerPhoto == null ? null : FileProvider.SaveMarkerLogo(markerLogo);
+            var photoPath = markerPhoto == null ? null : FileProvider.SaveMarkerPhoto(markerPhoto);
+            var logoPath = markerPhoto == null ? null : FileProvider.SaveMarkerLogo(markerLogo);
             model.Photo = photoPath;
             model.Logo = logoPath;
 
@@ -190,13 +190,13 @@ namespace MapBul.Web.Controllers
             if (markerPhoto != null)
             {
                 FileProvider.DeleteFile(model.Photo);
-                string filePath = FileProvider.SaveMarkerPhoto(markerPhoto);
+                var filePath = FileProvider.SaveMarkerPhoto(markerPhoto);
                 model.Photo = filePath;
             }
             if (markerLogo != null)
             {
                 FileProvider.DeleteFile(model.Logo);
-                string filePath = FileProvider.SaveMarkerLogo(markerLogo);
+                var filePath = FileProvider.SaveMarkerLogo(markerLogo);
                 model.Logo = filePath;
             }
 

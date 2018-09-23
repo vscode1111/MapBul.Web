@@ -15,7 +15,7 @@ namespace MapBul.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            LoginModel model = new LoginModel();
+            var model = new LoginModel();
             return View(model);
         }
 
@@ -27,7 +27,7 @@ namespace MapBul.Web.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel model)
         {
-            IAuthProvider auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             if (auth.Login(model.Login, model.Password))
                 return RedirectToAction("Index", "Home");
             ViewBag.errorMessage = "Неправильные логин/пароль";
@@ -41,7 +41,7 @@ namespace MapBul.Web.Controllers
         [HttpGet]
         public ActionResult Logout()
         {
-            IAuthProvider auth = DependencyResolver.Current.GetService<IAuthProvider>();
+            var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             auth.Logout();
             return RedirectToAction("Index");
         }

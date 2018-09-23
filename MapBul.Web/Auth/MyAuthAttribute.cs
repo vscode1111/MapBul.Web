@@ -11,7 +11,7 @@ namespace MapBul.Web.Auth
     {
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            IRepository repo = DependencyResolver.Current.GetService<IRepository>();
+            var repo = DependencyResolver.Current.GetService<IRepository>();
             try
             {
                 var user = repo.GetUserByGuid(httpContext.User.Identity.Name);

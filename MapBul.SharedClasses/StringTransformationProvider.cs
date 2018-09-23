@@ -9,10 +9,10 @@ namespace MapBul.SharedClasses
         public static string Md5(string input)
         {
             var md5 = MD5.Create();
-            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-            byte[] hash = md5.ComputeHash(inputBytes);
-            StringBuilder sBuilder = new StringBuilder();
-            foreach (byte t in hash)
+            var inputBytes = Encoding.UTF8.GetBytes(input);
+            var hash = md5.ComputeHash(inputBytes);
+            var sBuilder = new StringBuilder();
+            foreach (var t in hash)
             {
                 sBuilder.Append(t.ToString("x2"));
             }
@@ -26,11 +26,11 @@ namespace MapBul.SharedClasses
 
         public static string GeneratePassword()
         {
-            string key = "";
+            var key = "";
             var r = new Random(Guid.NewGuid().GetHashCode());
             while (key.Length < 7)
             {
-                Char c = (char)r.Next(33, 125);
+                var c = (char)r.Next(33, 125);
                 if (Char.IsLetterOrDigit(c))
                     key += c;
             }

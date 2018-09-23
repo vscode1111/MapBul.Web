@@ -20,14 +20,12 @@ namespace MapBul.SharedClasses
         }
         public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon)
         {
-            string virtualPath = "CategoryIcons\\" + Guid.NewGuid() + categoryIcon.FileName.Substring(categoryIcon.FileName.IndexOf(".", StringComparison.Ordinal));
-            File.AppendAllText(@"C:\temp\mapbul.txt", virtualPath + Environment.NewLine);
-            var siteRoot =HostingEnvironment.MapPath("~/");
+            var virtualPath = "CategoryIcons\\" + Guid.NewGuid() + categoryIcon.FileName.Substring(categoryIcon.FileName.IndexOf(".", StringComparison.Ordinal));
+            var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
                 //var savePath = Path.Combine(siteRoot, "..", virtualPath);
                 var savePath = $"{siteRoot}{virtualPath}";
-                File.AppendAllText(@"C:\temp\mapbul.txt", savePath + Environment.NewLine);
                 var dirPath = Path.GetDirectoryName(savePath);
                 if (!string.IsNullOrEmpty(dirPath) && !Directory.Exists(dirPath))
                     Directory.CreateDirectory(dirPath);
@@ -65,7 +63,7 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerPhoto(HttpPostedFileBase markerPhoto)
         {
-            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + markerPhoto.FileName.Substring(markerPhoto.FileName.IndexOf(".", StringComparison.Ordinal));
+            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + markerPhoto.FileName.Substring(markerPhoto.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
@@ -82,7 +80,7 @@ namespace MapBul.SharedClasses
             var tempStrings = new List<string>();
             foreach (var photo in markerPhotos)
             {
-                string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal));
+                var virtualPath = "MarkerPhotos/" + Guid.NewGuid() + photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal));
                 var siteRoot = HostingEnvironment.MapPath("~/");
                 if (siteRoot != null)
                 {
@@ -100,20 +98,20 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerPhoto(byte[] markerPhoto, bool mini)
         {
-            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
-            ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+            var virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
+            var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
                 using (var stream = new MemoryStream(markerPhoto))
                 {
-                    Encoder myEncoder =
+                    var myEncoder =
                         Encoder.Quality;
-                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
-                    EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+                    var myEncoderParameters = new EncoderParameters(1);
+                    var myEncoderParameter = new EncoderParameter(myEncoder, 50L);
                     myEncoderParameters.Param[0] = myEncoderParameter;
-                    Bitmap firstBitmap = new Bitmap(stream);
+                    var firstBitmap = new Bitmap(stream);
 
 
 
@@ -183,14 +181,14 @@ namespace MapBul.SharedClasses
         private static ImageCodecInfo GetEncoder(ImageFormat format)
         {
 
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            var codecs = ImageCodecInfo.GetImageDecoders();
 
             return codecs.FirstOrDefault(codec => codec.FormatID == format.Guid);
         }
 
         public static string SaveArticlePhoto(HttpPostedFileBase articlePhoto)
         {
-            string virtualPath = "ArticlePhotos\\" + Guid.NewGuid() + articlePhoto.FileName.Substring(articlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
+            var virtualPath = "ArticlePhotos\\" + Guid.NewGuid() + articlePhoto.FileName.Substring(articlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
@@ -210,7 +208,7 @@ namespace MapBul.SharedClasses
 
         public static string SaveArticleTitlePhoto(HttpPostedFileBase articleTitlePhoto)
         {
-            string virtualPath = "ArticlePhotos\\" + Guid.NewGuid() + articleTitlePhoto.FileName.Substring(articleTitlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
+            var virtualPath = "ArticlePhotos\\" + Guid.NewGuid() + articleTitlePhoto.FileName.Substring(articleTitlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
@@ -230,7 +228,7 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerLogo(HttpPostedFileBase markerLogo)
         {
-            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() +
+            var virtualPath = "MarkerPhotos/" + Guid.NewGuid() +
                                  markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
@@ -246,12 +244,12 @@ namespace MapBul.SharedClasses
                     if (image.Width >= image.Height)
                         k = 300f/image.Height;
                     var resizedImage = CompressImage(image, (int) (k*image.Width), (int) (k*image.Height));
-                    Rectangle cropRect = new Rectangle(resizedImage.Width > 300 ? (resizedImage.Width - 300)/2 : 0,
+                    var cropRect = new Rectangle(resizedImage.Width > 300 ? (resizedImage.Width - 300)/2 : 0,
                         resizedImage.Height > 300 ? (resizedImage.Height - 300)/2 : 0, 300, 300);
 
                     cuttedImage = new Bitmap(cropRect.Width, cropRect.Height);
 
-                    using (Graphics g = Graphics.FromImage(cuttedImage))
+                    using (var g = Graphics.FromImage(cuttedImage))
                     {
                         g.DrawImage(resizedImage, new Rectangle(0, 0, cuttedImage.Width, cuttedImage.Height),
                             cropRect,
@@ -267,14 +265,14 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerLogo(byte[] markerLogo)
         {
-            string virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
+            var virtualPath = "MarkerPhotos/" + Guid.NewGuid() + ".jpg";
             var siteRoot = HostingEnvironment.MapPath("~/");
             if (siteRoot != null)
             {
                 var savePath = Path.Combine(siteRoot, "..", virtualPath);
                 using (var stream = new MemoryStream(markerLogo))
                 {
-                    Bitmap firstBitmap = new Bitmap(stream);
+                    var firstBitmap = new Bitmap(stream);
 
 
 
@@ -331,12 +329,12 @@ namespace MapBul.SharedClasses
                     if (image.Width >= image.Height)
                         k = 300f / image.Height;
                     var resizedImage = CompressImage(image, (int)(k * image.Width), (int)(k * image.Height));
-                    Rectangle cropRect = new Rectangle(resizedImage.Width > 300 ? (resizedImage.Width - 300) / 2 : 0,
+                    var cropRect = new Rectangle(resizedImage.Width > 300 ? (resizedImage.Width - 300) / 2 : 0,
                         resizedImage.Height > 300 ? (resizedImage.Height - 300) / 2 : 0, 300, 300);
 
                     cuttedImage = new Bitmap(cropRect.Width, cropRect.Height);
 
-                    using (Graphics g = Graphics.FromImage(cuttedImage))
+                    using (var g = Graphics.FromImage(cuttedImage))
                     {
                         g.DrawImage(resizedImage, new Rectangle(0, 0, cuttedImage.Width, cuttedImage.Height),
                             cropRect,
