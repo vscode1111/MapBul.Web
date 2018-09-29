@@ -124,18 +124,31 @@ namespace MapBul.Web.Controllers
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
 
+            /*
             var photoPath = markerPhoto == null ? null : FileProvider.SaveMarkerPhoto(markerPhoto);
             var logoPath = markerPhoto == null ? null : FileProvider.SaveMarkerLogo(markerLogo);
             model.Photo = photoPath;
             model.Logo = logoPath;
 
-            var tempNewMarkerId = repo.AddMarker(model, openTimes, closeTimes, userGuid);
             if (markerPhotos != null && markerPhotos.Count > 0)
             {
                 var tempPhotosPaths = FileProvider.SaveMarkerPhotos(markerPhotos);
                 repo.AddMarkerPhotos(tempNewMarkerId, tempPhotosPaths);
             }
+            */
 
+            if (markerPhoto != null)
+            {
+                FileProvider.DeleteFile(model.Photo);
+                var filePath = FileProvider.SaveMarkerPhoto(markerPhoto);
+                model.Photo = filePath;
+            }
+            if (markerLogo != null)
+            {
+                FileProvider.DeleteFile(model.Logo);
+                var filePath = FileProvider.SaveMarkerLogo(markerLogo);
+                model.Logo = filePath;
+            }
 
             if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.NameEn))
             {
@@ -149,6 +162,7 @@ namespace MapBul.Web.Controllers
             {
                 model.Description = model.DescriptionEn;
             }
+            var tempNewMarkerId = repo.AddMarker(model, openTimes, closeTimes, userGuid);
 
             return true;
         }

@@ -135,7 +135,7 @@ function OnNewMarkerFormSubmit() {
     }
 
     var formData = new FormData(form);
-    
+    /*
     var photos = document.getElementById("NewMarkerPhotoInput").files;
     var x;
     if (photos.length < 10) {
@@ -148,6 +148,11 @@ function OnNewMarkerFormSubmit() {
         }
         
     }
+    var logo = document.getElementById("NewMarkerLogoInput").files[0];
+    formData.append("markerLogo", logo);
+    */
+    var photo = document.getElementById("NewMarkerPhotoInput").files[0];
+    formData.append("markerPhoto", photo);
     var logo = document.getElementById("NewMarkerLogoInput").files[0];
     formData.append("markerLogo", logo);
 
