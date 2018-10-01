@@ -48,7 +48,7 @@
     <Compile Include="Constants\UserTypes.cs" />
     <Compile Include="FileProvider.cs" />
     <Compile Include="KeyValue.cs" />
-    <Compile Include="MailProvider.cs" />
+    <Compile Include="Properties\MailProvider.cs" />
     <Compile Include="StringTransformationProvider.cs" />
     <Compile Include="MyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
