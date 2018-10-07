@@ -7,12 +7,12 @@ namespace MapBul.DBContext.Migrations
     {
         public override void Up()
         {
-            CreateIndex("city", "Name", unique: true);
+            AlterColumn("marker", "EntryTicket", c => c.String(maxLength: 200, unicode: false));
         }
         
         public override void Down()
         {
-            DropIndex("city", new[] { "Name" });
+            AlterColumn("marker", "EntryTicket", c => c.String(nullable: false, maxLength: 200, unicode: false));
         }
     }
 }

@@ -88,8 +88,6 @@ namespace MapBul.Web.Repository
 
                 _db.SaveChanges();
                 trans.Commit();
-
-
             }
             catch (Exception ex)
             {
@@ -125,8 +123,6 @@ namespace MapBul.Web.Repository
                 model.PermittedCities.Select(c => new city_permission {CityId = c, UserId = editor.UserId}));
 //            _db.region_permission.AddRange(
 //                model.PermittedRegions.Select(c => new region_permission {RegionId = c, UserId = editor.UserId}));
-
-
             _db.SaveChanges();
         }
 
@@ -495,10 +491,8 @@ namespace MapBul.Web.Repository
                 _db.marker.Add(newMarker);
                 _db.SaveChanges();
 
-                var subCategories = model.SubCategories != null
-                    ? model.SubCategories.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id})
-                        .ToList()
-                    : new List<subcategory>();
+                var subCategories = model.SubCategories?.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id})
+                                        .ToList() ?? new List<subcategory>();
 
                 var phones =
                     model.Phones.Where(p=>p.Length!=0).Select(p => new phone {Number = p, MarkerId = newMarker.Id, Primary = false}).ToList();
@@ -615,11 +609,7 @@ namespace MapBul.Web.Repository
                 _db.phone.RemoveRange(_db.phone.Where(s => s.MarkerId == newMarker.Id));
                 _db.worktime.RemoveRange(_db.worktime.Where(s => s.MarkerId == newMarker.Id));
 
-
-
-
-                var subCategories = model.SubCategories != null ?
-                    model.SubCategories.Select(sc => new subcategory { CategoryId = sc, MarkerId = newMarker.Id }).ToList() : new List<subcategory>();
+                var subCategories = model.SubCategories?.Select(sc => new subcategory { CategoryId = sc, MarkerId = newMarker.Id }).ToList() ?? new List<subcategory>();
 
                 var phones =
                     model.Phones.Where(p => p.Length != 0).Select(p => new phone { Number = p, MarkerId = newMarker.Id, Primary = false }).ToList();

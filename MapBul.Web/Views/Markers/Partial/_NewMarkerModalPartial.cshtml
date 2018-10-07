@@ -52,7 +52,7 @@
                         @Html.TextBoxFor(m => m.Email, new Dictionary<string, object> {{"placeholder", "Email"}, {"class", "form-control"}})
                     </div>
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.EntryTicket, new Dictionary<string, object> { { "placeholder", Resource.PinEntranceFee +"*"}, { "class", "form-control" }, { "required", "" } })
+                        @Html.TextBoxFor(m => m.EntryTicket, new Dictionary<string, object> { { "placeholder", Resource.PinEntranceFee}, { "class", "form-control" }})
                     </div>
                     <div class="form-group">
                         @Html.TextBoxFor(m => m.Phones, new Dictionary<string, object> { { "placeholder", "Телефон" }, { "class", "form-control" }, { "data-mask", "+?9999999999999999999999999" }, { "data-placeholder", " " } })

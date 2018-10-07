@@ -52,7 +52,7 @@ namespace MapBul.DBContext
 
         public double Lng { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(200)]
         public string EntryTicket { get; set; }
 
