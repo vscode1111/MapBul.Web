@@ -1,10 +1,7 @@
 namespace MapBul.DBContext
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("mapbul.marker_request_session")]
     public partial class marker_request_session

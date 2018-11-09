@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using MapBul.DBContext;
-using MapBul.Web.Auth;
 using MapBul.Web.Repository;
 
 namespace MapBul.Web.Models

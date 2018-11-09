@@ -3,7 +3,6 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MapBul.SharedClasses.Constants;
 
 namespace MapBul.Web.Filters
 {

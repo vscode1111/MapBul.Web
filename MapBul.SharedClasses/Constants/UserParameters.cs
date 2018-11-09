@@ -1,6 +1,4 @@
-﻿using MapBul.DBContext;
-
-namespace MapBul.SharedClasses.Constants
+﻿namespace MapBul.SharedClasses.Constants
 {
     public static class UserParameters
     {

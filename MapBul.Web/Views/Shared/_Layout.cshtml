@@ -1,6 +1,5 @@
 ﻿@using System.Web.Optimization
 @using MapBul.Web.Helpers
-@using MapBul.Web.Auth
 @{
     //IAuthProvider auth = DependencyResolver.Current.GetService<IAuthProvider>();
     //ViewBag.userType = auth.UserType;
@@ -18,7 +17,7 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <!-- Add local styles, mostly for plugins css file -->
     @if (IsSectionDefined("Styles"))
-    {@RenderSection("Styles", required: false)}
+    {@RenderSection("Styles", false)}
 
     <!-- Add jQuery Style direct - used for jQGrid plugin -->
     <link href="@Url.Content("~/Scripts/plugins/jquery-ui/jquery-ui.css")" rel="stylesheet" type="text/css" />
@@ -76,6 +75,6 @@
     @Scripts.Render("~/bundles/skinConfig")
 
     <!-- Handler for local scripts -->
-    @RenderSection("scripts", required: false)
+    @RenderSection("scripts", false)
 </body>
 </html>

@@ -259,8 +259,8 @@ namespace MapBul.Service
                                 Name,
                                 marker.Lat,
                                 marker.Lng,
-                                Icon = MapUrl(marker.category.Pin),
-                                Logo = MapUrl(marker.Logo),
+                                //Icon = MapUrl(marker.category.Pin),
+                                //Logo = MapUrl(marker.Logo),
                                 WorkTime = marker.worktime.Select(wt => new
                                 {
                                     wt.OpenTime,

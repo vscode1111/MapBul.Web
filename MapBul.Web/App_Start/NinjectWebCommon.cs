@@ -2,7 +2,7 @@ using MapBul.Web.Auth;
 using MapBul.Web.Repository;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(MapBul.Web.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(MapBul.Web.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(MapBul.Web.App_Start.NinjectWebCommon), "Stop")]
 
 namespace MapBul.Web.App_Start
 {
