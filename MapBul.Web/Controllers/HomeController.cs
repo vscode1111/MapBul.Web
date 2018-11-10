@@ -20,17 +20,5 @@ namespace MapBul.Web.Controllers
             var mapInfo = new MapInfoModel();
             return View(mapInfo);
         }
-
-        /// <summary>
-        /// метод удаления статьи
-        /// </summary>
-        /// <param name="articleId"></param>
-        /// <returns></returns>
-        [HttpGet, Route("/ArticlePhoto2")]
-        public byte[] ArticlePhoto(string fileName)
-        {
-            var t = fileName;
-            return null;
-        }
     }
 }

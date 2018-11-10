@@ -10,6 +10,12 @@ namespace MapBul.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "ArticlePhoto",
+                "ArticlePhoto/{fileName}",
+                new { controller = "ArticlePhoto", action = "Index", fileName = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 "Default",
                 "{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }
