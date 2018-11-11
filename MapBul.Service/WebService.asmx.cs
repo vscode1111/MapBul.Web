@@ -45,7 +45,8 @@ namespace MapBul.Service
         /// <returns></returns>
         private string MapUrl(string filePath)
         {
-            return "http://" + HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"] + "/" + filePath;
+            //return $@"{HttpContext.Current.Request.Url.Scheme}://{HttpContext.Current.Request.Url.Authority}/{filePath}".Replace("\\", "/");
+            return !string.IsNullOrEmpty(filePath) ? $@"http://web.mapbul.scub111.com/{filePath}".Replace("\\", "/") : null;
         }
         /// <summary>
         /// Метод возвращает описатель пользователя в зависимости от его типа
@@ -259,8 +260,8 @@ namespace MapBul.Service
                                 Name,
                                 marker.Lat,
                                 marker.Lng,
-                                //Icon = MapUrl(marker.category.Pin),
-                                //Logo = MapUrl(marker.Logo),
+                                Icon = MapUrl(marker.category.Pin),
+                                Logo = MapUrl(marker.Logo),
                                 WorkTime = marker.worktime.Select(wt => new
                                 {
                                     wt.OpenTime,
