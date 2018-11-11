@@ -112,13 +112,13 @@ namespace MapBul.SharedClasses
         {
             try
             {
-                MailMessage message = new MailMessage { From = new MailAddress("MapBul<mapbulapp@yandex.ru>") };
+                var message = new MailMessage { From = new MailAddress("MapBul<mapbulapp@yandex.ru>") };
 
                 message.To.Add(new MailAddress(email));
                 message.Subject = subject;
                 message.Body = body;
                 message.IsBodyHtml = true;
-                SmtpClient client = new SmtpClient("smtp.yandex.ru", 25)
+                var client = new SmtpClient("smtp.yandex.ru", 25)
                 {
                     EnableSsl = true,
                     Credentials = new NetworkCredential("mapbulapp@yandex.ru", "mapbulbul")

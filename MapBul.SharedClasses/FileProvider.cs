@@ -12,33 +12,59 @@ namespace MapBul.SharedClasses
 {
     public static class FileProvider
     {
+        private const string PublicContent = "mapbul.content";
+        private const string ArticlePhotos = "ArticlePhotos";
+        private const string CategoryIcons = "CategoryIcons";
+        private const string MarkerPhotos = "MarkerPhotos";
+
+        public static string GetPublicContent()
+        {
+            return GetParentDirectoryUntil(PublicContent);
+        }
+
+        private static string GetParentDirectoryUntil(string keyWord, string rootDirectory = "")
+        {
+            if (string.IsNullOrEmpty(rootDirectory))
+                rootDirectory = HostingEnvironment.MapPath("~/");
+            var dir = Directory.GetParent(rootDirectory);
+            if (dir == null) return "";
+            var parentDirectory = dir.FullName;
+            var needDirectory = $@"{parentDirectory}\{keyWord}";
+            return Directory.Exists(needDirectory)
+                ? needDirectory
+                : GetParentDirectoryUntil(keyWord, parentDirectory);
+        }
+
+        private static string SaveFileToPublicContent(HttpPostedFileBase articleTitlePhoto, string imageType)
+        {
+            var virtualPath =
+                $@"{imageType}\{Guid.NewGuid()}{articleTitlePhoto.FileName.Substring(articleTitlePhoto.FileName.IndexOf(".", StringComparison.Ordinal))}";
+            var siteRoot = GetPublicContent();
+            if (siteRoot != null)
+            {
+                var savePath = $@"{siteRoot}\{virtualPath}";
+                articleTitlePhoto.SaveAs(savePath);
+                Image resizedImage;
+                using (var image = Image.FromFile(savePath))
+                {
+                    resizedImage = CompressImage(image, 200, 200);
+                }
+                resizedImage.Save(savePath);
+            }
+            else
+                throw new MyException(Errors.UnknownError);
+            return virtualPath;
+        }
+
         private static Image CompressImage(Image input, int width, int height)
         {
             var result = new Bitmap(input, width, height);
             return result;
         }
+
         public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon)
         {
-            var virtualPath = "CategoryIcons\\" + Guid.NewGuid() + categoryIcon.FileName.Substring(categoryIcon.FileName.IndexOf(".", StringComparison.Ordinal));
-            var siteRoot = HostingEnvironment.MapPath("~/");
-            if (siteRoot != null)
-            {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
-                var dirPath = Path.GetDirectoryName(savePath);
-                if (!string.IsNullOrEmpty(dirPath) && !Directory.Exists(dirPath))
-                    Directory.CreateDirectory(dirPath);
-                categoryIcon.SaveAs(savePath);
-                Image resizedImage;
-                using (var image = Image.FromFile(savePath))
-                {
-                    resizedImage = CompressImage(image, 120, 120);
-                }
-                resizedImage.Save(savePath);
-            }
-            else 
-                throw new MyException(Errors.UnknownError);
-            return virtualPath;
+            return SaveFileToPublicContent(categoryIcon, CategoryIcons);
         }
 
         public static void DeleteFile(string path)
@@ -62,29 +88,21 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerPhoto(HttpPostedFileBase markerPhoto)
         {
-            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + markerPhoto.FileName.Substring(markerPhoto.FileName.IndexOf(".", StringComparison.Ordinal));
-            var siteRoot = HostingEnvironment.MapPath("~/");
-            if (siteRoot != null)
-            {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
-                markerPhoto.SaveAs(savePath);
-            }
-            else
-                throw new MyException(Errors.UnknownError);
-            return virtualPath;
+            return SaveFileToPublicContent(markerPhoto, MarkerPhotos);
         }
 
         public static string[] SaveMarkerPhotos(List<HttpPostedFileBase> markerPhotos)
         {
             var tempStrings = new List<string>();
+            var siteRoot = GetPublicContent();
             foreach (var photo in markerPhotos)
             {
-                var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal));
-                var siteRoot = HostingEnvironment.MapPath("~/");
+                var virtualPath =
+                    $@"{MarkerPhotos}\{Guid.NewGuid()}{
+                            photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal))
+                        }";
                 if (siteRoot != null)
                 {
-                    //var savePath = Path.Combine(siteRoot, "..", virtualPath);
                     var savePath = $"{siteRoot}{virtualPath}";
                     photo.SaveAs(savePath);
                     tempStrings.Add(savePath);
@@ -99,13 +117,12 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerPhoto(byte[] markerPhoto, bool mini)
         {
-            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + ".jpg";
+            var virtualPath = $@"{MarkerPhotos}\{Guid.NewGuid()}.jpg";
             var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
-            var siteRoot = HostingEnvironment.MapPath("~/");
+            var siteRoot = GetPublicContent();
             if (siteRoot != null)
             {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
+                var savePath = $@"{siteRoot}\{virtualPath}";
                 using (var stream = new MemoryStream(markerPhoto))
                 {
                     var myEncoder =
@@ -114,8 +131,6 @@ namespace MapBul.SharedClasses
                     var myEncoderParameter = new EncoderParameter(myEncoder, 50L);
                     myEncoderParameters.Param[0] = myEncoderParameter;
                     var firstBitmap = new Bitmap(stream);
-
-
 
                     if (Array.IndexOf(firstBitmap.PropertyIdList, 274) > -1)
                     {
@@ -151,10 +166,6 @@ namespace MapBul.SharedClasses
                         firstBitmap.RemovePropertyItem(274);
                     }
 
-                    /*var newItem = (PropertyItem)FormatterServices.GetUninitializedObject(typeof(PropertyItem));
-                    newItem.Id = 274;
-                    newItem.Value = new byte[] { 1 };
-                    firstBitmap.SetPropertyItem(newItem);*/
                     if (!mini)
                     {
                         firstBitmap.Save(savePath);
@@ -164,12 +175,6 @@ namespace MapBul.SharedClasses
                         firstBitmap.Save(savePath, jpgEncoder, myEncoderParameters);
                     }
                 }
-
-                /*using (var imageFile = new FileStream(savePath, FileMode.Create))
-                {
-                    imageFile.Write(markerPhoto, 0, markerPhoto.Length);
-                    imageFile.Flush();
-                }*/
             }
             else
                 throw new MyException(Errors.UnknownError);
@@ -178,62 +183,28 @@ namespace MapBul.SharedClasses
 
         private static ImageCodecInfo GetEncoder(ImageFormat format)
         {
-
             var codecs = ImageCodecInfo.GetImageDecoders();
-
             return codecs.FirstOrDefault(codec => codec.FormatID == format.Guid);
         }
 
         public static string SaveArticlePhoto(HttpPostedFileBase articlePhoto)
         {
-            var virtualPath = "ArticlePhotos\\" + Guid.NewGuid() + articlePhoto.FileName.Substring(articlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
-            var siteRoot = HostingEnvironment.MapPath("~/");
-            if (siteRoot != null)
-            {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
-                articlePhoto.SaveAs(savePath);
-                Image resizedImage;
-                using (var image = Image.FromFile(savePath))
-                {
-                    resizedImage = CompressImage(image, 600, 600);
-                }
-                resizedImage.Save(savePath);
-            }
-            else
-                throw new MyException(Errors.UnknownError);
-            return virtualPath;
+            return SaveFileToPublicContent(articlePhoto, ArticlePhotos);
         }
-
+        
         public static string SaveArticleTitlePhoto(HttpPostedFileBase articleTitlePhoto)
         {
-            var virtualPath = "ArticlePhotos\\" + Guid.NewGuid() + articleTitlePhoto.FileName.Substring(articleTitlePhoto.FileName.IndexOf(".", StringComparison.Ordinal));
-            var siteRoot = HostingEnvironment.MapPath("~/");
-            if (siteRoot != null)
-            {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
-                articleTitlePhoto.SaveAs(savePath);
-                Image resizedImage;
-                using (var image = Image.FromFile(savePath))
-                {
-                    resizedImage = CompressImage(image, 200, 200);
-                }
-                resizedImage.Save(savePath);
-            }
-            else
-                throw new MyException(Errors.UnknownError);
-            return virtualPath;
+            return SaveFileToPublicContent(articleTitlePhoto, ArticlePhotos);
         }
 
         public static string SaveMarkerLogo(HttpPostedFileBase markerLogo)
         {
-            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal));
-            var siteRoot = HostingEnvironment.MapPath("~/");
+            var virtualPath =
+                $@"{MarkerPhotos}\{Guid.NewGuid()}{markerLogo.FileName.Substring(markerLogo.FileName.IndexOf(".", StringComparison.Ordinal))}";
+            var siteRoot = GetPublicContent();
             if (siteRoot != null)
             {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
+                var savePath = $@"{siteRoot}\{virtualPath}";
                 markerLogo.SaveAs(savePath);
                 Bitmap cuttedImage;
                 using (var image = Image.FromFile(savePath))
@@ -265,12 +236,11 @@ namespace MapBul.SharedClasses
 
         public static string SaveMarkerLogo(byte[] markerLogo)
         {
-            var virtualPath = "MarkerPhotos\\" + Guid.NewGuid() + ".jpg";
-            var siteRoot = HostingEnvironment.MapPath("~/");
+            var virtualPath = $@"{MarkerPhotos}\{Guid.NewGuid()}.jpg";
+            var siteRoot = GetPublicContent();
             if (siteRoot != null)
             {
-                //var savePath = Path.Combine(siteRoot, "..", virtualPath);
-                var savePath = $"{siteRoot}{virtualPath}";
+                var savePath = $@"{siteRoot}\{virtualPath}";
                 using (var stream = new MemoryStream(markerLogo))
                 {
                     var firstBitmap = new Bitmap(stream);
@@ -309,10 +279,6 @@ namespace MapBul.SharedClasses
                         firstBitmap.RemovePropertyItem(274);
                     }
 
-                    /*var newItem = (PropertyItem)FormatterServices.GetUninitializedObject(typeof(PropertyItem));
-                    newItem.Id = 274;
-                    newItem.Value = new byte[] { 1 };
-                    firstBitmap.SetPropertyItem(newItem);*/
                     firstBitmap.Save(savePath);
                 }
                 Bitmap cuttedImage;
