@@ -35,7 +35,7 @@ namespace MapBul.SharedClasses
                 : GetParentDirectoryUntil(keyWord, parentDirectory);
         }
 
-        private static string SaveFileToPublicContent(HttpPostedFileBase articleTitlePhoto, string imageType)
+        private static string SaveFileToPublicContent(HttpPostedFileBase articleTitlePhoto, string imageType, int width = 200, int height = 200)
         {
             var virtualPath =
                 $@"{imageType}\{Guid.NewGuid()}{articleTitlePhoto.FileName.Substring(articleTitlePhoto.FileName.IndexOf(".", StringComparison.Ordinal))}";
@@ -47,7 +47,7 @@ namespace MapBul.SharedClasses
                 Image resizedImage;
                 using (var image = Image.FromFile(savePath))
                 {
-                    resizedImage = CompressImage(image, 200, 200);
+                    resizedImage = CompressImage(image, width, height);
                 }
                 resizedImage.Save(savePath);
             }
@@ -62,9 +62,9 @@ namespace MapBul.SharedClasses
             return result;
         }
 
-        public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon)
+        public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon, int width = 200, int height = 200)
         {
-            return SaveFileToPublicContent(categoryIcon, CategoryIcons);
+            return SaveFileToPublicContent(categoryIcon, CategoryIcons, width, height);
         }
 
         public static void DeleteFile(string path)

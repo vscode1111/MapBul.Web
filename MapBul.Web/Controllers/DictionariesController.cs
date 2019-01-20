@@ -288,12 +288,10 @@ namespace MapBul.Web.Controllers
             else
                 model.Icon = previousIcon;
 
-
-
             if (categoryPin != null)
             {
                 FileProvider.DeleteFile(previousPin);
-                var filePath = FileProvider.SaveCategoryIcon(categoryPin);
+                var filePath = FileProvider.SaveCategoryIcon(categoryPin, 50, 50);
                 model.Pin = filePath;
             }
             else
