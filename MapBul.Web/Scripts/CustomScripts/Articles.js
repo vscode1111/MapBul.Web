@@ -24,6 +24,7 @@ function OnEditArticleDocumentReady() {
 }
 
 function OnArticlesDocumentReady() {
+    $('.chosenselect').chosen();
     $(".EditArticleLink").each(function (index, item) {
         $(item).click(OnEditArticleClick);
     });
