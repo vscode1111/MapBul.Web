@@ -24,7 +24,8 @@ function OnEditArticleDocumentReady() {
 }
 
 function OnArticlesDocumentReady() {
-    $('.chosenselect').chosen();
+    //Brings some delay
+    //$('.chosenselect').chosen();
     $(".EditArticleLink").each(function (index, item) {
         $(item).click(OnEditArticleClick);
     });

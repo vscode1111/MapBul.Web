@@ -359,7 +359,8 @@ function OnNewMarkerAddressChanged() {
 }
 
 function OnMarkersDocumentReady() {
-    $('.chosenselect').chosen();
+    //Brings some delay
+    //$('.chosenselect').chosen();
     $("#NewMarkerButton").click(OnNewMarkerClick);
     $(".DeleteMarkerButton").click(OnMarkerDeleteClick);
     $(".EditMarkerLink").each(function(index, item) {
