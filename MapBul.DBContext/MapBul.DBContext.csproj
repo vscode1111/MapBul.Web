@@ -80,6 +80,10 @@
     <Compile Include="Migrations\201810070618506_first.Designer.cs">
       <DependentUpon>201810070618506_first.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902111140202_2019_02_11.cs" />
+    <Compile Include="Migrations\201902111140202_2019_02_11.Designer.cs">
+      <DependentUpon>201902111140202_2019_02_11.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="phone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +104,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201810070618506_first.resx">
       <DependentUpon>201810070618506_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902111140202_2019_02_11.resx">
+      <DependentUpon>201902111140202_2019_02_11.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

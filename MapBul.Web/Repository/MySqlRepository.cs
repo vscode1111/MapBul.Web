@@ -580,7 +580,8 @@ namespace MapBul.Web.Repository
             return _db.marker.First(m => m.Id == markerId);
         }
 
-        public void EditMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid)
+        public void EditMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes,
+            List<int> removePhotoIds, string userGuid)
         {
             var trans = _db.Database.BeginTransaction();
             try
@@ -605,26 +606,46 @@ namespace MapBul.Web.Repository
                     newMarker.PublishedDate = null;
                 }
 
+                if (model.marker_photos != null && model.marker_photos.Count > 0)
+                    _db.marker_photos.AddRange(model.marker_photos.Select(p =>
+                        new marker_photos {MarkerId = newMarker.Id, Photo = p.Photo}));
+
+                if (removePhotoIds != null && removePhotoIds.Count > 0)
+                    _db.marker_photos.RemoveRange(_db.marker_photos.Where(p => removePhotoIds.Contains(p.Id)));
+
                 _db.subcategory.RemoveRange(_db.subcategory.Where(s => s.MarkerId == newMarker.Id));
                 _db.phone.RemoveRange(_db.phone.Where(s => s.MarkerId == newMarker.Id));
                 _db.worktime.RemoveRange(_db.worktime.Where(s => s.MarkerId == newMarker.Id));
 
-                var subCategories = model.SubCategories?.Select(sc => new subcategory { CategoryId = sc, MarkerId = newMarker.Id }).ToList() ?? new List<subcategory>();
+                var subCategories =
+                    model.SubCategories?.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id})
+                        .ToList() ?? new List<subcategory>();
 
                 var phones =
-                    model.Phones.Where(p => p.Length != 0).Select(p => new phone { Number = p, MarkerId = newMarker.Id, Primary = false }).ToList();
+                    model.Phones.Where(p => p.Length != 0)
+                        .Select(p => new phone {Number = p, MarkerId = newMarker.Id, Primary = false}).ToList();
 
                 var firstOrDefault = phones.FirstOrDefault();
                 if (firstOrDefault != null)
                     firstOrDefault.Primary = true;
 
                 var workTimes =
-                    openTimes.Join(closeTimes.Select(ct => new { ct.WeekDayId, CloseTime = ct.Time }),
-                        ot => ot.WeekDayId, ct => ct.WeekDayId, (ot, ct) => new { ot.WeekDayId, OpenTime = ot.Time, ct.CloseTime }).Where(t => t.CloseTime != null && t.OpenTime != null).ToList();  //собираем из двух частей полное время работы
+                    openTimes.Join(closeTimes.Select(ct => new {ct.WeekDayId, CloseTime = ct.Time}),
+                            ot => ot.WeekDayId, ct => ct.WeekDayId,
+                            (ot, ct) => new {ot.WeekDayId, OpenTime = ot.Time, ct.CloseTime})
+                        .Where(t => t.CloseTime != null && t.OpenTime != null)
+                        .ToList(); //собираем из двух частей полное время работы
 
                 _db.subcategory.AddRange(subCategories);
                 _db.phone.AddRange(phones);
-                _db.worktime.AddRange(workTimes.Select(t => new worktime { CloseTime = t.CloseTime.Value, OpenTime = t.OpenTime.Value, MarkerId = newMarker.Id, WeekDayId = t.WeekDayId }));
+                _db.worktime.AddRange(workTimes.Select(t => new worktime
+                {
+                    CloseTime = t.CloseTime.Value,
+                    OpenTime = t.OpenTime.Value,
+                    MarkerId = newMarker.Id,
+                    WeekDayId = t.WeekDayId
+                }));
+
                 _db.SaveChanges();
                 trans.Commit();
             }

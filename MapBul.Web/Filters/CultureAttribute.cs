@@ -61,6 +61,7 @@ namespace MapBul.Web.Filters
                     HttpContext.Current.Response.SetCookie(cookie);
                 }
 
+                //language = "ru";
                 var cultureInfo = new CultureInfo(language);
                 //Thread.CurrentThread.CurrentCulture = cultureInfo;
                 Thread.CurrentThread.CurrentUICulture = cultureInfo;

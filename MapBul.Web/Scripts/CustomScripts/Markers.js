@@ -43,8 +43,6 @@ function OnEditMarkerDocumentReady() {
     });
 }
 
-
-
 function OnMarkerCoordinateChanged() {
     var lat = $("#MarkerLatInput").val();
     var lng = $("#MarkerLngInput").val();
@@ -59,7 +57,6 @@ function OnMarkerCoordinateChanged() {
     window.map.setCenter(latlng);
     OnMarkerPositionChanged();
 }
-
 
 function OnEditMarkerFormSubmit() {
     var form = document.getElementById("EditMarkerForm");
@@ -124,7 +121,6 @@ function OnEditMarkerClick() {
         }
     });
 }
-
 
 function OnNewMarkerFormSubmit() {
     var form = document.getElementById("NewMarkerForm");

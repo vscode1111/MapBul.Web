@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MapBul.DBContext;
 using MapBul.SharedClasses;
 using MapBul.SharedClasses.Constants;
 using MapBul.Web.Auth;
@@ -85,7 +86,6 @@ namespace MapBul.Web.Controllers
             ViewBag.Statuses = repo.GetStatuses(userGuid);
             ViewBag.WeekDays = repo.GetWeekDays();
             return PartialView("Partial/_EditMarkerModalPartial", model);
-
         }
 
 #endregion
@@ -166,6 +166,22 @@ namespace MapBul.Web.Controllers
             return true;
         }
 
+        [HttpPost]
+        [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
+        public bool RemovePhotosMarker(HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, IEnumerable<HttpPostedFileBase> markerPhotosExt)
+        {
+            var repo = DependencyResolver.Current.GetService<IRepository>();
+
+            return true;
+        }
+
+        public class RemovePhoto
+        {
+            public int id;
+
+            public string photo;
+        }
+
         /// <summary>
         /// метод сохранения изменений маркера
         /// </summary>
@@ -174,30 +190,30 @@ namespace MapBul.Web.Controllers
         /// <param name="closeTimesString"></param>
         /// <param name="markerPhoto"></param>
         /// <param name="markerLogo"></param>
+        /// <param name="markerPhotosExt"></param>
+        /// <param name="removePhotos"></param>
         /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public bool EditMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
-            HttpPostedFileBase markerPhoto,  HttpPostedFileBase markerLogo)
+            HttpPostedFileBase markerPhoto,  HttpPostedFileBase markerLogo, IEnumerable<HttpPostedFileBase> markerPhotosExt, string removePhotosString)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
 
             if (repo.GetCities().All(tc => tc.Id != model.CityId))
-            {
                 model.CityId = 0;
-            }
+
             if (string.IsNullOrEmpty(model.Street) || model.Street== "Unnamed Road")
-            {
                 model.Street = "Улица не определена";
-            }
+
             if (string.IsNullOrEmpty(model.House))
-            {
                 model.House = "Нет";
-            }
 
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
+            var removePhotos = JsonConvert.DeserializeObject<List<RemovePhoto>>(removePhotosString);
+            var removePhotoIds = removePhotos.Select(p => p.id);
 
             var userGuid = auth.UserGuid;
             if (markerPhoto != null)
@@ -212,21 +228,29 @@ namespace MapBul.Web.Controllers
                 var filePath = FileProvider.SaveMarkerLogo(markerLogo);
                 model.Logo = filePath;
             }
+            if (markerPhotosExt != null && markerPhotosExt.Any())
+            {
+                model.marker_photos = new List<marker_photos>();
+                foreach (var photo in markerPhotosExt)
+                {
+                    var filePath = FileProvider.SaveMarkerPhoto(photo);
+                    model.marker_photos.Add(new marker_photos{Photo = filePath});
+                }
+            }
+            if (removePhotos != null && removePhotos.Any())
+                foreach (var photo in removePhotos)
+                    FileProvider.DeleteFile(photo.photo);
 
             if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.NameEn))
-            {
                 model.Name = model.NameEn;
-            }
-            if (string.IsNullOrEmpty(model.Introduction) && !string.IsNullOrEmpty(model.IntroductionEn))
-            {
-                model.Introduction = model.IntroductionEn;
-            }
-            if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
-            {
-                model.Description = model.DescriptionEn;
-            }
 
-            repo.EditMarker(model, openTimes, closeTimes, userGuid);
+            if (string.IsNullOrEmpty(model.Introduction) && !string.IsNullOrEmpty(model.IntroductionEn))
+                model.Introduction = model.IntroductionEn;
+
+            if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
+                model.Description = model.DescriptionEn;
+
+            repo.EditMarker(model, openTimes, closeTimes, removePhotoIds?.ToList(), userGuid);
 
             return true;
         }

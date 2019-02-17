@@ -69,12 +69,12 @@ namespace MapBul.SharedClasses
 
         public static void DeleteFile(string path)
         {
-            var siteRoot = HostingEnvironment.MapPath("~/");
+            var siteRoot  = GetPublicContent();
             if (siteRoot != null)
             {
                 try
                 {
-                    var absolutePath = Path.Combine(siteRoot, "..", path);
+                    var absolutePath =  $@"{siteRoot}\{path}";
                     File.Delete(absolutePath);
                 }
                 catch

@@ -19,7 +19,7 @@ namespace MapBul.Web.Resource {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -39,7 +39,7 @@ namespace MapBul.Web.Resource {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    var temp = new global::System.Resources.ResourceManager("MapBul.Web.Resource.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MapBul.Web.Resource.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -718,6 +718,15 @@ namespace MapBul.Web.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Photos.
+        /// </summary>
+        public static string PinPhotos {
+            get {
+                return ResourceManager.GetString("PinPhotos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Pictures are displayed in the description pin).
         /// </summary>
         public static string PinPhotoText {
@@ -795,6 +804,24 @@ namespace MapBul.Web.Resource {
         public static string Previous {
             get {
                 return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selected photos.
+        /// </summary>
+        public static string RemoveSelectedPhotos {
+            get {
+                return ResourceManager.GetString("RemoveSelectedPhotos", resourceCulture);
             }
         }
         

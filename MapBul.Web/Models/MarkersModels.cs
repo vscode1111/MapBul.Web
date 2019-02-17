@@ -39,6 +39,7 @@ namespace MapBul.Web.Models
             WorkTimes = marker.worktime.ToList();
             SubCategories = marker.subcategory.Select(sc => sc.CategoryId).ToList();
             Phones = marker.phone.Select(p => p.Number).ToList();
+            marker_photos = marker.marker_photos.ToList();
         }
 
         public List<int> SubCategories { get; set; }

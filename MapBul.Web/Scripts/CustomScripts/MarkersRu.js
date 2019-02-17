@@ -19,7 +19,6 @@
     });
 }
 
-
 function OnEditMarkerDocumentReady() {
     $("#EditMarkerStreetInput").focusout(OnEditMarkerAddressChanged);
     $("#EditMarkerHouseInput").focusout(OnEditMarkerAddressChanged);
@@ -30,7 +29,6 @@ function OnEditMarkerDocumentReady() {
     $('.clockpicker').clockpicker();
     $("#MarkerLatInput").focusout(OnMarkerCoordinateChanged);
     $("#MarkerLngInput").focusout(OnMarkerCoordinateChanged);
-
     
     $('.i-checks').iCheck({
         checkboxClass: 'icheckbox_square-green',
@@ -43,7 +41,18 @@ function OnEditMarkerDocumentReady() {
     });
 }
 
-
+function findRemovePhotos() {
+    var result = [];
+    $('.marker-photo-remove').each(function(index, item) {
+        var parentClassName = $(item)[0].parentNode.className;
+        var id = $(item).data('id');
+        var photo = $(item).data('photo');
+        if (parentClassName.indexOf('checked') !== -1)
+            result.push({id, photo});
+    });
+    console.log(result);
+    return result;
+}
 
 function OnMarkerCoordinateChanged() {
     var lat = $("#MarkerLatInput").val();
@@ -60,7 +69,6 @@ function OnMarkerCoordinateChanged() {
     OnMarkerPositionChanged();
 }
 
-
 function OnEditMarkerFormSubmit() {
     var form = document.getElementById("EditMarkerForm");
 
@@ -74,10 +82,14 @@ function OnEditMarkerFormSubmit() {
     formData.append("markerPhoto", photo);
     var logo = document.getElementById("EditMarkerLogoInput").files[0];
     formData.append("markerLogo", logo);
+    var photos = document.getElementById("EditMarkerPhotosInput").files;
+    var i;
+    for (i = 0; i < photos.length; i++) {
+        formData.append("markerPhotosExt", photos[i]);
+    }
 
     var openTimesElements = $(".OpenTime");
     var openTimes = [];
-    var i;
     for (i = 0; i < openTimesElements.length; i++) {
         openTimes.push({ WeekDayId: $(openTimesElements[i]).attr("data-WeekDayId"), Time: $(openTimesElements[i]).val() });
     }
@@ -92,6 +104,9 @@ function OnEditMarkerFormSubmit() {
     formData.append("closeTimesString", JSON.stringify(closeTimes));
     formData.append("Lat", ("" + marker.position.lat()).replace(".", ","));
     formData.append("Lng", ("" + marker.position.lng()).replace(".", ","));
+
+    var removePhotos = findRemovePhotos();
+    formData.append("removePhotosString", JSON.stringify(removePhotos));
 
     $.ajax({
         url: "Markers/EditMarker",
@@ -124,7 +139,6 @@ function OnEditMarkerClick() {
         }
     });
 }
-
 
 function OnNewMarkerFormSubmit() {
     var form = document.getElementById("NewMarkerForm");
@@ -211,7 +225,6 @@ function RefreshMarkersPage() {
     });
 }
 
-
 function MapInit() {
     var myLatlng;
     if (isNaN(window.markerLat) || isNaN(window.markerLng))
@@ -245,7 +258,6 @@ function OnMapClick(e) {
     marker.setPosition(latLng);
     OnMarkerPositionChanged();
 }
-
 
 function ChangeCitySelect(result) {
     $("#MarkerCitySelect option").each(function (index2, option) {
@@ -323,8 +335,6 @@ function OnMarkerPositionChanged() {
     });
 }
 
-
-
 function OnEditMarkerAddressChanged() {    
     var address = $("#EditMarkerHouseInput").val() + ", " + $("#EditMarkerStreetInput").val() + ", " + $("#MarkerCitySelect option:selected").text();
 
@@ -339,7 +349,6 @@ function OnEditMarkerAddressChanged() {
         $("#MarkerLatInput").val(location.lat());
         $("#MarkerLngInput").val(location.lng());
     });
-
 }
 
 function OnNewMarkerAddressChanged() {
@@ -355,7 +364,6 @@ function OnNewMarkerAddressChanged() {
         window.marker.setPosition(latLng);
         window.map.setCenter(latLng);
     });
-
 }
 
 function OnMarkersDocumentReady() {
@@ -408,7 +416,6 @@ function OnMarkersDocumentReady() {
         });
     });
 }
-
 
 function OnNewMarkerClick() {
     var url = $(this).attr("data-actionurl");

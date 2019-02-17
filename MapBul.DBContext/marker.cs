@@ -111,6 +111,9 @@ namespace MapBul.DBContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<marker_request_session> marker_request_session { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<marker_photos> marker_photos { get; set; }
+
         public virtual status status { get; set; }
 
         public virtual user user { get; set; }

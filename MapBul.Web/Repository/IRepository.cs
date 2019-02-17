@@ -39,7 +39,7 @@ namespace MapBul.Web.Repository
         void AddMarkerPhotos(int markerId, string[] photos);
         void ChangeMarkerStatus(int markerId, int statusId);
         marker GetMarker(int markerId);
-        void EditMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, string userGuid);
+        void EditMarker(NewMarkerModel model, List<WorkTimeDay> openTimes, List<WorkTimeDay> closeTimes, List<int> removePhotoIds, string userGuid);
         List<article> GetArticles();
         void AddNewArticle(NewArticleModel model,string userGuid);
         void ChangeArticleStatus(int articleId, int statusId, string userGuid);

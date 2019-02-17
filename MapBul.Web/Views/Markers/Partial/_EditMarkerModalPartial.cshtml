@@ -79,6 +79,10 @@
                         <input type="file" id="EditMarkerLogoInput" class="form-control fileinput" accept="image/jpeg, image/png"/>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Новая фотография для фотоальбома <br /> </label>
+                        <input type="file" id="EditMarkerPhotosInput" class="form-control fileinput" accept="image/jpeg, image/png" multiple="multiple"/>
+                    </div>
+                    <div class="form-group">
                         <div class="checkbox i-checks">
                             <label>@Html.CheckBoxFor(m => m.Wifi)<i></i>@Resource.PinWiFi </label>
                         </div>
@@ -135,7 +139,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6">
-                                <label class="control-label">Фотография</label>
+                                <label class="control-label">@Resource.PinPhoto</label>
                                 <div class="col-sm-12">
                                     @if (Model.Photo != null)
                                     {
@@ -161,7 +165,27 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="row">
+                            <div class="col-sm-12">
+                            <label class="control-label">@Resource.PinPhotos</label>
+                                <div>
+                                    @if (Model.marker_photos.Count > 0)
+                                    {
+                                        foreach (var photo in Model.marker_photos)
+                                        {
+                                            <div class="checkbox i-checks">
+                                                <label><input type="checkbox" class="marker-photo-remove" data-id="@photo.Id" data-photo="@photo.Photo"/><i></i>@Resource.Remove</label>
+                                            </div>
+                                            <img class="col-sm-12" src="@Html.MapImage(photo.Photo)"/>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label class="label-danger">Альбом пуст</label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
