@@ -359,22 +359,18 @@ namespace MapBul.Service
             result.AddObjectToResult(new {HaveRelatedEvents = haveRelatedEvents}, 0);
 
             //Todo: Временная заглушка пока все маркеры не перейдут на новый формат хранения фотографий
-            var tempPhotos = repo.GetArrayOfPathsMarkerPhotos(markerId).Select(MapUrl).ToList();
-            if (tempPhotos.Count < 10 && !string.IsNullOrEmpty(marker.Photo))
-            {
-                tempPhotos.Add(marker.Photo);
-            }
+            var photos = repo.GetArrayOfPathsMarkerPhotos(markerId).Select(MapUrl).ToList();
+            if (photos.Count < 10 && !string.IsNullOrEmpty(marker.Photo))
+                photos.Insert(0, marker.Photo);
 
-            var tempPhotosMini = repo.GetArrayOfPathsMarkerPhotosMini(markerId).Select(MapUrl).ToList();
-            if (tempPhotos.Count < 10 && !string.IsNullOrEmpty(marker.Photo))
-            {
-                tempPhotosMini.Add(marker.Photo);
-            }
+            var photosMini = repo.GetArrayOfPathsMarkerPhotosMini(markerId).Select(MapUrl).ToList();
+            if (photos.Count < 10 && !string.IsNullOrEmpty(marker.Photo))
+                photosMini.Insert(0, marker.Photo);
 
             result.AddObjectToResult(new
             {
-                Photos = tempPhotos,
-                PhotosMini = tempPhotosMini,
+                Photos = photos,
+                PhotosMini = photosMini,
                 Phones = marker.phone.Select(p => new {p.Primary, p.Number}).ToList(),
                 Discount = marker.discount.Value,
                 Subcategories = marker.subcategory.Select(s => new {s.category.Id, s.category.Name}).ToList(),
