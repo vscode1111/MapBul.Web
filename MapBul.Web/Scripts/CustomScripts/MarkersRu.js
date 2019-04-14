@@ -85,7 +85,7 @@ function OnEditMarkerFormSubmit() {
     var photos = document.getElementById("EditMarkerPhotosInput").files;
     var i;
     for (i = 0; i < photos.length; i++) {
-        formData.append("markerPhotosExt", photos[i]);
+        formData.append("markerPhotos", photos[i]);
     }
 
     var openTimesElements = $(".OpenTime");
@@ -170,9 +170,14 @@ function OnNewMarkerFormSubmit() {
     var logo = document.getElementById("NewMarkerLogoInput").files[0];
     formData.append("markerLogo", logo);
 
+    var photos = document.getElementById("NewMarkerPhotosInput").files;
+    var i;
+    for (i = 0; i < photos.length; i++) {
+        formData.append("markerPhotos", photos[i]);
+    }
+
     var openTimesElements = $(".OpenTime");
     var openTimes = [];
-    var i;
     for (i = 0; i < openTimesElements.length; i++) {
         openTimes.push({ WeekDayId: $(openTimesElements[i]).attr("data-WeekDayId"), Time: $(openTimesElements[i]).val() });
     }

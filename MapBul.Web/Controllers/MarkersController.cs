@@ -106,16 +106,15 @@ namespace MapBul.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin)]
-        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString, HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, List<HttpPostedFileBase> markerPhotos, float lat, float lng)
+        public bool AddNewMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
+            HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, List<HttpPostedFileBase> markerPhotos,
+            float lat, float lng)
         {
             if (Math.Abs(model.Lat) <= 0)
-            {
                 model.Lat = lat;
-            }
+
             if (Math.Abs(model.Lng) <= 0)
-            {
                 model.Lng = lng;
-            }
 
             var openTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(openTimesString);
             var closeTimes = JsonConvert.DeserializeObject<List<WorkTimeDay>>(closeTimesString);
@@ -123,25 +122,13 @@ namespace MapBul.Web.Controllers
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
             var userGuid = auth.UserGuid;
 
-            /*
-            var photoPath = markerPhoto == null ? null : FileProvider.SaveMarkerPhoto(markerPhoto);
-            var logoPath = markerPhoto == null ? null : FileProvider.SaveMarkerLogo(markerLogo);
-            model.Photo = photoPath;
-            model.Logo = logoPath;
-
-            if (markerPhotos != null && markerPhotos.Count > 0)
-            {
-                var tempPhotosPaths = FileProvider.SaveMarkerPhotos(markerPhotos);
-                repo.AddMarkerPhotos(tempNewMarkerId, tempPhotosPaths);
-            }
-            */
-
             if (markerPhoto != null)
             {
                 FileProvider.DeleteFile(model.Photo);
                 var filePath = FileProvider.SaveMarkerPhoto(markerPhoto);
                 model.Photo = filePath;
             }
+
             if (markerLogo != null)
             {
                 FileProvider.DeleteFile(model.Logo);
@@ -149,18 +136,25 @@ namespace MapBul.Web.Controllers
                 model.Logo = filePath;
             }
 
+            if (markerPhotos != null && markerPhotos.Any())
+            {
+                model.marker_photos = new List<marker_photos>();
+                foreach (var photo in markerPhotos)
+                {
+                    var filePath = FileProvider.SaveMarkerPhoto(photo);
+                    model.marker_photos.Add(new marker_photos { Photo = filePath });
+                }
+            }
+
             if (string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.NameEn))
-            {
                 model.Name = model.NameEn;
-            }
+
             if (string.IsNullOrEmpty(model.Introduction) && !string.IsNullOrEmpty(model.IntroductionEn))
-            {
                 model.Introduction = model.IntroductionEn;
-            }
+
             if (string.IsNullOrEmpty(model.Description) && !string.IsNullOrEmpty(model.DescriptionEn))
-            {
                 model.Description = model.DescriptionEn;
-            }
+
             var tempNewMarkerId = repo.AddMarker(model, openTimes, closeTimes, userGuid);
 
             return true;
@@ -171,14 +165,12 @@ namespace MapBul.Web.Controllers
         public bool RemovePhotosMarker(HttpPostedFileBase markerPhoto, HttpPostedFileBase markerLogo, IEnumerable<HttpPostedFileBase> markerPhotosExt)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
-
             return true;
         }
 
         public class RemovePhoto
         {
             public int id;
-
             public string photo;
         }
 
@@ -190,13 +182,13 @@ namespace MapBul.Web.Controllers
         /// <param name="closeTimesString"></param>
         /// <param name="markerPhoto"></param>
         /// <param name="markerLogo"></param>
-        /// <param name="markerPhotosExt"></param>
+        /// <param name="markerPhotos"></param>
         /// <param name="removePhotos"></param>
         /// <returns></returns>
         [HttpPost]
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor)]
         public bool EditMarker(NewMarkerModel model, string openTimesString, string closeTimesString,
-            HttpPostedFileBase markerPhoto,  HttpPostedFileBase markerLogo, IEnumerable<HttpPostedFileBase> markerPhotosExt, string removePhotosString)
+            HttpPostedFileBase markerPhoto,  HttpPostedFileBase markerLogo, IEnumerable<HttpPostedFileBase> markerPhotos, string removePhotosString)
         {
             var repo = DependencyResolver.Current.GetService<IRepository>();
             var auth = DependencyResolver.Current.GetService<IAuthProvider>();
@@ -222,21 +214,24 @@ namespace MapBul.Web.Controllers
                 var filePath = FileProvider.SaveMarkerPhoto(markerPhoto);
                 model.Photo = filePath;
             }
+
             if (markerLogo != null)
             {
                 FileProvider.DeleteFile(model.Logo);
                 var filePath = FileProvider.SaveMarkerLogo(markerLogo);
                 model.Logo = filePath;
             }
-            if (markerPhotosExt != null && markerPhotosExt.Any())
+
+            if (markerPhotos != null && markerPhotos.Any())
             {
                 model.marker_photos = new List<marker_photos>();
-                foreach (var photo in markerPhotosExt)
+                foreach (var photo in markerPhotos)
                 {
                     var filePath = FileProvider.SaveMarkerPhoto(photo);
                     model.marker_photos.Add(new marker_photos{Photo = filePath});
                 }
             }
+
             if (removePhotos != null && removePhotos.Any())
                 foreach (var photo in removePhotos)
                     FileProvider.DeleteFile(photo.photo);

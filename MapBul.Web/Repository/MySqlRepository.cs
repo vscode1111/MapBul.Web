@@ -489,6 +489,11 @@ namespace MapBul.Web.Repository
                     newMarker.PublishedDate = null;
                 }
                 _db.marker.Add(newMarker);
+
+                if (model.marker_photos != null && model.marker_photos.Count > 0)
+                    _db.marker_photos.AddRange(model.marker_photos.Select(p =>
+                        new marker_photos { MarkerId = newMarker.Id, Photo = p.Photo }));
+
                 _db.SaveChanges();
 
                 var subCategories = model.SubCategories?.Select(sc => new subcategory {CategoryId = sc, MarkerId = newMarker.Id})
