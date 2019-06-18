@@ -466,7 +466,7 @@ namespace MapBul.Service
         /// <param name="appLang"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetRecentArticles(string appLang, bool refresh = false, DateTime? existingDateTime = null)
+        public string GetRecentArticles(string appLang, int page, int size, bool refresh = false, DateTime? existingDateTime = null)
         {
             var repo = new MySqlRepository();
             var articles = repo.GetArticles();
@@ -483,10 +483,14 @@ namespace MapBul.Service
                 filteredArticles =
                     articles.Where(a => a.PublishedDate < existingDateTime)
                         .OrderByDescending(a => a.PublishedDate)
-                        .Take(ServiceSettings.ArticleOrderingCount)
-                        .ToList();
+                        .Skip((page - 1) * size)
+                        .Take(size).ToList();
             else
-                filteredArticles = articles.OrderByDescending(a => a.PublishedDate).Take(ServiceSettings.ArticleOrderingCount).ToList();
+                filteredArticles = articles
+                    .OrderByDescending(a => a.PublishedDate)
+                    .Skip((page - 1) * size)
+                    .Take(size)
+                    .ToList();
 
             foreach (var article in filteredArticles)
             {
@@ -578,30 +582,45 @@ namespace MapBul.Service
         /// Метод возращает набор событий. Если в метод не передаются параметры, то возвращаются первые 15 событий, далее, события подгружаются при прокрутке по 15 штук.
         /// </summary>
         /// <param name="appLang"></param>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
         /// <param name="refresh">Если true, то подгружаются события, добавленные с последнего обновления</param>
         /// <param name="existingDateTime"></param>
         /// <returns></returns>
         [WebMethod]
-        public string GetRecentEvents(string appLang, bool refresh = false, DateTime? existingDateTime = null)
+        public string GetRecentEvents(string appLang, int page, int size, bool refresh = false,
+            DateTime? existingDateTime = null)
         {
             var repo = new MySqlRepository();
             var articles = repo.GetEvents();
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            var i = 0; List<article> filteredArticles;
+            var i = 0;
+            List<article> filteredArticles;
 
-            if (existingDateTime != null && refresh)
-                filteredArticles =
-                    articles.Where(a => a.PublishedDate > existingDateTime)
-                        .OrderByDescending(a => a.PublishedDate)
-                        .ToList();
-            else if (existingDateTime != null)
-                filteredArticles =
-                    articles.Where(a => a.PublishedDate < existingDateTime)
-                        .OrderByDescending(a => a.PublishedDate)
-                        .Take(ServiceSettings.ArticleOrderingCount)
-                        .ToList();
-            else
-                filteredArticles = articles.OrderByDescending(a => a.PublishedDate).Take(ServiceSettings.ArticleOrderingCount).ToList();
+            //if (existingDateTime != null && refresh)
+            //    filteredArticles =
+            //        articles.Where(a => a.PublishedDate > existingDateTime)
+            //            .OrderByDescending(a => a.PublishedDate)
+            //            .ToList();
+            //else if (existingDateTime != null)
+            //    filteredArticles =
+            //        articles.Where(a => a.PublishedDate < existingDateTime)
+            //            .OrderByDescending(a => a.PublishedDate)
+            //            .Skip((page - 1) * size)
+            //            .Take(size)
+            //            .ToList();
+            //else
+            //    filteredArticles = articles.OrderByDescending(a => a.PublishedDate)
+            //        .Skip((page - 1) * size)
+            //        .Take(size)
+            //        .ToList();
+
+            filteredArticles =
+                articles.Where(a => a.StartDate > existingDateTime)
+                .OrderBy(a => a.StartDate)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToList();
 
             foreach (var article in filteredArticles)
             {
@@ -671,14 +690,15 @@ namespace MapBul.Service
                     markerAddressName = article.marker.Name;
                 }
 
-                result.AddObjectToResult(new { AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName }, i);
+                result.AddObjectToResult(
+                    new {AuthorName = authorName, MarkerAddress = markerAddress, AddressName = markerAddressName}, i);
                 result.AddObjectToResult(new
                 {
                     Subcategories =
-                        article.articlesubcategory.Select(
-                            a => (appLang != "ru" && !string.IsNullOrEmpty(a.category.EnName))
-                                ? a.category.EnName
-                                : a.category.Name).ToList(),
+                    article.articlesubcategory.Select(
+                        a => (appLang != "ru" && !string.IsNullOrEmpty(a.category.EnName))
+                            ? a.category.EnName
+                            : a.category.Name).ToList(),
                     StopDate = article.EndDate
                 }, i);
 
