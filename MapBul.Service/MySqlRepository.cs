@@ -173,9 +173,7 @@ namespace MapBul.Service
 
         public List<article> GetArticles()
         {
-            //return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published && a.StartDate == null).ToList();
-            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published).ToList();
-            //return _db.article.ToList();
+            return _db.article.Where(a => a.status.Tag == MarkerStatuses.Published && a.StartDate == null).ToList();
         }
 
         public List<article> GetEvents()

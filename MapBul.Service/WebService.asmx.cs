@@ -471,9 +471,9 @@ namespace MapBul.Service
             var repo = new MySqlRepository();
             var articles = repo.GetArticles();
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            var i = 0;
             List<article> filteredArticles;
 
+            /*
             if (existingDateTime != null && refresh)
                 filteredArticles =
                     articles.Where(a => a.PublishedDate > existingDateTime)
@@ -491,7 +491,16 @@ namespace MapBul.Service
                     .Skip((page - 1) * size)
                     .Take(size)
                     .ToList();
+            */
+            filteredArticles =
+                articles
+                    // .Where(a => existingDateTime < a.StartDate || a.StartDate <= existingDateTime && existingDateTime <= a.EndDate)
+                    // .OrderBy(a => a.StartDate)
+                    .Skip((page - 1) * size)
+                    .Take(size)
+                    .ToList();
 
+            var i = 0;
             foreach (var article in filteredArticles)
             {
                 article.Photo = MapUrl(article.Photo);
@@ -594,34 +603,36 @@ namespace MapBul.Service
             var repo = new MySqlRepository();
             var articles = repo.GetEvents();
             var result = new JsonResult(new List<Dictionary<string, object>>());
-            var i = 0;
             List<article> filteredArticles;
 
-            //if (existingDateTime != null && refresh)
-            //    filteredArticles =
-            //        articles.Where(a => a.PublishedDate > existingDateTime)
-            //            .OrderByDescending(a => a.PublishedDate)
-            //            .ToList();
-            //else if (existingDateTime != null)
-            //    filteredArticles =
-            //        articles.Where(a => a.PublishedDate < existingDateTime)
-            //            .OrderByDescending(a => a.PublishedDate)
-            //            .Skip((page - 1) * size)
-            //            .Take(size)
-            //            .ToList();
-            //else
-            //    filteredArticles = articles.OrderByDescending(a => a.PublishedDate)
-            //        .Skip((page - 1) * size)
-            //        .Take(size)
-            //        .ToList();
+            /*
+            if (existingDateTime != null && refresh)
+                filteredArticles =
+                    articles.Where(a => a.PublishedDate > existingDateTime)
+                        .OrderByDescending(a => a.PublishedDate)
+                        .ToList();
+            else if (existingDateTime != null)
+                filteredArticles =
+                    articles.Where(a => a.PublishedDate < existingDateTime)
+                        .OrderByDescending(a => a.PublishedDate)
+                        .Skip((page - 1) * size)
+                        .Take(size)
+                        .ToList();
+            else
+                filteredArticles = articles.OrderByDescending(a => a.PublishedDate)
+                    .Skip((page - 1) * size)
+                    .Take(size)
+                    .ToList();
+            */
 
             filteredArticles =
-                articles.Where(a => a.StartDate > existingDateTime)
+                articles.Where(a => existingDateTime < a.StartDate || a.StartDate <= existingDateTime && existingDateTime <= a.EndDate)
                 .OrderBy(a => a.StartDate)
                 .Skip((page - 1) * size)
                 .Take(size)
                 .ToList();
 
+            var i = 0;
             foreach (var article in filteredArticles)
             {
                 article.Photo = MapUrl(article.Photo);
