@@ -10,6 +10,7 @@ using MapBul.Web.Repository;
 namespace MapBul.Web.Controllers
 {
     [Culture]
+    [ValidateInput(false)]
     public class ArticlesController : Controller
     {
         /// <summary>
