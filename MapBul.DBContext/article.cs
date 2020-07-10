@@ -27,6 +27,9 @@ namespace MapBul.DBContext
         public string TitlePhoto { get; set; }
 
         [StringLength(200)]
+        public string TitlePhotoPreview { get; set; }
+
+        [StringLength(200)]
         public string Photo { get; set; }
 
         [Column(TypeName = "text")]

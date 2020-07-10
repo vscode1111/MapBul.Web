@@ -96,11 +96,18 @@ namespace MapBul.Web.Controllers
         [MyAuth(Roles = UserTypes.Admin + ", " + UserTypes.Editor + ", " + UserTypes.Journalist)]
         public bool AddNewArticle(NewArticleModel model, HttpPostedFileBase articlePhoto,
             HttpPostedFileBase articleTitlePhoto)
+
         {
-            if (articlePhoto != null)
-                model.Photo = FileProvider.SaveArticlePhoto(articlePhoto);
             if (articleTitlePhoto != null)
+            {
                 model.TitlePhoto = FileProvider.SaveArticleTitlePhoto(articleTitlePhoto);
+                model.TitlePhotoPreview = FileProvider.SaveArticleTitlePhotoPreview(articleTitlePhoto);
+            }
+
+            if (articlePhoto != null)
+            {
+                model.Photo = FileProvider.SaveArticlePhoto(articlePhoto);
+            }
 
             if (string.IsNullOrEmpty(model.Title) && !string.IsNullOrEmpty(model.TitleEn))
             {

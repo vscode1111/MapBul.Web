@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -35,36 +36,82 @@ namespace MapBul.SharedClasses
                 : GetParentDirectoryUntil(keyWord, parentDirectory);
         }
 
-        private static string SaveFileToPublicContent(HttpPostedFileBase articleTitlePhoto, string imageType, int width = 200, int height = 200)
-        {
-            var virtualPath =
-                $@"{imageType}\{Guid.NewGuid()}{articleTitlePhoto.FileName.Substring(articleTitlePhoto.FileName.IndexOf(".", StringComparison.Ordinal))}";
-            var siteRoot = GetPublicContent();
-            if (siteRoot != null)
-            {
-                var savePath = $@"{siteRoot}\{virtualPath}";
-                articleTitlePhoto.SaveAs(savePath);
-                Image resizedImage;
-                using (var image = Image.FromFile(savePath))
-                {
-                    resizedImage = CompressImage(image, width, height);
-                }
-                resizedImage.Save(savePath);
-            }
-            else
-                throw new MyException(Errors.UnknownError);
-            return virtualPath;
-        }
-
         private static Image CompressImage(Image input, int width, int height)
         {
             var result = new Bitmap(input, width, height);
             return result;
         }
 
+        public static Image ResizeImage(Image imgToResize, Size destinationSize)
+        {
+            var originalWidth = imgToResize.Width;
+            var originalHeight = imgToResize.Height;
+
+            //how many units are there to make the original length
+            var hRatio = (float)originalHeight / destinationSize.Height;
+            var wRatio = (float)originalWidth / destinationSize.Width;
+
+            //get the shorter side
+            var ratio = Math.Min(hRatio, wRatio);
+
+            var hScale = Convert.ToInt32(destinationSize.Height * ratio);
+            var wScale = Convert.ToInt32(destinationSize.Width * ratio);
+
+            //start cropping from the center
+            var startX = (originalWidth - wScale) / 2;
+            var startY = (originalHeight - hScale) / 2;
+
+            //crop the image from the specified location and size
+            var sourceRectangle = new Rectangle(startX, startY, wScale, hScale);
+
+            //the future size of the image
+            var bitmap = new Bitmap(destinationSize.Width, destinationSize.Height);
+
+            //fill-in the whole bitmap
+            var destinationRectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            //generate the new image
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.DrawImage(imgToResize, destinationRectangle, sourceRectangle, GraphicsUnit.Pixel);
+            }
+
+            return bitmap;
+        }
+
+
+        private static string SaveFileToPublicContent(HttpPostedFileBase httpPhoto, string imageType, Size? destinationSize = null)
+        {
+            var virtualPath =
+                $@"{imageType}\{Guid.NewGuid()}{httpPhoto.FileName.Substring(httpPhoto.FileName.IndexOf(".", StringComparison.Ordinal))}";
+            var siteRoot = GetPublicContent();
+            if (siteRoot != null)
+            {
+                var savePath = $@"{siteRoot}\{virtualPath}";                
+
+                if (destinationSize != null)
+                {
+                    using (var image = Image.FromStream(httpPhoto.InputStream))
+                    {
+                        // var resizedImage = CompressImage(image, destinationSize.Value.Width, destinationSize.Value.Height);
+                        var resizedImage = ResizeImage(image, destinationSize.Value);
+                        resizedImage.Save(savePath);
+                    }
+                } else
+                {
+                    httpPhoto.SaveAs(savePath);
+                }
+            }
+            else
+                throw new MyException(Errors.UnknownError);
+            return virtualPath;
+        }
+
+
         public static string SaveCategoryIcon(HttpPostedFileBase categoryIcon, int width = 200, int height = 200)
         {
-            return SaveFileToPublicContent(categoryIcon, CategoryIcons, width, height);
+            return SaveFileToPublicContent(categoryIcon, CategoryIcons, new Size(width, height));
         }
 
         public static void DeleteFile(string path)
@@ -195,6 +242,11 @@ namespace MapBul.SharedClasses
         public static string SaveArticleTitlePhoto(HttpPostedFileBase articleTitlePhoto)
         {
             return SaveFileToPublicContent(articleTitlePhoto, ArticlePhotos);
+        }
+
+        public static string SaveArticleTitlePhotoPreview(HttpPostedFileBase articleTitlePhoto)
+        {
+            return SaveFileToPublicContent(articleTitlePhoto, ArticlePhotos, new Size(200, 200));
         }
 
         public static string SaveMarkerLogo(HttpPostedFileBase markerLogo)
